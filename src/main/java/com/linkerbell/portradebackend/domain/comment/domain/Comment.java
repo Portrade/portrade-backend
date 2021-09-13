@@ -34,14 +34,13 @@ public class Comment extends BaseTimeEntity {
     private String content;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Comment(Long id, User user, Portfolio portfolio, String content, LocalDateTime lastModifiedDate) {
+    public Comment(Long id, User user, Portfolio portfolio, String content) {
         this.id = id;
         this.user = user;
         this.portfolio = portfolio;
         this.content = content;
-        this.lastModifiedDate = lastModifiedDate;
     }
 }

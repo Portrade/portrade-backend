@@ -39,15 +39,14 @@ public class Portfolio extends BaseTimeEntity {
     private int viewCount;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
+    private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
-    public Portfolio(Long id, User user, String title, String description, boolean isPublic, int viewCount, LocalDateTime lastModifiedDate) {
+    public Portfolio(Long id, User user, String title, String description, boolean isPublic, int viewCount) {
         this.id = id;
         this.user = user;
         this.title = title;
         this.description = description;
         this.isPublic = isPublic;
         this.viewCount = viewCount;
-        this.lastModifiedDate = lastModifiedDate;
     }
 }
