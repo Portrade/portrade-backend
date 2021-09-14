@@ -1,33 +1,38 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
-
-import com.linkerbell.portradebackend.domain.user.domain.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
-import java.util.UUID;
+import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDto {
+public class SignUpDto {
 
-    private UUID id;
+    @NotNull
     private String email;
+
+    @NotNull
     private String name;
-    private Set<Role> roles;
+
+    @NotNull
+    private String password;
+
     private String college;
+
+    @NotNull
     private String jobStatus;
+
+    @NotNull
     private int birthDate;
 
     @Builder
-    public UserDto(UUID id, String email, String name, Set<Role> roles, String college, String jobStatus, int birthDate) {
-        this.id = id;
+    public SignUpDto(String email, String name, String password, String college, String jobStatus, int birthDate) {
         this.email = email;
         this.name = name;
-        this.roles = roles;
+        this.password = password;
         this.college = college;
         this.jobStatus = jobStatus;
         this.birthDate = birthDate;
