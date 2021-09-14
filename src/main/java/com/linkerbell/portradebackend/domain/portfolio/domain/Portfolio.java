@@ -31,6 +31,9 @@ public class Portfolio extends BaseTimeEntity {
     @Column(nullable = false)
     private String description;
 
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     @Column(name = "is_public")
     private boolean isPublic;
 
