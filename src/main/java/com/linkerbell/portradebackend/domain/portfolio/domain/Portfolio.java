@@ -2,16 +2,14 @@ package com.linkerbell.portradebackend.domain.portfolio.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString(of = {"id", "user", "title", "description", "isPublic", "viewCount"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "portfolio")
 public class Portfolio extends BaseTimeEntity {
@@ -37,13 +35,13 @@ public class Portfolio extends BaseTimeEntity {
     @Column(name = "is_public")
     private boolean isPublic;
 
-    @ColumnDefault("0")
     @Column(name = "view_count")
-    private int viewCount;
+    private int viewCount = 0;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
+    @Builder
     public Portfolio(Long id, User user, String title, String description, boolean isPublic, int viewCount) {
         this.id = id;
         this.user = user;
