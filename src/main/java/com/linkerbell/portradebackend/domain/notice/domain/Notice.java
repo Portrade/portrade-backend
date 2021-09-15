@@ -2,10 +2,7 @@ package com.linkerbell.portradebackend.domain.notice.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -13,6 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString(of = {"id","title","viewCount"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notice")
 public class Notice extends BaseTimeEntity {
@@ -29,9 +27,8 @@ public class Notice extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    @ColumnDefault("0")
     @Column(name = "view_count")
-    private int viewCount;
+    private int viewCount = 0;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();

@@ -2,16 +2,14 @@ package com.linkerbell.portradebackend.domain.faq.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString(of = {"id", "title"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "faq")
 public class Faq extends BaseTimeEntity {

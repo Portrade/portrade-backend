@@ -2,16 +2,14 @@ package com.linkerbell.portradebackend.domain.qna.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@ToString(of = {"id"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "qna")
 public class Qna extends BaseTimeEntity {
