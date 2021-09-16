@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.comment.domain;
+package com.linkerbell.portradebackend.domain.likes.domain;
 
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.user.domain.User;
@@ -6,18 +6,17 @@ import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @ToString(of = {"id"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "comment")
-public class Comment extends BaseTimeEntity {
+@Table(name = "likes")
+public class Likes extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Column(name = "likes_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -28,17 +27,10 @@ public class Comment extends BaseTimeEntity {
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
-    @Column(nullable = false)
-    private String content;
-
-    @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate = LocalDateTime.now();
-
     @Builder
-    public Comment(Long id, User user, Portfolio portfolio, String content) {
+    public Likes(Long id, User user, Portfolio portfolio) {
         this.id = id;
         this.user = user;
         this.portfolio = portfolio;
-        this.content = content;
     }
 }
