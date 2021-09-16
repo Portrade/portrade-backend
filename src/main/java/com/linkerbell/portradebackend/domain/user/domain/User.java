@@ -11,7 +11,7 @@ import java.util.*;
 
 @Entity
 @Getter
-@ToString(of = {"id", "email", "name", "college", "birthDate"})
+@ToString(of = {"id", "username", "name", "college", "birthDate"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
@@ -23,7 +23,7 @@ public class User extends BaseTimeEntity {
     private UUID id;
 
     @Column(nullable = false)
-    private String email;
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -31,34 +31,46 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
-    @Enumerated(EnumType.STRING)
-    private Set<Role> roles = new HashSet<>();
-
     private String college;
 
-    @Column(nullable = false, name = "job_status")
+    @Column(name = "is_graduated")
+    private boolean isGraduated;
+
+    @Column(name = "wanted_job")
+    private String wantedJob;
+
+    @Column(name = "job_status")
     private String jobStatus;
 
     @Column(name = "birth_date", nullable = false)
     private int birthDate;
 
+    @Column(name = "profile_url")
+    private String profileUrl;
+
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "followUser")
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String email, String password, String name, String college, String jobStatus, int birthDate) {
+    public User(UUID id, String username, String password, String name, String college, boolean isGraduated, String wantedJob, String jobStatus, int birthDate, String profileUrl) {
         this.id = id;
-        this.email = email;
+        this.username = username;
         this.password = password;
         this.name = name;
         this.college = college;
+        this.isGraduated = isGraduated;
+        this.wantedJob = wantedJob;
         this.jobStatus = jobStatus;
         this.birthDate = birthDate;
+        this.profileUrl = profileUrl;
 
         this.roles.add(Role.ROLE_USER);
     }

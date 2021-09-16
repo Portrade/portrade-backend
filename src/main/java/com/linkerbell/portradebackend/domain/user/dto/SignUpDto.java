@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 public class SignUpDto {
 
     @NotNull
-    private String email;
+    private String id;
 
     @NotNull
     private String name;
@@ -22,19 +22,22 @@ public class SignUpDto {
 
     private String college;
 
+    private boolean isGraduated;
+
     @NotNull
-    private String jobStatus;
+    private String wantedJob;
 
     @NotNull
     private int birthDate;
 
     @Builder
-    public SignUpDto(String email, String name, String password, String college, String jobStatus, int birthDate) {
-        this.email = email;
+    public SignUpDto(String id, String name, String password, String college, boolean isGraduated, String wantedJob, int birthDate) {
+        this.id = id;
         this.name = name;
         this.password = password;
         this.college = college;
-        this.jobStatus = jobStatus;
+        this.isGraduated = isGraduated;
+        this.wantedJob = wantedJob;
         this.birthDate = birthDate;
     }
 }

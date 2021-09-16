@@ -25,13 +25,8 @@ public class UserController {
         User user = userService.createUser(signUpDto);
 
         UserDto userDto = UserDto.builder()
-                .id(user.getId())
-                .email(user.getEmail())
+                .id(user.getUsername())
                 .name(user.getName())
-                .roles(user.getRoles())
-                .college(user.getCollege())
-                .jobStatus(user.getJobStatus())
-                .birthDate(user.getBirthDate())
                 .build();
         return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }

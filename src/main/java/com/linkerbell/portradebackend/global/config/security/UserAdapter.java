@@ -12,7 +12,7 @@ public class UserAdapter extends org.springframework.security.core.userdetails.U
     private User user;
 
     public UserAdapter(User user) {
-        super(user.getEmail(),
+        super(user.getUsername(),
                 user.getPassword(),
                 user.getRoles().stream()
                         .map(role -> new SimpleGrantedAuthority(role.toString()))

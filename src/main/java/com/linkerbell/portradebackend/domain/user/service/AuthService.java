@@ -24,11 +24,11 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = null;
         Authentication authentication = null;
         try {
-            authenticationToken = new UsernamePasswordAuthenticationToken(logInDto.getEmail(), logInDto.getPassword());
+            authenticationToken = new UsernamePasswordAuthenticationToken(logInDto.getId(), logInDto.getPassword());
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            throw new IllegalArgumentException("이메일 또는 비밀번호가 잘못 입력 되었습니다.");
+            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 입력 되었습니다.");
         }
 
         String accessToken = tokenProvider.createAccessToken(authentication);
