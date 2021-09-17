@@ -2,7 +2,8 @@ package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.SignUpDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import lombok.RequiredArgsConstructor;
@@ -56,20 +57,26 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public User createUser(SignUpDto signUpDto) {
-        if (userRepository.findByUsername(signUpDto.getId()).orElse(null) != null) {
+    public UserResponseDto createUser(SignUpRequestDto signUpRequestDto) {
+        if (userRepository.findByUsername(signUpRequestDto.getId()).orElse(null) != null) {
             throw new IllegalArgumentException("이미 존재하는 사용자 아이디입니다.");
         }
 
         User user = User.builder()
-                .username(signUpDto.getId())
-                .name(signUpDto.getName())
-                .password(passwordEncoder.encode(signUpDto.getPassword()))
-                .college(signUpDto.getCollege())
-                .isGraduated(signUpDto.isGraduated())
-                .wantedJob(signUpDto.getWantedJob())
-                .birthDate(signUpDto.getBirthDate())
+                .username(signUpRequestDto.getId())
+                .name(signUpRequestDto.getName())
+                .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
+                .college(signUpRequestDto.getCollege())
+                .isGraduated(signUpRequestDto.isGraduated())
+                .wantedJob(signUpRequestDto.getWantedJob())
+                .birthDate(signUpRequestDto.getBirthDate())
                 .build();
-        return userRepository.save(user);
+
+        userRepository.save(user);
+
+        return UserResponseDto.builder()
+                .id(user.getUsername())
+                .name(user.getName())
+                .build();
     }
 }

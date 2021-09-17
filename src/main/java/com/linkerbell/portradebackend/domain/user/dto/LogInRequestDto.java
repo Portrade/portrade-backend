@@ -9,13 +9,17 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class TokenDto {
+public class LogInRequestDto {
 
     @NotNull
-    private String accessToken;
+    private String id;
+
+    @NotNull
+    private String password;
 
     @Builder
-    public TokenDto(String accessToken) {
-        this.accessToken = accessToken;
+    public LogInRequestDto(String id, String password) {
+        this.id = id;
+        this.password = password;
     }
 }

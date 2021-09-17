@@ -1,9 +1,8 @@
 package com.linkerbell.portradebackend.domain.user.controller;
 
 
-import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.SignUpDto;
-import com.linkerbell.portradebackend.domain.user.dto.UserDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,13 +20,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> signUpApi(@RequestBody SignUpDto signUpDto) {
-        User user = userService.createUser(signUpDto);
-
-        UserDto userDto = UserDto.builder()
-                .id(user.getUsername())
-                .name(user.getName())
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
+    public ResponseEntity<UserResponseDto> signUpApi(@RequestBody SignUpRequestDto signUpRequestDto) {
+        UserResponseDto userResponseDto = userService.createUser(signUpRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }
 }

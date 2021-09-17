@@ -1,7 +1,7 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
-import com.linkerbell.portradebackend.domain.user.dto.LogInDto;
-import com.linkerbell.portradebackend.domain.user.dto.TokenDto;
+import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
 import com.linkerbell.portradebackend.global.config.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,11 +20,11 @@ public class AuthService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     @Transactional
-    public TokenDto logIn(LogInDto logInDto) {
+    public TokenResponseDto logIn(LogInRequestDto logInRequestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = null;
         Authentication authentication = null;
         try {
-            authenticationToken = new UsernamePasswordAuthenticationToken(logInDto.getId(), logInDto.getPassword());
+            authenticationToken = new UsernamePasswordAuthenticationToken(logInRequestDto.getId(), logInRequestDto.getPassword());
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
@@ -33,7 +33,7 @@ public class AuthService {
 
         String accessToken = tokenProvider.createAccessToken(authentication);
 
-        return TokenDto.builder()
+        return TokenResponseDto.builder()
                 .accessToken(accessToken)
                 .build();
     }

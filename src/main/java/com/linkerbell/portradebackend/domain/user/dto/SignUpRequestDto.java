@@ -9,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class SignUpDto {
+public class SignUpRequestDto {
 
     @NotNull
     private String id;
@@ -31,7 +31,7 @@ public class SignUpDto {
     private int birthDate;
 
     @Builder
-    public SignUpDto(String id, String name, String password, String college, boolean isGraduated, String wantedJob, int birthDate) {
+    public SignUpRequestDto(String id, String name, String password, String college, boolean isGraduated, String wantedJob, int birthDate) {
         this.id = id;
         this.name = name;
         this.password = password;

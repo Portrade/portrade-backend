@@ -1,8 +1,8 @@
 package com.linkerbell.portradebackend.domain.user.controller;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.LogInDto;
-import com.linkerbell.portradebackend.domain.user.dto.TokenDto;
+import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,9 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/login")
-    public ResponseEntity<TokenDto> logInApi(@RequestBody LogInDto logInDto) {
-        TokenDto tokenDto = authService.logIn(logInDto);
-        return ResponseEntity.status(HttpStatus.OK).body(tokenDto);
+    public ResponseEntity<TokenResponseDto> logInApi(@RequestBody LogInRequestDto logInRequestDto) {
+        TokenResponseDto tokenResponseDto = authService.logIn(logInRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(tokenResponseDto);
     }
 
     @GetMapping("/logout")
