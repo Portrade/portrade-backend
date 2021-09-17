@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.admin.domain;
 
+import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
@@ -8,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"id", "name", "phoneNumber", "title", "content"})
+@ToString(of = {"id", "name", "email", "phoneNumber", "title", "content"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "qna")
 public class Qna extends BaseTimeEntity {
@@ -18,8 +19,15 @@ public class Qna extends BaseTimeEntity {
     @Column(name = "qna_id")
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
     @Column(nullable = false)
     private String name;
+
+    @Column(nullable = false)
+    private String email;
 
     @Column(nullable = false)
     private String phoneNumber;
@@ -42,9 +50,11 @@ public class Qna extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Qna(Long id, String name, String phoneNumber, String title, String content, Category category, Status status) {
+    public Qna(Long id, User user, String name, String email, String phoneNumber, String title, String content, Category category, Status status) {
         this.id = id;
+        this.user = user;
         this.name = name;
+        this.email = email;
         this.phoneNumber = phoneNumber;
         this.title = title;
         this.content = content;

@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"id", "title"})
+@ToString(of = {"id", "title", "content"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "faq")
 public class Faq extends BaseTimeEntity {
@@ -26,12 +26,17 @@ public class Faq extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
+    private String content;
+
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Faq(Long id, String title) {
+    public Faq(Long id, User user, String title, String content) {
         this.id = id;
+        this.user = user;
         this.title = title;
+        this.content = content;
     }
 }
