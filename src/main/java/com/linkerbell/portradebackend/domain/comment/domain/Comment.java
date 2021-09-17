@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"id"})
+@ToString(of = {"id", "content"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {

@@ -30,9 +30,8 @@ public class Faq extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Faq(Long id, User user, String title) {
+    public Faq(Long id, String title) {
         this.id = id;
-        this.user = user;
         this.title = title;
     }
 }
