@@ -22,7 +22,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id", columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false)
     private String username;
 
     @Column(nullable = false)
@@ -31,22 +31,11 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
-    private String college;
-
-    @Column(name = "is_graduated")
-    private boolean isGraduated;
-
-    @Column(name = "wanted_job")
-    private String wantedJob;
-
-    @Column(name = "job_status")
-    private String jobStatus;
-
     @Column(name = "birth_date", nullable = false)
     private int birthDate;
 
-    @Column(name = "profile_url")
-    private String profileUrl;
+    @Embedded
+    private Profile profile;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
@@ -60,18 +49,13 @@ public class User extends BaseTimeEntity {
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String username, String password, String name, String college, boolean isGraduated, String wantedJob, String jobStatus, int birthDate, String profileUrl) {
+    public User(UUID id, String username, String password, String name, int birthDate, Profile profile) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
-        this.college = college;
-        this.isGraduated = isGraduated;
-        this.wantedJob = wantedJob;
-        this.jobStatus = jobStatus;
         this.birthDate = birthDate;
-        this.profileUrl = profileUrl;
-
+        this.profile = profile;
         this.roles.add(Role.ROLE_USER);
     }
 
