@@ -1,21 +1,25 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotNull;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDto {
+public class LogInRequestDto {
 
-    private String username;
+    @NotNull
+    private String id;
+
+    @NotNull
     private String password;
 
     @Builder
-    public UserDto(String username, String password) {
-        this.username = username;
+    public LogInRequestDto(String id, String password) {
+        this.id = id;
         this.password = password;
     }
 }

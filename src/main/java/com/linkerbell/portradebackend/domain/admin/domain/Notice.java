@@ -3,14 +3,13 @@ package com.linkerbell.portradebackend.domain.admin.domain;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"id","title","viewCount"})
+@ToString(of = {"id","title","content","viewCount"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "notice")
 public class Notice extends BaseTimeEntity {
@@ -26,6 +25,9 @@ public class Notice extends BaseTimeEntity {
 
     @Column(nullable = false)
     private String title;
+
+    @Column(nullable = false)
+    private String content;
 
     @Column(name = "view_count")
     private int viewCount = 0;

@@ -6,15 +6,12 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
-@ToString(of = {"id", "email", "name", "college", "birthDate"})
+@ToString(of = {"id", "username", "name", "college", "birthDate"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
@@ -25,8 +22,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "user_id", columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(nullable = false)
-    private String email;
+    @Column(unique = true, nullable = false)
+    private String username;
 
     @Column(nullable = false)
     private String password;
@@ -34,24 +31,39 @@ public class User extends BaseTimeEntity {
     @Column(nullable = false)
     private String name;
 
-    private String college;
+    @Column(name = "birth_date", nullable = false)
+    private int birthDate;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
+    @Embedded
+    private Profile profile;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
 
     @OneToMany(mappedBy = "followUser")
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String email, String password, String name, String college, LocalDate birthDate) {
+    public User(UUID id, String username, String password, String name, int birthDate, Profile profile) {
         this.id = id;
-        this.email = email;
+        this.username = username;
         this.password = password;
         this.name = name;
-        this.college = college;
         this.birthDate = birthDate;
+        this.profile = profile;
+        this.roles.add(Role.ROLE_USER);
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public void deleteRole(Role role) {
+        roles.remove(role);
     }
 }
