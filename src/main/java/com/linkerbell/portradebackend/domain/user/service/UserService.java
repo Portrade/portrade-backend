@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.time.LocalDate;
 import java.util.Arrays;
 
 @Service
@@ -27,6 +26,7 @@ public class UserService implements UserDetailsService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @org.springframework.context.annotation.Profile("dev")
     @PostConstruct
     public void init() {
         Profile profile1 = Profile.builder()
