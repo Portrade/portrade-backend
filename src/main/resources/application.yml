@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: "dev"
+    active: dev
 
 ---
 
@@ -9,10 +9,10 @@ spring:
     group:
       dev:
         - common
-        - dev
+        - development
       prod:
         - common
-        - prod
+        - production
 
 ---
 
@@ -20,63 +20,59 @@ spring:
   config:
     activate:
       on-profile: common
-
 server:
   port: 8080
-
 jwt:
-  authorities_key: auth
-  secret_key: SmFzdGVyMjUtU3ByaW5nQm9vdC1TcHJpbmdTZWN1cml0eS1hdXRoLUpXVC1zZWNyZXQta2V5LUpXVC1zZWNyZXQta2V5
-  access_token_expires_in: 7200 # 2 * 60 * 60
+  authorities-key: auth
+  secret-key: SmFzdGVyMjUtU3ByaW5nQm9vdC1TcHJpbmdTZWN1cml0eS1hdXRoLUpXVC1zZWNyZXQta2V5LUpXVC1zZWNyZXQta2V5
+  access-token-expires-in: 7200 # 2 * 60 * 60
 
 ---
 
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: development
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/portrade?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: 1234
   jpa:
-    show-sql: true
     hibernate:
       ddl-auto: create-drop
     properties:
       dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
         format_sql: true
-
 logging:
   level:
-    root: info
     org:
-      hibernate: info
-    org.hibernate.type: trace
-    org.hibernate.SQL: debug
+      hibernate:
+        type: trace
+        SQL: debug
 
 ---
 
 spring:
   config:
     activate:
-      on-profile: prod
+      on-profile: production
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://13.125.85.53:3306/portrade?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: 1234
   jpa:
-    show-sql: false
     hibernate:
       ddl-auto: update
     properties:
       dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
         format_sql: true
-
 logging:
   level:
-    root: info
+    org:
+      hibernate:
+        type: trace
+        SQL: debug
