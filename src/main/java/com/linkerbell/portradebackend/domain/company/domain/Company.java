@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.recruit.domain;
+package com.linkerbell.portradebackend.domain.company.domain;
 
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;

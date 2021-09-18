@@ -1,5 +1,6 @@
-package com.linkerbell.portradebackend.domain.recruit.domain;
+package com.linkerbell.portradebackend.domain.recruitment.domain;
 
+import com.linkerbell.portradebackend.domain.company.domain.Company;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString(of = {"id", "logo", "viewCount", "pay", "address"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "recruit")
-public class Recruit extends BaseTimeEntity {
+public class Recruitment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +47,7 @@ public class Recruit extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Recruit(Long id, Company company, String logo, int viewCount, Career career, Education education, WorkType workType, String pay, String address) {
+    public Recruitment(Long id, Company company, String logo, int viewCount, Career career, Education education, WorkType workType, String pay, String address) {
         this.id = id;
         this.company = company;
         this.logo = logo;

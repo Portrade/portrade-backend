@@ -1,6 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.domain;
 
-import com.linkerbell.portradebackend.domain.recruit.domain.Company;
+import com.linkerbell.portradebackend.domain.company.domain.Company;
 import lombok.*;
 
 import javax.persistence.*;
