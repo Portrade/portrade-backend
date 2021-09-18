@@ -33,7 +33,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @Column(name = "birth_date", nullable = false)
-    private LocalDate birthDate;
+    private String birthDate;
 
     @Embedded
     private Profile profile;
@@ -50,7 +50,7 @@ public class User extends BaseTimeEntity {
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String username, String password, String name, LocalDate birthDate, Profile profile) {
+    public User(UUID id, String username, String password, String name, String birthDate, Profile profile) {
         this.id = id;
         this.username = username;
         this.password = password;

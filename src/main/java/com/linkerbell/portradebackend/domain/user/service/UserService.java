@@ -39,7 +39,7 @@ public class UserService implements UserDetailsService {
                 .name("회원1")
                 .password(passwordEncoder.encode("1234"))
                 .profile(profile1)
-                .birthDate(LocalDate.now())
+                .birthDate("1990826")
                 .build();
 
         Profile profile2 = Profile.builder()
@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
                 .name("관리자1")
                 .password(passwordEncoder.encode("1234"))
                 .profile(profile2)
-                .birthDate(LocalDate.now())
+                .birthDate("1980826")
                 .build();
         admin1.addRole(Role.ROLE_ADMIN);
 
