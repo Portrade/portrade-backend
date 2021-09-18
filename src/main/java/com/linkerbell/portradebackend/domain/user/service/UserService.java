@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.user.domain.Profile;
-import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
@@ -15,9 +14,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.PostConstruct;
-import java.util.Arrays;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -25,38 +21,6 @@ public class UserService implements UserDetailsService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-
-    @org.springframework.context.annotation.Profile("dev")
-    @PostConstruct
-    public void init() {
-        Profile profile1 = Profile.builder()
-                .college("대학1")
-                .isGraduated(true)
-                .build();
-
-        User user1 = User.builder()
-                .username("user1")
-                .name("회원1")
-                .password(passwordEncoder.encode("1234"))
-                .profile(profile1)
-                .birthDate("1990826")
-                .build();
-
-        Profile profile2 = Profile.builder()
-                .college("대학2")
-                .isGraduated(false)
-                .build();
-        User admin1 = User.builder()
-                .username("admin1")
-                .name("관리자1")
-                .password(passwordEncoder.encode("1234"))
-                .profile(profile2)
-                .birthDate("1980826")
-                .build();
-        admin1.addRole(Role.ROLE_ADMIN);
-
-        userRepository.saveAll(Arrays.asList(user1, admin1));
-    }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {

@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    default: dev
 
 ---
 
@@ -40,7 +40,7 @@ spring:
     password: 1234
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: create
     properties:
       dialect: org.hibernate.dialect.MySQL8Dialect
       hibernate:
