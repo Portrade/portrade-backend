@@ -6,15 +6,12 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @Getter
-@ToString(of = {"id", "email", "name", "college", "birthDate"})
+@ToString(of = {"id", "username", "name", "college", "birthDate"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
@@ -43,6 +40,11 @@ public class User extends BaseTimeEntity {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles = new HashSet<>();
+
     @OneToMany(mappedBy = "followUser")
     private List<Follow> follows = new ArrayList<>();
 
@@ -54,5 +56,14 @@ public class User extends BaseTimeEntity {
         this.name = name;
         this.birthDate = birthDate;
         this.profile = profile;
+        this.roles.add(Role.ROLE_USER);
+    }
+
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public void deleteRole(Role role) {
+        roles.remove(role);
     }
 }

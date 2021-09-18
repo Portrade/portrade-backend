@@ -21,3 +21,8 @@ logging:
       hibernate: info
     org.hibernate.type: trace
     org.hibernate.SQL: debug
+
+jwt:
+  authorities_key: auth
+  secret_key: SmFzdGVyMjUtU3ByaW5nQm9vdC1TcHJpbmdTZWN1cml0eS1hdXRoLUpXVC1zZWNyZXQta2V5LUpXVC1zZWNyZXQta2V5
+  access_token_expires_in: 7200 # 2 * 60 * 60
