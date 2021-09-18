@@ -6,6 +6,7 @@ import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedExc
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -55,6 +56,19 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .message(e.getMessage())
                 .timestamp(LocalDateTime.now())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    //validation exception
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        final String errorMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .timestamp(LocalDateTime.now())
+                .message(ErrorCode.valueOf(errorMessage).getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
