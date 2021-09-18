@@ -6,6 +6,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -32,7 +33,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @Column(name = "birth_date", nullable = false)
-    private int birthDate;
+    private LocalDate birthDate;
 
     @Embedded
     private Profile profile;
@@ -49,7 +50,7 @@ public class User extends BaseTimeEntity {
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String username, String password, String name, int birthDate, Profile profile) {
+    public User(UUID id, String username, String password, String name, LocalDate birthDate, Profile profile) {
         this.id = id;
         this.username = username;
         this.password = password;

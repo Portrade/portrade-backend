@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
+import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @Service
@@ -27,21 +29,29 @@ public class UserService implements UserDetailsService {
 
     @PostConstruct
     public void init() {
+        Profile profile1 = Profile.builder()
+                .college("대학1")
+                .isGraduated(true)
+                .build();
+
         User user1 = User.builder()
                 .username("user1")
                 .name("회원1")
                 .password(passwordEncoder.encode("1234"))
-                .college("대학1")
-                .isGraduated(true)
-                .birthDate(20001214)
+                .profile(profile1)
+                .birthDate(LocalDate.now())
+                .build();
+
+        Profile profile2 = Profile.builder()
+                .college("대학2")
+                .isGraduated(false)
                 .build();
         User admin1 = User.builder()
                 .username("admin1")
                 .name("관리자1")
                 .password(passwordEncoder.encode("1234"))
-                .college("대학1")
-                .isGraduated(false)
-                .birthDate(20001214)
+                .profile(profile2)
+                .birthDate(LocalDate.now())
                 .build();
         admin1.addRole(Role.ROLE_ADMIN);
 
@@ -62,13 +72,16 @@ public class UserService implements UserDetailsService {
             throw new IllegalArgumentException("이미 존재하는 사용자 아이디입니다.");
         }
 
+        Profile profile = Profile.builder()
+                .college(signUpRequestDto.getCollege())
+                .isGraduated(signUpRequestDto.isGraduated())
+                .build();
+
         User user = User.builder()
                 .username(signUpRequestDto.getId())
                 .name(signUpRequestDto.getName())
                 .password(passwordEncoder.encode(signUpRequestDto.getPassword()))
-                .college(signUpRequestDto.getCollege())
-                .isGraduated(signUpRequestDto.isGraduated())
-                .wantedJob(signUpRequestDto.getWantedJob())
+                .profile(profile)
                 .birthDate(signUpRequestDto.getBirthDate())
                 .build();
 

@@ -63,10 +63,12 @@ public class GlobalExceptionHandler {
     //validation exception
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentNotValidException e, HttpServletRequest request) {
+        final String errorMessage = e.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .method(request.getMethod())
                 .path(request.getRequestURI())
-                .message(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage())
+                .timestamp(LocalDateTime.now())
+                .message(ErrorCode.valueOf(errorMessage).getMessage())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

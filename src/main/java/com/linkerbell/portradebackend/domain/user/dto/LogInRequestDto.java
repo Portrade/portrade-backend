@@ -11,10 +11,10 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class LogInRequestDto {
 
-    @NotNull
+    @NotNull(message = "NULL_USER_ID")
     private String id;
 
-    @NotNull
+    @NotNull(message = "NULL_USER_PASSWORD")
     private String password;
 
     @Builder
