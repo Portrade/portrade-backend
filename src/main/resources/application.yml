@@ -26,6 +26,19 @@ jwt:
   authorities-key: auth
   secret-key: SmFzdGVyMjUtU3ByaW5nQm9vdC1TcHJpbmdTZWN1cml0eS1hdXRoLUpXVC1zZWNyZXQta2V5LUpXVC1zZWNyZXQta2V5
   access-token-expires-in: 7200 # 2 * 60 * 60
+cloud:
+  aws:
+    s3:
+      bucket: portrade-bucket/upload
+    region:
+      auto: false
+      static: ap-northeast-2
+    stack:
+      auto: false
+    credentials:
+      instance-profile: false
+      access-key: AKIAQHNBSGRBHRVXXIUP
+      secret-key: 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
 
 ---
 
