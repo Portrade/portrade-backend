@@ -6,13 +6,12 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
 @Entity
 @Getter
-@ToString(of = {"id", "username", "name", "college", "birthDate"})
+@ToString(of = {"id", "username", "name", "birthDate"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {
