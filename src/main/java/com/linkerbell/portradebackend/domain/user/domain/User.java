@@ -1,6 +1,5 @@
 package com.linkerbell.portradebackend.domain.user.domain;
 
-import com.linkerbell.portradebackend.domain.file.domain.File;
 import com.linkerbell.portradebackend.domain.follow.domain.Follow;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
@@ -38,10 +37,6 @@ public class User extends BaseTimeEntity {
     @Embedded
     private Profile profile;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "file_id")
-    private File profileImage;
-
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
@@ -62,10 +57,6 @@ public class User extends BaseTimeEntity {
         this.birthDate = birthDate;
         this.profile = profile;
         this.roles.add(Role.ROLE_USER);
-    }
-
-    public void updateProfileImage(File profileImage) {
-        this.profileImage = profileImage;
     }
 
     public void addRole(Role role) {

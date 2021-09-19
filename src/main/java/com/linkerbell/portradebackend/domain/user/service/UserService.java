@@ -1,13 +1,12 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
-import com.linkerbell.portradebackend.domain.file.domain.File;
-import com.linkerbell.portradebackend.domain.file.repository.FileRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
+import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.EntityManager;
 import java.io.IOException;
 
 @Service
@@ -26,8 +26,8 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
+    private final EntityManager entityManager;
     private final UserRepository userRepository;
-    private final FileRepository fileRepository;
     private final PasswordEncoder passwordEncoder;
     private final S3Util s3Util;
 
@@ -68,21 +68,14 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) throws IOException {
-        String originalFileName = file.getOriginalFilename();
-        String filePath = s3Util.upload(file);
+        UploadResponseDto uploadResponseDto = s3Util.upload(file);
 
-        File imageFile = File.builder()
-                .name(originalFileName)
-                .url(filePath)
-                .build();
-
-        fileRepository.save(imageFile);
-
-        user.updateProfileImage(imageFile);
+        user.getProfile().updateProfileUrl(uploadResponseDto.getUrl());
+        entityManager.merge(user);
 
         return ProfileImageResponseDto.builder()
-                .name(originalFileName)
-                .url(filePath)
+                .fileName(uploadResponseDto.getNewFileName())
+                .url(uploadResponseDto.getUrl())
                 .build();
     }
 }

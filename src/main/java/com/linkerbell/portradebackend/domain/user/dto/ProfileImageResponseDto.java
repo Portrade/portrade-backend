@@ -12,14 +12,14 @@ import javax.validation.constraints.NotNull;
 public class ProfileImageResponseDto {
 
     @NotNull
-    private String name;
+    private String fileName;
 
     @NotNull
     private String url;
 
     @Builder
-    public ProfileImageResponseDto(String name, String url) {
-        this.name = name;
+    public ProfileImageResponseDto(String fileName, String url) {
+        this.fileName = fileName;
         this.url = url;
     }
 }

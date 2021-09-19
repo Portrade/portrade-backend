@@ -16,9 +16,17 @@ public class Profile {
     @Column(name = "is_graduated")
     private boolean isGraduated;
 
+    @Column(name = "profile_url")
+    private String profileUrl;
+
     @Builder
-    public Profile(String college, boolean isGraduated) {
+    public Profile(String college, boolean isGraduated, String profileUrl) {
         this.college = college;
         this.isGraduated = isGraduated;
+        this.profileUrl = profileUrl;
+    }
+
+    public void updateProfileUrl(String profileUrl) {
+        this.profileUrl = profileUrl;
     }
 }
