@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
 @NoArgsConstructor
@@ -44,10 +45,11 @@ public class S3Util {
     }
 
     public String upload(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename() + "_" + System.currentTimeMillis();
+        String[] filenames = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
+        String newFileName = filenames[0] + "_" + System.currentTimeMillis() + "." + filenames[1];
 
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        return s3Client.getUrl(bucket, newFileName).toString();
     }
 }
