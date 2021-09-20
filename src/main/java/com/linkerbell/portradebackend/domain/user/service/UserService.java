@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
 
         return UserResponseDto.builder()
-                .id(user.getUsername())
+                .userId(user.getUsername())
                 .name(user.getName())
                 .build();
     }

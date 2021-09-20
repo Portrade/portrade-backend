@@ -12,14 +12,14 @@ import javax.validation.constraints.NotNull;
 public class LogInRequestDto {
 
     @NotNull(message = "NULL_USER_ID")
-    private String id;
+    private String userId;
 
     @NotNull(message = "NULL_USER_PASSWORD")
     private String password;
 
     @Builder
-    public LogInRequestDto(String id, String password) {
-        this.id = id;
+    public LogInRequestDto(String userId, String password) {
+        this.userId = userId;
         this.password = password;
     }
 }
