@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.global.exception;
 
 
 import com.linkerbell.portradebackend.global.exception.custom.InvalidTokenException;
+import com.linkerbell.portradebackend.global.exception.custom.ServiceException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,17 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .timestamp(LocalDateTime.now())
                 .message(ErrorCode.valueOf(errorMessage).getMessage())
+                .build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(ServiceException.class)
+    public ResponseEntity<ErrorResponse> handleServiceException(Exception e, ServiceException serviceException, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.builder()
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .message(serviceException.getErrorCode().getMessage())
+                .timestamp(LocalDateTime.now())
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }

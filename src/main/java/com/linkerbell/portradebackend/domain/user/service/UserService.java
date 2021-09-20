@@ -8,6 +8,8 @@ import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
+import com.linkerbell.portradebackend.global.exception.ErrorCode;
+import com.linkerbell.portradebackend.global.exception.custom.ServiceException;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,7 +36,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(email)
-                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자 아이디입니다."));
+                .orElseThrow(() -> new ServiceException(ErrorCode.NOT_FOUND_USER_USERNAME));
 
         return new UserAdapter(user);
     }
@@ -42,7 +44,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserResponseDto createUser(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findByUsername(signUpRequestDto.getId()).orElse(null) != null) {
-            throw new IllegalArgumentException("이미 존재하는 사용자 아이디입니다.");
+            throw new ServiceException(ErrorCode.ALREADY_INUSE_USER_USERNAME);
         }
 
         Profile profile = Profile.builder()
