@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(of = {"id", "logo", "viewCount", "pay", "address"})
+@ToString(exclude = {"company"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "recruit")
 public class Recruitment extends BaseTimeEntity {
