@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
 
     @Transactional
     public UserResponseDto createUser(SignUpRequestDto signUpRequestDto) {
-        if (userRepository.findByUsername(signUpRequestDto.getUsername()).orElse(null) != null) {
+        if (userRepository.findByUsername(signUpRequestDto.getUserId()).orElse(null) != null) {
             throw new IllegalArgumentException("이미 존재하는 사용자 아이디입니다.");
         }
 

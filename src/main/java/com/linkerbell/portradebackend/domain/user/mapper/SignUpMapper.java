@@ -10,6 +10,7 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface SignUpMapper extends GenericMapper<SignUpRequestDto, User> {
 
+    @Mapping(target = "username", source = "dto.userId")
     @Mapping(target = "profile.college", source = "dto.college")
     @Mapping(target = "profile.isGraduated", source = "dto.graduation")
     @Mapping(target = "password", ignore = true)

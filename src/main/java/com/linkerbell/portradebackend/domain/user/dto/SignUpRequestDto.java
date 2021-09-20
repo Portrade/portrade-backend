@@ -16,7 +16,7 @@ public class SignUpRequestDto {
 
     @NotNull(message = "NULL_USER_ID")
     @Pattern(regexp = "^[a-z0-9]*$", message = "INVALID_USER_ID")
-    private String username;
+    private String userId;
 
     @NotNull(message = "NULL_USER_NAME")
     @Size(min = 2, max = 8, message = "INVALID_USER_NAME")
@@ -38,8 +38,8 @@ public class SignUpRequestDto {
     private String birthDate;
 
     @Builder
-    public SignUpRequestDto(String username, String name, String password, String college, boolean graduation, String wantedJob, String birthDate) {
-        this.username = username;
+    public SignUpRequestDto(String userId, String name, String password, String college, boolean graduation, String wantedJob, String birthDate) {
+        this.userId = userId;
         this.name = name;
         this.password = password;
         this.college = college;
