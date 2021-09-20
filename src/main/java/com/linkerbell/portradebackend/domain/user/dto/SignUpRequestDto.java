@@ -28,7 +28,7 @@ public class SignUpRequestDto {
 
     private String college;
 
-    private boolean getGraduated;
+    private boolean graduation;
 
     @NotNull(message = "NULL_USER_WANTEDJOB")
     private String wantedJob;
@@ -38,12 +38,12 @@ public class SignUpRequestDto {
     private String birthDate;
 
     @Builder
-    public SignUpRequestDto(String username, String name, String password, String college, boolean getGraduated, String wantedJob, String birthDate) {
+    public SignUpRequestDto(String username, String name, String password, String college, boolean graduation, String wantedJob, String birthDate) {
         this.username = username;
         this.name = name;
         this.password = password;
         this.college = college;
-        this.getGraduated = getGraduated;
+        this.graduation = graduation;
         this.wantedJob = wantedJob;
         this.birthDate = birthDate;
     }

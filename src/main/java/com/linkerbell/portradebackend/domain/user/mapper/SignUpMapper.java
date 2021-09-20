@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 public interface SignUpMapper extends GenericMapper<SignUpRequestDto, User> {
 
     @Mapping(target = "profile.college", source = "dto.college")
-    @Mapping(target = "profile.isGraduated", source = "dto.getGraduated")
+    @Mapping(target = "profile.isGraduated", source = "dto.graduation")
     @Mapping(target = "password", ignore = true)
     User toEntity(SignUpRequestDto dto, Profile profile);
 }
