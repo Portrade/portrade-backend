@@ -25,6 +25,7 @@ public class User extends BaseTimeEntity {
     @Column(unique = true, nullable = false)
     private String username;
 
+    @Setter
     @Column(nullable = false)
     private String password;
 
@@ -34,12 +35,16 @@ public class User extends BaseTimeEntity {
     @Column(name = "birth_date", nullable = false)
     private String birthDate;
 
+    @Column(name = "wanted_job", nullable = false)
+    private String wantedJob;
+
     @Embedded
     private Profile profile;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
+    @Setter
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -49,12 +54,13 @@ public class User extends BaseTimeEntity {
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String username, String password, String name, String birthDate, Profile profile) {
+    public User(UUID id, String username, String password, String name, String birthDate, String wantedJob, Profile profile) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.name = name;
         this.birthDate = birthDate;
+        this.wantedJob = wantedJob;
         this.profile = profile;
         this.roles.add(Role.ROLE_USER);
     }
