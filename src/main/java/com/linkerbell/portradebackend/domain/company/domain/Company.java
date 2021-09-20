@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(exclude = {"lastModifiedDate"})
+@ToString
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "company")
 public class Company extends BaseTimeEntity {
