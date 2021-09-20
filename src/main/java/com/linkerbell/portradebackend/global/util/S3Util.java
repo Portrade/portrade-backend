@@ -7,6 +7,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Objects;
 
 @Service
 @NoArgsConstructor
@@ -43,11 +45,19 @@ public class S3Util {
                 .build();
     }
 
-    public String upload(MultipartFile file) throws IOException {
-        String fileName = file.getOriginalFilename() + "_" + System.currentTimeMillis();
+    public UploadResponseDto upload(MultipartFile file) throws IOException {
+        String originalFileName = file.getOriginalFilename();
+        String[] fileNames = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
+        String newFileName = fileNames[0] + "_" + System.currentTimeMillis() + "." + fileNames[1];
 
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+        s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        String url = s3Client.getUrl(bucket, newFileName).toString();
+
+        return UploadResponseDto.builder()
+                .originalFileName(originalFileName)
+                .newFileName(newFileName)
+                .url(url)
+                .build();
     }
 }
