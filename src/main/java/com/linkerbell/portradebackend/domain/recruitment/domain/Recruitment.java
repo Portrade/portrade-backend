@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.recruitment.domain;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
+import com.linkerbell.portradebackend.global.domain.Category;
 import lombok.*;
 
 import javax.persistence.*;
@@ -43,11 +44,14 @@ public class Recruitment extends BaseTimeEntity {
     @Column(nullable = false)
     private String address;
 
+    @Enumerated(EnumType.STRING)
+    private Category category;
+
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Recruitment(Long id, Company company, String logo, int viewCount, Career career, Education education, WorkType workType, String pay, String address) {
+    public Recruitment(Long id, Company company, String logo, int viewCount, Career career, Education education, WorkType workType, String pay, String address, Category category) {
         this.id = id;
         this.company = company;
         this.logo = logo;
@@ -57,5 +61,6 @@ public class Recruitment extends BaseTimeEntity {
         this.workType = workType;
         this.pay = pay;
         this.address = address;
+        this.category = category;
     }
 }

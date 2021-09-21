@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
+import com.linkerbell.portradebackend.global.domain.Category;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,15 +31,15 @@ public class SignUpRequestDto {
 
     private boolean graduation;
 
-    @NotNull(message = "NULL_USER_WANTEDJOB")
-    private String wantedJob;
+    @NotNull(message = "NULL_USER_CATEGORY")
+    private Category wantedJob;
 
     @NotNull(message = "NULL_USER_BIRTHDATE")
     @Pattern(regexp="^[0-9]{8}", message="INVALID_SIZE_USER_BIRTHDATE")
     private String birthDate;
 
     @Builder
-    public SignUpRequestDto(String userId, String name, String password, String college, boolean graduation, String wantedJob, String birthDate) {
+    public SignUpRequestDto(String userId, String name, String password, String college, boolean graduation, Category wantedJob, String birthDate) {
         this.userId = userId;
         this.name = name;
         this.password = password;

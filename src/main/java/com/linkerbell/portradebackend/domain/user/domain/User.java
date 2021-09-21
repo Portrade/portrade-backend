@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.user.domain;
 
 import com.linkerbell.portradebackend.domain.follow.domain.Follow;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
+import com.linkerbell.portradebackend.global.domain.Category;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -35,8 +36,8 @@ public class User extends BaseTimeEntity {
     @Column(name = "birth_date", nullable = false)
     private String birthDate;
 
-    @Column(name = "wanted_job", nullable = false)
-    private String wantedJob;
+    @Enumerated(EnumType.STRING)
+    private Category wantedJob;
 
     @Embedded
     private Profile profile;
@@ -54,7 +55,7 @@ public class User extends BaseTimeEntity {
     private List<Follow> follows = new ArrayList<>();
 
     @Builder
-    public User(UUID id, String username, String password, String name, String birthDate, String wantedJob, Profile profile) {
+    public User(UUID id, String username, String password, String name, String birthDate, Category wantedJob, Profile profile) {
         this.id = id;
         this.username = username;
         this.password = password;

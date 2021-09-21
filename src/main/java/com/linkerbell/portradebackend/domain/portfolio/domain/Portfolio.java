@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.portfolio.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
+import com.linkerbell.portradebackend.global.domain.Category;
 import lombok.*;
 
 import javax.persistence.*;
