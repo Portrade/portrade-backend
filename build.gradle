@@ -37,7 +37,7 @@ dependencies {
 	// MySQL
 	runtimeOnly 'mysql:mysql-connector-java'
 	// H2
-//	runtimeOnly 'com.h2database:h2'
+	runtimeOnly 'com.h2database:h2'
 
 	/**
 	 * Spring Security
