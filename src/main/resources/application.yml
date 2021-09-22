@@ -1,19 +1,26 @@
 spring:
   profiles:
-    active: dev
+    group:
+      dev:
+        - env
+        - h2
+      prod:
+        - env
+        - mysql
+    default: dev
 
 server:
   port: 8080
 
 jwt:
-  authorities-key: auth
-  secret-key: SmFzdGVyMjUtU3ByaW5nQm9vdC1TcHJpbmdTZWN1cml0eS1hdXRoLUpXVC1zZWNyZXQta2V5LUpXVC1zZWNyZXQta2V5
+  authorities-key: ${JWT_AUTHORITIES_KEY}
+  secret-key: ${JWT_SECRET_KEY}
   access-token-expires-in: 7200 # 2 * 60 * 60
 
 cloud:
   aws:
     s3:
-      bucket: portrade-bucket/upload
+      bucket: ${AWS_BUCKET}
     region:
       auto: false
       static: ap-northeast-2
@@ -21,5 +28,5 @@ cloud:
       auto: false
     credentials:
       instance-profile: false
-      access-key: AKIAQHNBSGRBHRVXXIUP
-      secret-key: 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
+      access-key: ${AWS_ACCESS_KEY}
+      secret-key: ${AWS_SECRET_KEY}
