@@ -46,11 +46,14 @@ public class Qna extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Column(name = "is_public")
+    private boolean isPublic;
+
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Qna(Long id, User user, String name, String email, String phoneNumber, String title, String content, Category category, Status status) {
+    public Qna(Long id, User user, String name, String email, String phoneNumber, String title, String content, Category category, Status status, boolean isPublic) {
         this.id = id;
         this.user = user;
         this.name = name;
@@ -60,5 +63,6 @@ public class Qna extends BaseTimeEntity {
         this.content = content;
         this.category = category;
         this.status = status;
+        this.isPublic = isPublic;
     }
 }
