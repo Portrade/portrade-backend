@@ -11,7 +11,7 @@ import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.ServiceException;
+import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
@@ -41,7 +41,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(email)
-                .orElseThrow(() -> new ServiceException(ErrorCode.NOT_FOUND_USER_USERNAME));
+                .orElseThrow(() -> new InvalidValueException(ErrorCode.NOT_FOUND_USER_USERNAME));
 
         return new UserAdapter(user);
     }
@@ -49,7 +49,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserResponseDto createUser(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findByUsername(signUpRequestDto.getUserId()).orElse(null) != null) {
-            throw new ServiceException(ErrorCode.ALREADY_INUSE_USER_USERNAME);
+            throw new InvalidValueException(ErrorCode.ALREADY_INUSE_USER_USERNAME);
         }
 
         Profile profile = Profile.builder().build();

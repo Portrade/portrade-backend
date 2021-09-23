@@ -4,7 +4,7 @@ import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
 import com.linkerbell.portradebackend.global.config.security.jwt.TokenProvider;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.ServiceException;
+import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,7 +30,7 @@ public class AuthService {
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            throw new ServiceException(ErrorCode.INVALID_USER_ID_PASSWORD);
+            throw new InvalidValueException(ErrorCode.INVALID_USER_ID_PASSWORD);
         }
 
         String accessToken = tokenProvider.createAccessToken(authentication);
