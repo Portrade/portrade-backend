@@ -29,6 +29,7 @@ public class Portfolio extends BaseTimeEntity {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
     private String category;
 
     @Column(name = "is_public")

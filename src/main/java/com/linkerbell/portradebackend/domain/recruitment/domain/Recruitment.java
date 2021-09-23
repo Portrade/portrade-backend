@@ -43,6 +43,7 @@ public class Recruitment extends BaseTimeEntity {
     @Column(nullable = false)
     private String address;
 
+    @Column(nullable = false)
     private String category;
 
     @Column(name = "last_modified_date")

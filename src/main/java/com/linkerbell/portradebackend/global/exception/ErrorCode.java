@@ -19,7 +19,7 @@ public enum ErrorCode {
     NULL_USER_NAME("M004","이름은 필수 입니다."),
     INVALID_USER_PASSWORD("M005","비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함 8글자 이상이어야 합니다."),
     NULL_USER_PASSWORD("M006", "비밀번호는 필수 입니다."),
-    NULL_USER_CATEGORY("M007",  "희망직무는 필수 입니다."),
+    NULL_USER_WANTEDJOB("M007",  "희망직무는 필수 입니다."),
     INVALID_SIZE_USER_BIRTHDATE("M008", "생일은 8 글자로 입력해주세요."),
     NULL_USER_BIRTHDATE("M009", "생일은 필수 입니다."),
     ;

@@ -50,7 +50,7 @@ public class Company extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Company(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, LocalDate foundingDate, LocalDateTime lastModifiedDate) {
+    public Company(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, LocalDate foundingDate) {
         this.id = id;
         this.name = name;
         this.form = form;
@@ -61,6 +61,5 @@ public class Company extends BaseTimeEntity {
         this.address = address;
         this.ceo = ceo;
         this.foundingDate = foundingDate;
-        this.lastModifiedDate = lastModifiedDate;
     }
 }

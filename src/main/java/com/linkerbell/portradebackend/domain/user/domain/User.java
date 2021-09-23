@@ -35,6 +35,7 @@ public class User extends BaseTimeEntity {
     @Column(name = "birth_date", nullable = false)
     private String birthDate;
 
+    @Column(name = "wanted_job", nullable = false)
     private String wantedJob;
 
     @Embedded
