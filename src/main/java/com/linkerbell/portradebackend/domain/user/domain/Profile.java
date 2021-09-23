@@ -1,6 +1,5 @@
 package com.linkerbell.portradebackend.domain.user.domain;
 
-import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -24,6 +23,10 @@ public class Profile {
     public Profile(String college, boolean isGraduated, String profileUrl) {
         this.college = college;
         this.isGraduated = isGraduated;
+        this.profileUrl = profileUrl;
+    }
+
+    public void updateProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
     }
 }

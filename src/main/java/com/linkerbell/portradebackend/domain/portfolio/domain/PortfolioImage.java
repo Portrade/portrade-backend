@@ -8,7 +8,7 @@ import lombok.ToString;
 import javax.persistence.*;
 
 @Entity
-@ToString(of = {"id", "url"})
+@ToString(exclude = {"portfolio"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "portfolio_image")
 public class PortfolioImage {

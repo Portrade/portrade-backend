@@ -1,6 +1,5 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,14 +7,14 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserResponseDto {
+public class ProfileImageResponseDto {
 
-    private String userId;
-    private String name;
+    private String fileName;
+    private String url;
 
     @Builder
-    public UserResponseDto(String userId, String name) {
-        this.userId = userId;
-        this.name = name;
+    public ProfileImageResponseDto(String fileName, String url) {
+        this.fileName = fileName;
+        this.url = url;
     }
 }
