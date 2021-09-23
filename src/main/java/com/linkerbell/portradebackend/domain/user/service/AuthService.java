@@ -26,7 +26,7 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken = null;
         Authentication authentication = null;
         try {
-            authenticationToken = new UsernamePasswordAuthenticationToken(logInRequestDto.getId(), logInRequestDto.getPassword());
+            authenticationToken = new UsernamePasswordAuthenticationToken(logInRequestDto.getUserId(), logInRequestDto.getPassword());
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
