@@ -2,7 +2,6 @@ package com.linkerbell.portradebackend.domain.portfolio.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
-import com.linkerbell.portradebackend.global.domain.Category;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,8 +29,7 @@ public class Portfolio extends BaseTimeEntity {
     @Column(nullable = false)
     private String description;
 
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private String category;
 
     @Column(name = "is_public")
     private boolean isPublic;
@@ -46,11 +44,12 @@ public class Portfolio extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Portfolio(Long id, User user, String title, String description, boolean isPublic, int viewCount, String mainImage) {
+    public Portfolio(Long id, User user, String title, String description, String category, boolean isPublic, int viewCount, String mainImage) {
         this.id = id;
         this.user = user;
         this.title = title;
         this.description = description;
+        this.category = category;
         this.isPublic = isPublic;
         this.viewCount = viewCount;
         this.mainImage = mainImage;
