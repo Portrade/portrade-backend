@@ -28,17 +28,16 @@ class UserRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        Profile profile = Profile.builder()
-                .college("가나대학교")
-                .isGraduated(false)
-                .build();
         user = User.builder()
                 .username("test1")
                 .password("1234")
                 .name("김회원")
                 .birthDate("20030327")
                 .wantedJob("marketing")
-                .profile(profile)
+                .profile(Profile.builder()
+                        .college("가나대학교")
+                        .isGraduated(false)
+                        .build())
                 .build();
     }
 
