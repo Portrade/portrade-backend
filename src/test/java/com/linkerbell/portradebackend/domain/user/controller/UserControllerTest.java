@@ -18,6 +18,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
@@ -146,11 +147,20 @@ class UserControllerTest {
         assertThat(response.getName()).isEqualTo("name");
     }
 
+//    @Test
+//    @WithAnonymousUser
+//    public void 프로필등록_인증되지않은사용자() throws Exception {
+//
+//    }
 
     @Test
-    @WithAnonymousUser
-    public void 프로필등록_인증되지않은사용자() throws Exception {
+    @WithMockUser(username = "june", roles = "ROLE_USER")
+    public void 프로필등록성공() throws Exception {
         final String url = "/api/v1/users/profile/image";
+
+        final User user = User.builder()
+                .username("june")
+                .build();
 
         MockMultipartFile file = new MockMultipartFile("imagefile", "imagefile.jpg", "image/jpeg", "imagefile".getBytes());
         MockMultipartHttpServletRequestBuilder builder =
@@ -163,17 +173,21 @@ class UserControllerTest {
             }
         });
 
-        doThrow(new UsernameNotFoundException("존재하지 않는 사용자 아이디입니다.")).when(userService).uploadProfileImage(any(null), any(MultipartFile.class));
+        ProfileImageResponseDto profileImageResponseDto = ProfileImageResponseDto.builder()
+                .fileName(file.getName())
+                .build();
 
-        final ResultActions resultActions = mockMvc.perform(
-                builder
-                        .file(file)
-                        .contentType(MediaType.MULTIPART_FORM_DATA));
+        doReturn(profileImageResponseDto).when(userService).uploadProfileImage(eq(user), eq(file));
+
+        final ResultActions resultActions = mockMvc.perform(builder
+                .file(file)
+                .contentType(MediaType.MULTIPART_FORM_DATA));
+
         resultActions.andDo(print());
-        resultActions.andExpect(status().isNotFound());
+        resultActions.andExpect(status().isOk());
+
+        verify(userService).uploadProfileImage(eq(user),any(MultipartFile.class));
     }
-
-
 
 
     private SignUpRequestDto signUpRequestDto(String userId, String name, String password, String wantedJob, String birthdate) {
