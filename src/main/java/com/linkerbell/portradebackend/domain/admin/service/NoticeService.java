@@ -42,7 +42,7 @@ public class NoticeService {
 
         return NoticeResponseDto.builder()
                 .id(notice.getId())
-                .creator(notice.getUser().getName())
+                .creator(notice.getUser().getUsername())
                 .title(notice.getTitle())
                 .viewCount(notice.getViewCount())
                 .createdDate(notice.getCreatedDate())
@@ -59,7 +59,7 @@ public class NoticeService {
         List<NoticeResponseDto> notices = noticePage.stream()
                 .map(notice -> NoticeResponseDto.builder()
                         .id(notice.getId())
-                        .creator(notice.getUser().getName())
+                        .creator(notice.getUser().getUsername())
                         .title(notice.getTitle())
                         .viewCount(notice.getViewCount())
                         .createdDate(notice.getCreatedDate())
@@ -81,7 +81,7 @@ public class NoticeService {
 
         return NoticeDetailResponseDto.builder()
                 .id(notice.getId())
-                .creator(notice.getUser().getName()) // 이름? 아이디?
+                .creator(notice.getUser().getUsername()) // 이름? 아이디?
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .viewCount(notice.getViewCount())
