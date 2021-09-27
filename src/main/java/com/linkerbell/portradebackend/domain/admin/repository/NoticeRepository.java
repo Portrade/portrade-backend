@@ -1,4 +1,7 @@
 package com.linkerbell.portradebackend.domain.admin.repository;
 
-public interface NoticeRepository {
+import com.linkerbell.portradebackend.domain.admin.domain.Notice;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface NoticeRepository extends JpaRepository<Notice, Long> {
 }
