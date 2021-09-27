@@ -1,24 +1,13 @@
 package com.linkerbell.portradebackend.global.exception.custom;
 
+import com.linkerbell.portradebackend.global.exception.ErrorCode;
+import lombok.Getter;
+
+@Getter
 public class UnAuthorizedException extends RuntimeException {
+    private ErrorCode errorCode;
 
-    public UnAuthorizedException() {
-        super();
-    }
-
-    public UnAuthorizedException(String message) {
-        super(message);
-    }
-
-    public UnAuthorizedException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public UnAuthorizedException(Throwable cause) {
-        super(cause);
-    }
-
-    protected UnAuthorizedException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    public UnAuthorizedException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
     }
 }

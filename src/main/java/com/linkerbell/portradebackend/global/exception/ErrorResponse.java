@@ -1,9 +1,6 @@
 package com.linkerbell.portradebackend.global.exception;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
@@ -15,12 +12,14 @@ public class ErrorResponse {
     private String path;
     private LocalDateTime timestamp;
     private String message;
+    private String code;
 
     @Builder
-    public ErrorResponse(String method, String path, LocalDateTime timestamp, String message) {
+    public ErrorResponse(String method, String path, LocalDateTime timestamp, String message, String code) {
         this.method = method;
         this.path = path;
-        this.timestamp = timestamp;
+        this.timestamp = LocalDateTime.now();
         this.message = message;
+        this.code = code;
     }
 }
