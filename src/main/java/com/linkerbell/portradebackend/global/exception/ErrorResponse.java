@@ -15,11 +15,11 @@ public class ErrorResponse {
     private String code;
 
     @Builder
-    public ErrorResponse(String method, String path, LocalDateTime timestamp, String message, String code) {
+    public ErrorResponse(String method, String path, String message, String code) {
         this.method = method;
         this.path = path;
-        this.timestamp = LocalDateTime.now();
         this.message = message;
         this.code = code;
+        this.timestamp = LocalDateTime.now();
     }
 }
