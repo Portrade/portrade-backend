@@ -53,7 +53,7 @@ public class NoticeService {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
-                Sort.by(Sort.Direction.DESC, "created_date"));
+                Sort.by(Sort.Direction.DESC, "id"));
         Page<Notice> noticePage = noticeRepository.findAll(pageable);
 
         List<NoticeResponseDto> notices = noticePage.stream()
@@ -72,6 +72,7 @@ public class NoticeService {
                 .build();
     }
 
+    @Transactional
     public NoticeDetailResponseDto getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공지사항 번호입니다."));
