@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.notice.domain;
+package com.linkerbell.portradebackend.domain.admin.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
@@ -42,12 +42,6 @@ public class Notice extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.viewCount = viewCount;
-    }
-
-    public void update(String title, String content) {
-        this.title = title;
-        this.content = content;
-        lastModifiedDate = LocalDateTime.now();
     }
 
     public void addViewCount() {
