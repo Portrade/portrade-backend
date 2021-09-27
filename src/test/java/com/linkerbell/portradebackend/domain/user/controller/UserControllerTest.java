@@ -4,29 +4,30 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.UserService;
+import com.linkerbell.portradebackend.global.config.security.CustomAccessDeniedHandler;
+import com.linkerbell.portradebackend.global.config.security.CustomAuthenticationEntryPoint;
+import com.linkerbell.portradebackend.global.config.security.jwt.JwtFilter;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
-@ExtendWith({SpringExtension.class})
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
-@AutoConfigureMockMvc
+@WebMvcTest(UserController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class UserControllerTest {
 
     static String username = "username1";
@@ -44,6 +45,12 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+    @MockBean
+    private CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    @MockBean
+    private CustomAccessDeniedHandler customAccessDeniedHandler;
+    @MockBean
+    private JwtFilter jwtFilter;
 
     @DisplayName("회원가입 API")
     @Test
@@ -120,6 +127,7 @@ class UserControllerTest {
         // when
         ResultActions result = mvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
+                .with(csrf())
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(signUpRequestDto)));
 
