@@ -9,13 +9,13 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NoticeListResponseDto {
+public class NoticesResponseDto {
 
     private int maxPage;
     private List<NoticeResponseDto> notices;
 
     @Builder
-    public NoticeListResponseDto(int maxPage, List<NoticeResponseDto> notices) {
+    public NoticesResponseDto(int maxPage, List<NoticeResponseDto> notices) {
         this.maxPage = maxPage;
         this.notices = notices;
     }
