@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -17,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @ExtendWith(SpringExtension.class)
 class NoticeRepositoryTest {
 
@@ -29,9 +27,9 @@ class NoticeRepositoryTest {
     @BeforeEach
     public void setUp() {
         User admin = User.builder()
-                .username("admin5")
+                .username("admin1")
                 .password("1234Aa@@")
-                .name("관리자5")
+                .name("관리자1")
                 .birthDate("20030327")
                 .wantedJob("marketing")
                 .build();
@@ -42,7 +40,7 @@ class NoticeRepositoryTest {
                 .build();
     }
 
-    @DisplayName("Notice 엔티티 저장")
+    @DisplayName("공지사항 엔티티 저장")
     @Test
     void saveNotice() throws Exception {
         // given
@@ -58,7 +56,7 @@ class NoticeRepositoryTest {
         assertEquals(notice.getCreatedDate(), savedNotice.getCreatedDate());
     }
 
-    @DisplayName("Notice 엔티티 조회")
+    @DisplayName("공지사항 엔티티 조회")
     @Test
     void findNoticeById() throws Exception {
         // given
@@ -77,7 +75,7 @@ class NoticeRepositoryTest {
         assertEquals(notice.getCreatedDate(), foundNotice.getCreatedDate());
     }
 
-    @DisplayName("Notice 엔티티 삭제")
+    @DisplayName("공지사항 엔티티 삭제")
     @Test
     void deleteNotice() throws Exception {
         // given

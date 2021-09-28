@@ -8,6 +8,7 @@ import com.linkerbell.portradebackend.domain.admin.dto.NoticeResponseDto;
 import com.linkerbell.portradebackend.domain.admin.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -17,8 +18,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,7 +62,7 @@ class NoticeServiceTest {
                 .build();
     }
 
-    @DisplayName("Notice 생성")
+    @DisplayName("공지사항 생성")
     @Test
     void createNotice() throws Exception {
         // given
@@ -75,7 +80,7 @@ class NoticeServiceTest {
         assertEquals(0, savedNoticeResponseDto.getViewCount());
     }
 
-    @DisplayName("Notice 생성 - 권한 없는 사용자")
+    @DisplayName("공지사항 생성 - 권한 없는 사용자")
     @Test
     void createNotice_unAuthorizedUser() throws Exception {
         // given
@@ -90,14 +95,27 @@ class NoticeServiceTest {
                 () -> noticeService.createNotice(noticeRequestDto, user));
     }
 
-    //    TODO
-    @DisplayName("Notice 목록 조회")
+    @DisplayName("공지사항 목록 조회")
     @Test
     void getNoticeList() throws Exception {
         // given
-//        Page<Notice> noticePage = Page.empty();
-        Page<Notice> noticePage = Page.empty();
-
+        Notice notice1 = Notice.builder()
+                .title("공지사항 제목1")
+                .content("공지사항 내용1")
+                .user(admin)
+                .build();
+        Notice notice2 = Notice.builder()
+                .title("공지사항 제목2")
+                .content("공지사항 내용2")
+                .user(admin)
+                .build();
+        Notice notice3 = Notice.builder()
+                .title("공지사항 제목3")
+                .content("공지사항 내용3")
+                .user(admin)
+                .build();
+        List<Notice> notices = new ArrayList<>(Arrays.asList(notice1, notice2, notice3));
+        Page<Notice> noticePage = new PageImpl<>(notices);
 
         given(noticeRepository.findAll(any(Pageable.class)))
                 .willReturn(noticePage);
@@ -106,10 +124,11 @@ class NoticeServiceTest {
         NoticeListResponseDto foundNoticeListResponseDto = noticeService.getNoticeList(1, 3);
 
         // then
-//        assertEquals(foundNoticeListResponseDto.);
+        assertEquals(foundNoticeListResponseDto.getMaxPage(), 1);
+        assertEquals(foundNoticeListResponseDto.getNotices().size(), 3);
     }
 
-    @DisplayName("Notice 상세 조회")
+    @DisplayName("공지사항 상세 조회")
     @Test
     void getNotice() throws Exception {
         // given
@@ -137,20 +156,20 @@ class NoticeServiceTest {
         assertEquals(notice.getLastModifiedDate(), foundNoticeDetailResponseDto.getLastModifiedDate());
     }
 
-    @DisplayName("Notice 상세 조회 - 존재하지 않는 id")
+    @DisplayName("공지사항 상세 조회 - 존재하지 않는 ID")
     @Test
-    void getNotice_invalidNoticeId() throws Exception {
+    void getNotice_nonexistentNoticeId() throws Exception {
         // given
         given(noticeRepository.findById(anyLong()))
                 .willReturn(Optional.empty());
 
         // when
         // then
-        assertThrows(IllegalArgumentException.class,
+        assertThrows(InvalidValueException.class,
                 () -> noticeService.getNotice(1L));
     }
 
-    @DisplayName("Notice 상세 조회 - 조회수 증가")
+    @DisplayName("공지사항 상세 조회 - 조회수 증가")
     @Test
     void getNotice_addViewCount() throws Exception {
         // given
