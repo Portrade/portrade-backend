@@ -19,7 +19,7 @@ public class PortfolioImage {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "porfolio_id")
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
 
     @Column(nullable = false)
