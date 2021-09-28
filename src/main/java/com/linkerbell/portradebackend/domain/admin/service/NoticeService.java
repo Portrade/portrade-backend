@@ -8,6 +8,8 @@ import com.linkerbell.portradebackend.domain.admin.dto.NoticeResponseDto;
 import com.linkerbell.portradebackend.domain.admin.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.exception.ErrorCode;
+import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -30,7 +32,7 @@ public class NoticeService {
     @Transactional
     public NoticeResponseDto createNotice(NoticeRequestDto noticeRequestDto, User user) {
         if (!user.getRoles().contains(Role.ROLE_ADMIN)) {
-            throw new UnAuthorizedException("권한이 없습니다.");
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
         }
 
         Notice notice = Notice.builder()
@@ -75,13 +77,13 @@ public class NoticeService {
     @Transactional
     public NoticeDetailResponseDto getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 공지사항 번호입니다."));
+                .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_NOTICE_ID));
 
         notice.addViewCount();
 
         return NoticeDetailResponseDto.builder()
                 .id(notice.getId())
-                .creator(notice.getUser().getUsername()) // 이름? 아이디?
+                .creator(notice.getUser().getUsername())
                 .title(notice.getTitle())
                 .content(notice.getContent())
                 .viewCount(notice.getViewCount())
