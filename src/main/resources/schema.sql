@@ -92,18 +92,20 @@ create table portfolio_image (
 
 
 create table qna (
-       qna_id bigint AUTO_INCREMENT PRIMARY KEY,
-       created_date timestamp,
-       category varchar(255),
-       content varchar(255) not null,
-       email varchar(255),
-       is_public boolean,
-       last_modified_date timestamp,
-       name varchar(255),
-       phone_number varchar(255),
-       status varchar(255) not null,
-       title varchar(255) not null,
-       user_id BINARY(16)
+        qna_id bigint AUTO_INCREMENT PRIMARY KEY,
+        dtype varchar(31) not null,
+        created_date timestamp not null,
+        content varchar(255) not null,
+        is_public boolean,
+        last_modified_date timestamp,
+        title varchar(255) not null,
+        category varchar(255),
+        email varchar(255),
+        name varchar(255),
+        phone_number varchar(255),
+        status varchar(255),
+        question_id bigint,
+        user_id BINARY(16)
 );
 
 
