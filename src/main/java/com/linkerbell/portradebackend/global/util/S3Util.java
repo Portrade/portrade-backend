@@ -8,6 +8,8 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
+import com.linkerbell.portradebackend.global.exception.ErrorCode;
+import com.linkerbell.portradebackend.global.exception.custom.FileUploadException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -45,19 +47,23 @@ public class S3Util {
                 .build();
     }
 
-    public UploadResponseDto upload(MultipartFile file) throws IOException {
+    public UploadResponseDto upload(MultipartFile file) {
         String originalFileName = file.getOriginalFilename();
         String[] fileNames = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
         String newFileName = fileNames[0] + "_" + System.currentTimeMillis() + "." + fileNames[1];
 
-        s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
-                .withCannedAcl(CannedAccessControlList.PublicRead));
-        String url = s3Client.getUrl(bucket, newFileName).toString();
+        try {
+            s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
+                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            String url = s3Client.getUrl(bucket, newFileName).toString();
 
-        return UploadResponseDto.builder()
-                .originalFileName(originalFileName)
-                .newFileName(newFileName)
-                .url(url)
-                .build();
+            return UploadResponseDto.builder()
+                    .originalFileName(originalFileName)
+                    .newFileName(newFileName)
+                    .url(url)
+                    .build();
+        }catch (IOException e) {
+            throw new FileUploadException(ErrorCode.FAILURE_FILE_UPLOAD);
+        }
     }
 }

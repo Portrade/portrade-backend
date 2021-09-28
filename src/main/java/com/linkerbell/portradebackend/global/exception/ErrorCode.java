@@ -25,6 +25,11 @@ public enum ErrorCode {
     ALREADY_INUSE_USER_USERNAME("M010","이미 존재하는 사용자 아이디입니다."),
     NOT_FOUND_USER_USERNAME("M011","존재하지 않는 사용자 아이디입니다."),
     INVALID_USER_ID_PASSWORD("M012","아이디 또는 비밀번호가 잘못 입력 되었습니다."),
+
+    /**
+     * F: 파일 업로드 관련
+     */
+     FAILURE_FILE_UPLOAD("F001", "파일 업로드에 실패하였습니다."),
     ;
 
     private String code;

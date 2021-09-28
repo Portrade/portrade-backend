@@ -65,7 +65,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) throws IOException {
+    public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) {
         UploadResponseDto uploadResponseDto = s3Util.upload(file);
 
         user.getProfile().updateProfileUrl(uploadResponseDto.getUrl());
