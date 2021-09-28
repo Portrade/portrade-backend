@@ -2,15 +2,14 @@ package com.linkerbell.portradebackend.domain.admin.service;
 
 import com.linkerbell.portradebackend.domain.admin.domain.Notice;
 import com.linkerbell.portradebackend.domain.admin.dto.NoticeDetailResponseDto;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticeListResponseDto;
 import com.linkerbell.portradebackend.domain.admin.dto.NoticeRequestDto;
 import com.linkerbell.portradebackend.domain.admin.dto.NoticeResponseDto;
+import com.linkerbell.portradebackend.domain.admin.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.admin.repository.NoticeRepository;
-import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,11 +29,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     @Transactional
-    public NoticeResponseDto createNotice(NoticeRequestDto noticeRequestDto, User user) {
-        if (!user.getRoles().contains(Role.ROLE_ADMIN)) {
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
-        }
-
+    public CreateResponseDto createNotice(NoticeRequestDto noticeRequestDto, User user) {
         Notice notice = Notice.builder()
                 .user(user)
                 .title(noticeRequestDto.getTitle())
@@ -42,16 +37,10 @@ public class NoticeService {
                 .build();
         noticeRepository.save(notice);
 
-        return NoticeResponseDto.builder()
-                .id(notice.getId())
-                .creator(notice.getUser().getUsername())
-                .title(notice.getTitle())
-                .viewCount(notice.getViewCount())
-                .createdDate(notice.getCreatedDate())
-                .build();
+        return new CreateResponseDto(notice.getId());
     }
 
-    public NoticeListResponseDto getNoticeList(int page, int size) {
+    public NoticesResponseDto getNoticeList(int page, int size) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
@@ -68,7 +57,7 @@ public class NoticeService {
                         .build())
                 .collect(Collectors.toList());
 
-        return NoticeListResponseDto.builder()
+        return NoticesResponseDto.builder()
                 .maxPage(noticePage.getTotalPages())
                 .notices(notices)
                 .build();
@@ -90,5 +79,21 @@ public class NoticeService {
                 .createdDate(notice.getCreatedDate())
                 .lastModifiedDate(notice.getLastModifiedDate())
                 .build();
+    }
+
+    @Transactional
+    public void updateNotice(Long noticeId, NoticeRequestDto noticeRequestDto) {
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_NOTICE_ID));
+
+        notice.update(noticeRequestDto.getTitle(), noticeRequestDto.getContent());
+    }
+
+    @Transactional
+    public void deleteNotice(Long noticeId) {
+        Notice notice = noticeRepository.findById(noticeId)
+                .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_NOTICE_ID));
+
+        noticeRepository.delete(notice);
     }
 }

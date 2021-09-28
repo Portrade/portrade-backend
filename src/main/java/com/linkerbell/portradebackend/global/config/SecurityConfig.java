@@ -7,6 +7,7 @@ import com.linkerbell.portradebackend.global.config.security.jwt.JwtFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -50,6 +51,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/notices").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/notices/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/notices/**").hasRole("ADMIN")
+
                 .antMatchers(PREFIX_URL + "/auth/user").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
                 .anyRequest().permitAll();

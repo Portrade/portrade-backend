@@ -44,6 +44,12 @@ public class Notice extends BaseTimeEntity {
         this.viewCount = viewCount;
     }
 
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        lastModifiedDate = LocalDateTime.now();
+    }
+
     public void addViewCount() {
         viewCount += 1;
     }
