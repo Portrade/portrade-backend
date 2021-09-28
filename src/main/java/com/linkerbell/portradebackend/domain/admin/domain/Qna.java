@@ -23,13 +23,10 @@ public class Qna extends BaseTimeEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String email;
 
-    @Column(nullable = false)
     private String phoneNumber;
 
     @Column(nullable = false)
@@ -38,9 +35,7 @@ public class Qna extends BaseTimeEntity {
     @Column(nullable = false)
     private String content;
 
-    //문의 분류
-    @Enumerated(EnumType.STRING)
-    private Category category;
+    private String category;
 
     //답변 완료 유무
     @Enumerated(EnumType.STRING)
@@ -53,7 +48,7 @@ public class Qna extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Qna(Long id, User user, String name, String email, String phoneNumber, String title, String content, Category category, Status status, boolean isPublic) {
+    public Qna(Long id, User user, String name, String email, String phoneNumber, String title, String content, String category, Status status, boolean isPublic) {
         this.id = id;
         this.user = user;
         this.name = name;
