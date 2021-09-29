@@ -1,6 +1,8 @@
 package com.linkerbell.portradebackend.domain.qna.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.linkerbell.portradebackend.domain.qna.domain.Qna;
+import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -13,9 +15,19 @@ public class QnaResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private final LocalDateTime createdDate;
 
+    @Builder
     public QnaResponseDto(Long id, String title, LocalDateTime createdDate) {
         this.id = id;
         this.title = title;
         this.createdDate = createdDate;
     }
+
+    public static QnaResponseDto toDto(Qna qna) {
+        return QnaResponseDto.builder()
+                .id(qna.getId())
+                .title(qna.getTitle())
+                .createdDate(qna.getCreatedDate())
+                .build();
+    }
+
 }

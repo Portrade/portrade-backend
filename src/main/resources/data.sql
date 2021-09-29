@@ -49,5 +49,7 @@ INSERT INTO qna(qna_id, dtype, created_date, category, content, email, is_public
 VALUES (2, 'QUESTION', '2020-11-21T08:17:09.478881', '업로드 문의', '이력서 업로드 문의합니다.', 'sa@naver.com', true, now(), '사나', '12341234', 'ANSWERED', '1:1 문의합니다.', null, '067d42d516394118bf54ad37d2f6f61e');
 INSERT INTO qna(qna_id, dtype, created_date, category, content, email, is_public, last_modified_date, name, phone_number, status, title, question_id, user_id)
 VALUES (3, 'ANSWER', '2020-11-22T08:17:09.478881', null, '1:1문의 답변해드립니다.', null, true, now(), null, null, null, '1:1 답변해드립니다.', 2, 'd9b4adce82bd48fe9456cfb20d43537d');
+INSERT INTO qna(qna_id, dtype, created_date, category, content, email, is_public, last_modified_date, name, phone_number, status, title, question_id, user_id)
+VALUES (4, 'QUESTION', '2019-01-21T08:17:09.478881', '업로드 문의', '이력서 업로드 문의합니다.', 'rla@naver.com', false, now(), '김가입', '12341234', 'UNANSWERED', '1:1 문의합니다.', null, '79b9203acf6e4b2baae18d7ddb79b3ca');
 
 

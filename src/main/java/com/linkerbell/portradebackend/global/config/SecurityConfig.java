@@ -55,7 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/qnas").authenticated()
                 .antMatchers(PREFIX_URL + "/qnas/{qnaId}/answer").hasRole("ADMIN")
-                .antMatchers(PREFIX_URL + "/qnas/{qnaId}").authenticated()
                 .anyRequest().permitAll();
     }
 

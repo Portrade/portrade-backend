@@ -1,5 +1,9 @@
 package com.linkerbell.portradebackend.domain.qna.dto;
 
+import com.linkerbell.portradebackend.domain.qna.domain.Answer;
+import com.linkerbell.portradebackend.domain.qna.domain.Qna;
+import com.linkerbell.portradebackend.domain.qna.domain.Question;
+import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,5 +30,12 @@ public class ReplyQnaRequestDto {
     public ReplyQnaRequestDto(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public Answer toEntity(User user, Question question) {
+        return Answer.builder()
+                .user(user)
+                .question(question)
+                .build();
     }
 }

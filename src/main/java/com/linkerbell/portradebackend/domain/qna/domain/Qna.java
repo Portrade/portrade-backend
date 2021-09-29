@@ -1,6 +1,8 @@
 package com.linkerbell.portradebackend.domain.qna.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.linkerbell.portradebackend.domain.qna.dto.QnaCurDetailResponseDto;
+import com.linkerbell.portradebackend.domain.qna.dto.QnaResponseDto;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
@@ -59,5 +61,12 @@ public abstract class Qna extends BaseTimeEntity {
             throw new NotExsitException(ErrorCode.NONEXISTENT_USER);
         }
         return user.getId();
+    }
+
+    public String name() {
+        if(Objects.isNull(user)) {
+            throw new NotExsitException(ErrorCode.NONEXISTENT_USER);
+        }
+        return user.getName();
     }
 }
