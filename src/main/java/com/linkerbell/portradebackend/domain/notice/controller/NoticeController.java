@@ -1,9 +1,9 @@
-package com.linkerbell.portradebackend.domain.admin.controller;
+package com.linkerbell.portradebackend.domain.notice.controller;
 
-import com.linkerbell.portradebackend.domain.admin.dto.NoticeDetailResponseDto;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticeRequestDto;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticesResponseDto;
-import com.linkerbell.portradebackend.domain.admin.service.NoticeService;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticeDetailResponseDto;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticeRequestDto;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
+import com.linkerbell.portradebackend.domain.notice.service.NoticeService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +22,9 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @PostMapping
-    public ResponseEntity<CreateResponseDto> writeNoticeApi
-            (@RequestBody @Valid NoticeRequestDto noticeRequestDto,
-             @AuthenticationPrincipal User user) {
+    public ResponseEntity<CreateResponseDto> writeNoticeApi(
+            @RequestBody @Valid NoticeRequestDto noticeRequestDto,
+            @AuthenticationPrincipal User user) {
         CreateResponseDto createResponseDto = noticeService.createNotice(noticeRequestDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createResponseDto);
     }

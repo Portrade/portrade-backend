@@ -1,11 +1,11 @@
-package com.linkerbell.portradebackend.domain.admin.service;
+package com.linkerbell.portradebackend.domain.notice.service;
 
-import com.linkerbell.portradebackend.domain.admin.domain.Notice;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticeDetailResponseDto;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticeRequestDto;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticeResponseDto;
-import com.linkerbell.portradebackend.domain.admin.dto.NoticesResponseDto;
-import com.linkerbell.portradebackend.domain.admin.repository.NoticeRepository;
+import com.linkerbell.portradebackend.domain.notice.domain.Notice;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticeDetailResponseDto;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticeRequestDto;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticeResponseDto;
+import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
+import com.linkerbell.portradebackend.domain.notice.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,13 +49,7 @@ public class NoticeService {
         Page<Notice> noticePage = noticeRepository.findAll(pageable);
 
         List<NoticeResponseDto> notices = noticePage.stream()
-                .map(notice -> NoticeResponseDto.builder()
-                        .id(notice.getId())
-                        .creator(notice.getUser().getUsername())
-                        .title(notice.getTitle())
-                        .viewCount(notice.getViewCount())
-                        .createdDate(notice.getCreatedDate())
-                        .build())
+                .map(NoticeResponseDto::of)
                 .collect(Collectors.toList());
 
         return NoticesResponseDto.builder()
@@ -67,33 +62,18 @@ public class NoticeService {
     public NoticeDetailResponseDto getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_NOTICE_ID));
-        Notice nextNotice = noticeRepository.findTopByIdIsGreaterThan(noticeId)
-                .orElse(null);
-        Notice prevNotice = noticeRepository.findTopByIdIsLessThan(noticeId)
-                .orElse(null);
 
         notice.addViewCount();
 
-        NoticeResponseDto nextNoticeResponseDto = null;
-        NoticeResponseDto prevNoticeResponseDto = null;
-        if (nextNotice != null) {
-            nextNoticeResponseDto = NoticeResponseDto.builder()
-                    .id(nextNotice.getId())
-                    .creator(nextNotice.getUser().getUsername())
-                    .title(nextNotice.getTitle())
-                    .viewCount(nextNotice.getViewCount())
-                    .createdDate(nextNotice.getCreatedDate())
-                    .build();
-        }
-        if (prevNotice != null) {
-            prevNoticeResponseDto = NoticeResponseDto.builder()
-                    .id(prevNotice.getId())
-                    .creator(prevNotice.getUser().getUsername())
-                    .title(prevNotice.getTitle())
-                    .viewCount(prevNotice.getViewCount())
-                    .createdDate(prevNotice.getCreatedDate())
-                    .build();
-        }
+        Optional<Notice> nextNoticeOptional = noticeRepository.findTopByIdIsGreaterThanOrderByIdAsc(noticeId);
+        Optional<Notice> prevNoticeOptional = noticeRepository.findTopByIdIsLessThanOrderByIdDesc(noticeId);
+
+        NoticeResponseDto nextNoticeResponseDto = nextNoticeOptional.isPresent()
+                ? NoticeResponseDto.of(nextNoticeOptional.get())
+                : null;
+        NoticeResponseDto prevNoticeResponseDto = prevNoticeOptional.isPresent()
+                ? NoticeResponseDto.of(prevNoticeOptional.get())
+                : null;
 
         return NoticeDetailResponseDto.builder()
                 .id(notice.getId())

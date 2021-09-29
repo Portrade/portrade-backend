@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.admin.domain;
+package com.linkerbell.portradebackend.domain.notice.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;

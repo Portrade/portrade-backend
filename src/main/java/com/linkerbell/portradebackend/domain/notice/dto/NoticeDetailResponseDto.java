@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.admin.dto;
+package com.linkerbell.portradebackend.domain.notice.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-
 public class NoticeDetailResponseDto {
+
     private Long id;
     private String creator;
     private String title;

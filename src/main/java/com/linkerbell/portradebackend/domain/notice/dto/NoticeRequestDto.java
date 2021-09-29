@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.admin.dto;
+package com.linkerbell.portradebackend.domain.notice.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

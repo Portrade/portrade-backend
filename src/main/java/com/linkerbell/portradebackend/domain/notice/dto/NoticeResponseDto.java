@@ -1,6 +1,6 @@
-package com.linkerbell.portradebackend.domain.admin.dto;
+package com.linkerbell.portradebackend.domain.notice.dto;
 
-
+import com.linkerbell.portradebackend.domain.notice.domain.Notice;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -25,5 +25,15 @@ public class NoticeResponseDto {
         this.title = title;
         this.viewCount = viewCount;
         this.createdDate = createdDate;
+    }
+
+    public static NoticeResponseDto of(Notice notice) {
+        return NoticeResponseDto.builder()
+                .id(notice.getId())
+                .creator(notice.getUser().getUsername())
+                .title(notice.getTitle())
+                .viewCount(notice.getViewCount())
+                .createdDate(notice.getCreatedDate())
+                .build();
     }
 }
