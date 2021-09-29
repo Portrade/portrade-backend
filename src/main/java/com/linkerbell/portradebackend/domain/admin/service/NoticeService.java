@@ -40,7 +40,7 @@ public class NoticeService {
         return new CreateResponseDto(notice.getId());
     }
 
-    public NoticesResponseDto getNoticeList(int page, int size) {
+    public NoticesResponseDto getNotices(int page, int size) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
@@ -67,8 +67,33 @@ public class NoticeService {
     public NoticeDetailResponseDto getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_NOTICE_ID));
+        Notice nextNotice = noticeRepository.findTopByIdIsGreaterThan(noticeId)
+                .orElse(null);
+        Notice prevNotice = noticeRepository.findTopByIdIsLessThan(noticeId)
+                .orElse(null);
 
         notice.addViewCount();
+
+        NoticeResponseDto nextNoticeResponseDto = null;
+        NoticeResponseDto prevNoticeResponseDto = null;
+        if (nextNotice != null) {
+            nextNoticeResponseDto = NoticeResponseDto.builder()
+                    .id(nextNotice.getId())
+                    .creator(nextNotice.getUser().getUsername())
+                    .title(nextNotice.getTitle())
+                    .viewCount(nextNotice.getViewCount())
+                    .createdDate(nextNotice.getCreatedDate())
+                    .build();
+        }
+        if (prevNotice != null) {
+            prevNoticeResponseDto = NoticeResponseDto.builder()
+                    .id(prevNotice.getId())
+                    .creator(prevNotice.getUser().getUsername())
+                    .title(prevNotice.getTitle())
+                    .viewCount(prevNotice.getViewCount())
+                    .createdDate(prevNotice.getCreatedDate())
+                    .build();
+        }
 
         return NoticeDetailResponseDto.builder()
                 .id(notice.getId())
@@ -78,6 +103,8 @@ public class NoticeService {
                 .viewCount(notice.getViewCount())
                 .createdDate(notice.getCreatedDate())
                 .lastModifiedDate(notice.getLastModifiedDate())
+                .next(nextNoticeResponseDto)
+                .prev(prevNoticeResponseDto)
                 .build();
     }
 
