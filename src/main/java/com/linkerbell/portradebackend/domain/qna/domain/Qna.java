@@ -1,11 +1,19 @@
-package com.linkerbell.portradebackend.domain.admin.domain;
+package com.linkerbell.portradebackend.domain.qna.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
-import lombok.*;
+import com.linkerbell.portradebackend.global.exception.ErrorCode;
+import com.linkerbell.portradebackend.global.exception.custom.NotExsitException;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -21,6 +29,7 @@ public abstract class Qna extends BaseTimeEntity {
     @Column(name = "qna_id")
     private Long id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
@@ -43,5 +52,12 @@ public abstract class Qna extends BaseTimeEntity {
         this.title = title;
         this.content = content;
         this.isPublic = isPublic;
+    }
+
+    public UUID Id() {
+        if(Objects.isNull(user)) {
+            throw new NotExsitException(ErrorCode.NONEXISTENT_USER);
+        }
+        return user.getId();
     }
 }

@@ -1,10 +1,7 @@
 package com.linkerbell.portradebackend.global.exception;
 
 
-import com.linkerbell.portradebackend.global.exception.custom.InvalidTokenException;
-import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
+import com.linkerbell.portradebackend.global.exception.custom.*;
 import com.linkerbell.portradebackend.global.mapper.ErrorMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.mapstruct.factory.Mappers;
@@ -52,5 +49,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleServiceException(InvalidValueException e, HttpServletRequest request) {
         ErrorResponse errorResponse = errorMapper.toDto(e.getErrorCode(), request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(value = NotExsitException.class)
+    public ResponseEntity<ErrorResponse> handleServiceException(NotExsitException e, HttpServletRequest request) {
+        ErrorResponse errorResponse =  errorMapper.toDto(e.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
 }

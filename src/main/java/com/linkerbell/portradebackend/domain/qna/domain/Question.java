@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.admin.domain;
+package com.linkerbell.portradebackend.domain.qna.domain;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.*;
@@ -35,5 +35,9 @@ public class Question extends Qna{
         this.name = name;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    public void changeStatus(Status status) {
+        this.status = status;
     }
 }
