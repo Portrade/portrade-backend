@@ -30,10 +30,10 @@ public class NoticeController {
     }
 
     @GetMapping
-    public ResponseEntity<NoticesResponseDto> getNoticeListApi(
+    public ResponseEntity<NoticesResponseDto> getNoticesApi(
             @RequestParam(value = "page", defaultValue = "1") int page,
             @RequestParam(value = "size", defaultValue = "10") int size) {
-        NoticesResponseDto noticesResponseDto = noticeService.getNoticeList(page, size);
+        NoticesResponseDto noticesResponseDto = noticeService.getNotices(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(noticesResponseDto);
     }
 

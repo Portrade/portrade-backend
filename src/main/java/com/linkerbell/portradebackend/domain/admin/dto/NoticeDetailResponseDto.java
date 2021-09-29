@@ -9,8 +9,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class NoticeDetailResponseDto {
 
+public class NoticeDetailResponseDto {
     private Long id;
     private String creator;
     private String title;
@@ -19,8 +19,11 @@ public class NoticeDetailResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
 
+    private NoticeResponseDto next;
+    private NoticeResponseDto prev;
+
     @Builder
-    public NoticeDetailResponseDto(Long id, String creator, String title, String content, int viewCount, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public NoticeDetailResponseDto(Long id, String creator, String title, String content, int viewCount, LocalDateTime createdDate, LocalDateTime lastModifiedDate, NoticeResponseDto next, NoticeResponseDto prev) {
         this.id = id;
         this.creator = creator;
         this.title = title;
@@ -28,5 +31,7 @@ public class NoticeDetailResponseDto {
         this.viewCount = viewCount;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
+        this.next = next;
+        this.prev = prev;
     }
 }
