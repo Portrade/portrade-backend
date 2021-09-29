@@ -1,15 +1,18 @@
 package com.linkerbell.portradebackend.domain.notice.dto;
 
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class NoticesResponseDto {
 
-    private final int maxPage;
-    private final List<NoticeResponseDto> notices;
+    private int maxPage;
+    private List<NoticeResponseDto> notices;
 
     @Builder
     public NoticesResponseDto(int maxPage, List<NoticeResponseDto> notices) {
