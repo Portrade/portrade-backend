@@ -1,6 +1,6 @@
-package com.linkerbell.portradebackend.domain.admin.repository;
+package com.linkerbell.portradebackend.domain.notice.repository;
 
-import com.linkerbell.portradebackend.domain.admin.domain.Notice;
+import com.linkerbell.portradebackend.domain.notice.domain.Notice;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DataJpaTest
-@ExtendWith(SpringExtension.class)
 class NoticeRepositoryTest {
 
     @Autowired
