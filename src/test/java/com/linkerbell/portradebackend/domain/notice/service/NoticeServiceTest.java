@@ -53,7 +53,7 @@ class NoticeServiceTest {
         admin.addRole(Role.ROLE_ADMIN);
     }
 
-    @DisplayName("공지사항 생성")
+    @DisplayName("공지사항 생성 성공")
     @Test
     void createNotice() throws Exception {
         // given
@@ -69,7 +69,7 @@ class NoticeServiceTest {
         verify(noticeRepository, times(1)).save(any(Notice.class));
     }
 
-    @DisplayName("공지사항 목록 조회")
+    @DisplayName("공지사항 목록 조회 성공")
     @Test
     void getNoticeList() throws Exception {
         // given
@@ -102,7 +102,7 @@ class NoticeServiceTest {
         assertEquals(foundNoticesResponseDto.getNotices().size(), 3);
     }
 
-    @DisplayName("공지사항 상세 조회")
+    @DisplayName("공지사항 상세 조회 성공")
     @Test
     void getNotice() throws Exception {
         // given
@@ -130,7 +130,7 @@ class NoticeServiceTest {
         assertEquals(notice.getLastModifiedDate(), foundNoticeDetailResponseDto.getLastModifiedDate());
     }
 
-    @DisplayName("공지사항 상세 조회 - 존재하지 않는 ID")
+    @DisplayName("공지사항 상세 조회 실패 - 존재하지 않는 ID")
     @Test
     void getNotice_nonexistentId() throws Exception {
         // given
@@ -143,7 +143,7 @@ class NoticeServiceTest {
                 () -> noticeService.getNotice(1L));
     }
 
-    @DisplayName("공지사항 상세 조회 - 조회수 증가")
+    @DisplayName("공지사항 상세 조회 성공 - 조회수 증가")
     @Test
     void getNotice_addViewCount() throws Exception {
         // given
@@ -167,7 +167,53 @@ class NoticeServiceTest {
         assertEquals(beforeViewCount + 1, foundNoticeDetailResponseDto.getViewCount());
     }
 
-    @DisplayName("공지사항 삭제")
+    @DisplayName("공지사항 수정 성공")
+    @Test
+    void updateNotice() throws Exception {
+        // given
+        NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
+                .title("공지사항 수정 제목")
+                .content("공지사항 수정 내용")
+                .build();
+        Notice notice = Notice.builder()
+                .id(1L)
+                .user(admin)
+                .title("공지사항 제목1")
+                .content("공지사항 내용1")
+                .viewCount(10)
+                .build();
+
+        given(noticeRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(notice));
+
+        // when
+        noticeService.updateNotice(1L, noticeRequestDto);
+
+        // then
+        assertNotNull(notice);
+        assertEquals("공지사항 수정 제목", notice.getTitle());
+        assertEquals("공지사항 수정 내용", notice.getContent());
+    }
+
+    @DisplayName("공지사항 수정 실패 - 존재하지 않는 ID")
+    @Test
+    void updateNotice_nonexistentId() throws Exception {
+        // given
+        NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
+                .title("공지사항 수정 제목")
+                .content("공지사항 수정 내용")
+                .build();
+
+        given(noticeRepository.findById(anyLong()))
+                .willReturn(Optional.empty());
+
+        // when
+        // then
+        assertThrows(InvalidValueException.class,
+                () -> noticeService.updateNotice(1L, noticeRequestDto));
+    }
+
+    @DisplayName("공지사항 삭제 성공")
     @Test
     void deleteNotice() throws Exception {
         // given
@@ -188,7 +234,7 @@ class NoticeServiceTest {
         verify(noticeRepository, times(1)).delete(any(Notice.class));
     }
 
-    @DisplayName("공지사항 삭제 - 존재하지 않는 ID")
+    @DisplayName("공지사항 삭제 실패 - 존재하지 않는 ID")
     @Test
     void deleteNotice_nonexistentId() throws Exception {
         // given
