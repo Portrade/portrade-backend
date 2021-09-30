@@ -5,10 +5,8 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
@@ -39,7 +37,7 @@ class NoticeRepositoryTest {
                 .build();
     }
 
-    @DisplayName("공지사항 엔티티 저장")
+    @DisplayName("공지사항 엔티티 저장 성공")
     @Test
     void saveNotice() throws Exception {
         // given
@@ -55,7 +53,7 @@ class NoticeRepositoryTest {
         assertEquals(notice.getCreatedDate(), savedNotice.getCreatedDate());
     }
 
-    @DisplayName("공지사항 엔티티 조회")
+    @DisplayName("공지사항 엔티티 조회 성공")
     @Test
     void findNoticeById() throws Exception {
         // given
@@ -74,7 +72,7 @@ class NoticeRepositoryTest {
         assertEquals(notice.getCreatedDate(), foundNotice.getCreatedDate());
     }
 
-    @DisplayName("공지사항 엔티티 삭제")
+    @DisplayName("공지사항 엔티티 삭제 성공")
     @Test
     void deleteNotice() throws Exception {
         // given
