@@ -32,7 +32,10 @@ public enum ErrorCode {
     /**
      * N: 공지사항 관련 에러
      */
-    NONEXISTENT_NOTICE_ID("N001", "존재하지 않는 공지사항 번호입니다.");
+    NONEXISTENT_NOTICE_ID("N001", "존재하지 않는 공지사항 번호입니다."),
+    // 작성, 수정
+    NULL_NOTICE_TITLE("N100", "제목은 필수입니다."),
+    NULL_NOTICE_CONTENT("N101", "내용은 필수입니다.");
 
 
     private String code;
