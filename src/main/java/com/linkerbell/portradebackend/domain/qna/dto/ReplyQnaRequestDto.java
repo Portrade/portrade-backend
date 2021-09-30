@@ -27,13 +27,17 @@ public class ReplyQnaRequestDto {
     private boolean secret;
 
     @Builder
-    public ReplyQnaRequestDto(String title, String content) {
+    public ReplyQnaRequestDto(String title, String content, boolean secret) {
         this.title = title;
         this.content = content;
+        this.secret = secret;
     }
 
     public Answer toEntity(User user, Question question) {
         return Answer.builder()
+                .title(title)
+                .content(content)
+                .isPublic(secret)
                 .user(user)
                 .question(question)
                 .build();

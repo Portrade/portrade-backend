@@ -7,6 +7,7 @@ import com.linkerbell.portradebackend.domain.qna.domain.Qna;
 import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
+import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NotExsitException;
@@ -35,9 +36,9 @@ public class QnaService {
     @Transactional
     public CreateQnaResponseDto createQna(CreateQnaRequestDto requestDto, User user) {
         Question qna = requestDto.toEntity(user, Status.UNANSWERED);
-        Qna savedQna = qnaRepository.save(qna);
+        qnaRepository.save(qna);
         return CreateQnaResponseDto.builder()
-                .id(savedQna.getId())
+                .id(qna.getId())
                 .build();
     }
 
@@ -46,12 +47,12 @@ public class QnaService {
         Question foundQna = qnaRepository.findByIdAndDType(qnaId)
                 .orElseThrow(() -> new NotExsitException(ErrorCode.NONEXISTENT_QNA_ID));
 
-        Answer qna = requestDto.toEntity(user, foundQna);
-        Qna savedQna = qnaRepository.save(qna);
+        Answer answer = requestDto.toEntity(user, foundQna);
+        qnaRepository.save(answer);
         foundQna.changeStatus(Status.ANSWERED);
 
         return ReplyQnaResponseDto.builder()
-                .id(savedQna.getId())
+                .id(answer.getId())
                 .build();
     }
 
@@ -73,14 +74,14 @@ public class QnaService {
                 .orElseThrow(() -> new NotExsitException(ErrorCode.NONEXISTENT_QNA));
 
         if (!qna.isPublic()) {
-            if(Objects.isNull(user) || !user.getId().equals(qna.Id())) {
+            if(Objects.isNull(user) || !user.getId().equals(qna.Id()) && !user.getRoles().contains(Role.ROLE_ADMIN)) {
                 throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
             }
         }
 
-        Qna nextQna = qnaRepository.findTopByIdIsGreaterThan(qnaId)
+        Qna nextQna = qnaRepository.findTopByIdIsGreaterThanOrderByIdAsc(qnaId)
                 .orElse(null);
-        Qna prevQna = qnaRepository.findTopByIdIsLessThan(qnaId)
+        Qna prevQna = qnaRepository.findTopByIdIsLessThanOrderByIdDesc(qnaId)
                 .orElse(null);
 
         QnaCurDetailResponseDto curDetailResponseDto = QnaCurDetailResponseDto.toDto(qna);

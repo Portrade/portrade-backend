@@ -14,6 +14,6 @@ public interface QnaRepository extends JpaRepository<Qna, Long> {
     @Query("select q from Question q where q.id=:qnaId")
     Optional<Question> findByIdAndDType(@Param("qnaId") Long qnaId);
 
-    Optional<Qna> findTopByIdIsGreaterThan(Long id);
-    Optional<Qna> findTopByIdIsLessThan(Long id);
+    Optional<Qna> findTopByIdIsGreaterThanOrderByIdAsc(Long id);
+    Optional<Qna> findTopByIdIsLessThanOrderByIdDesc(Long id);
 }

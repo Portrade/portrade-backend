@@ -3,6 +3,7 @@ package com.linkerbell.portradebackend.domain.qna.dto;
 import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -40,6 +41,18 @@ public class CreateQnaRequestDto {
     private boolean isPublic;  //기본값 true
 
     private Long reply;  //기본값 UNANSWERED
+
+    @Builder
+    public CreateQnaRequestDto(String category, String name, String phoneNumber, String email, String title, String content, boolean isPublic, Long reply) {
+        this.category = category;
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.title = title;
+        this.content = content;
+        this.isPublic = isPublic;
+        this.reply = reply;
+    }
 
     public Question toEntity(User user, Status status) {
         return Question.builder()
