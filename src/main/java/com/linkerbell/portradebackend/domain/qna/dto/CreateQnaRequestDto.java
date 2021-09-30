@@ -40,10 +40,9 @@ public class CreateQnaRequestDto {
 
     private boolean isPublic;  //기본값 true
 
-    private Long reply;  //기본값 UNANSWERED
 
     @Builder
-    public CreateQnaRequestDto(String category, String name, String phoneNumber, String email, String title, String content, boolean isPublic, Long reply) {
+    public CreateQnaRequestDto(String category, String name, String phoneNumber, String email, String title, String content, boolean isPublic) {
         this.category = category;
         this.name = name;
         this.phoneNumber = phoneNumber;
@@ -51,7 +50,6 @@ public class CreateQnaRequestDto {
         this.title = title;
         this.content = content;
         this.isPublic = isPublic;
-        this.reply = reply;
     }
 
     public Question toEntity(User user, Status status) {

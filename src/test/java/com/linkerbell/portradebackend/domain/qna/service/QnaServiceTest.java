@@ -94,7 +94,6 @@ class QnaServiceTest {
                 .category("업로드")
                 .content("업로드 관련 문의드립니다.")
                 .isPublic(false)
-                .reply(0L)
                 .build();
 
         //when
@@ -166,7 +165,7 @@ class QnaServiceTest {
                 .name("이질문")
                 .email("user2@gmail.com")
                 .phoneNumber("12341234")
-                .category("programming")
+                .category("업로드")
                 .status(Status.UNANSWERED)
                 .build();
 
@@ -250,7 +249,7 @@ class QnaServiceTest {
                 .name("김질문")
                 .email("user1@gmail.com")
                 .phoneNumber("12341234")
-                .category("programming")
+                .category("업로드")
                 .status(Status.ANSWERED)
                 .user(user1)
                 .build();
@@ -268,7 +267,7 @@ class QnaServiceTest {
                 .name("이질문")
                 .email("user2@gmail.com")
                 .phoneNumber("12341234")
-                .category("programming")
+                .category("업로드")
                 .status(Status.UNANSWERED)
                 .user(user3)
                 .build();
@@ -307,7 +306,7 @@ class QnaServiceTest {
                 .name("김질문")
                 .email("user1@gmail.com")
                 .phoneNumber("12341234")
-                .category("programming")
+                .category("업로드")
                 .status(Status.ANSWERED)
                 .user(user1)
                 .build();
@@ -325,7 +324,7 @@ class QnaServiceTest {
                 .name("이질문")
                 .email("user2@gmail.com")
                 .phoneNumber("12341234")
-                .category("programming")
+                .category("업로드")
                 .status(Status.UNANSWERED)
                 .user(user3)
                 .build();
