@@ -2,15 +2,12 @@ package com.linkerbell.portradebackend.domain.notice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.notice.dto.NoticeRequestDto;
-import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -26,25 +23,18 @@ class NoticeControllerTest {
 
     final String PREFIX_URI = "/api/v1/notices";
 
+    @Value("${ADMIN_ACCESS_TOKEN}")
+    private String adminAccessToken;
+    @Value("${USER_ACCESS_TOKEN}")
+    private String userAccessToken;
+
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
-    @Autowired
-    private UserRepository userRepository;
-
-    private User admin;
-    private User user;
-
-    @BeforeEach
-    public void setUp() {
-        admin = userRepository.findByUsername("admin1").get();
-        user = userRepository.findByUsername("user1").get();
-    }
 
     @Order(12)
     @DisplayName("공지사항 등록 API 성공")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void writeNoticeApi() throws Exception {
         // given
@@ -55,9 +45,9 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(post(PREFIX_URI)
+                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null))
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
@@ -68,7 +58,6 @@ class NoticeControllerTest {
 
     @Order(13)
     @DisplayName("공지사항 등록 API 실패 - 권한 없는 사용자")
-    @WithMockUser
     @Test
     void writeNoticeApi_unAuthorizedUser() throws Exception {
         // given
@@ -79,9 +68,9 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(post(PREFIX_URI)
+                .header("Authorization", userAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(user, null))
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
@@ -90,8 +79,28 @@ class NoticeControllerTest {
     }
 
     @Order(14)
+    @DisplayName("공지사항 등록 API 실패 - 비로그인")
+    @Test
+    void writeNoticeApi_unAuthenticatedUser() throws Exception {
+        // given
+        NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
+                .title("공지사항 제목")
+                .content("공지사항 내용")
+                .build();
+
+        // when
+        ResultActions result = mvc.perform(post(PREFIX_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(noticeRequestDto)));
+
+        // then
+        result.andExpect(status().isUnauthorized())
+                .andDo(print());
+    }
+
+    @Order(15)
     @DisplayName("공지사항 등록 API 실패 - 유효하지 않은 요청 값")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void writeNoticeApi_invalidRequestBody() throws Exception {
         // given
@@ -101,9 +110,9 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(post(PREFIX_URI)
+                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null))
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
@@ -201,7 +210,6 @@ class NoticeControllerTest {
 
     @Order(6)
     @DisplayName("공지사항 수정 API 성공")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void updateNoticeApi() throws Exception {
         // given
@@ -212,9 +220,9 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(put(PREFIX_URI + "/3")
+                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null))
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
@@ -224,7 +232,6 @@ class NoticeControllerTest {
 
     @Order(7)
     @DisplayName("공지사항 수정 API 실패 - 유효하지 않은 요청 값")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void updateNoticeApi_invalidRequestBody() throws Exception {
         // given
@@ -234,9 +241,9 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(put(PREFIX_URI + "/3")
+                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null))
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
@@ -247,7 +254,6 @@ class NoticeControllerTest {
 
     @Order(8)
     @DisplayName("공지사항 수정 API 실패 - 존재하지 않는 ID")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void updateNoticeApi_nonexistentId() throws Exception {
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -257,9 +263,9 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(put(PREFIX_URI + "/13")
+                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null))
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
@@ -270,13 +276,12 @@ class NoticeControllerTest {
 
     @Order(9)
     @DisplayName("공지사항 삭제 API 성공")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void deleteNoticeApi() throws Exception {
         // given
         // when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null)));
+                .header("Authorization", adminAccessToken));
 
         // then
         result.andExpect(status().isNoContent())
@@ -285,13 +290,12 @@ class NoticeControllerTest {
 
     @Order(10)
     @DisplayName("공지사항 삭제 API 실패 - 존재하지 않는 ID")
-    @WithMockUser(roles = "ADMIN")
     @Test
     void deleteNoticeApi_nonexistentId() throws Exception {
         // given
         // when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1")
-                .principal(new UsernamePasswordAuthenticationToken(admin, null)));
+                .header("Authorization", adminAccessToken));
 
         // then
         result.andExpect(status().isBadRequest())
@@ -301,13 +305,12 @@ class NoticeControllerTest {
 
     @Order(11)
     @DisplayName("공지사항 삭제 API 실패 - 권한 없는 사용자")
-    @WithMockUser
     @Test
     void deleteNoticeApi_unAuthorizedUser() throws Exception {
         // given
         // when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/2")
-                .principal(new UsernamePasswordAuthenticationToken(user, null)));
+                .header("Authorization", userAccessToken));
 
         // then
         result.andExpect(status().isForbidden())
