@@ -11,12 +11,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.Objects;
 
 @RequiredArgsConstructor
 public class CustomSecurityFilter implements Filter {
-
-    private final User user1;
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -24,13 +21,8 @@ public class CustomSecurityFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-        SecurityContext context = SecurityContextHolder.createEmptyContext();
-
-        UserAdapter userDetails = new UserAdapter(user1);
-
-        Authentication auth =
-                new UsernamePasswordAuthenticationToken(userDetails, "password", userDetails.getAuthorities());
-        context.setAuthentication(auth);
+        SecurityContextHolder.getContext()
+                .setAuthentication((Authentication) ((HttpServletRequest) req).getUserPrincipal());
         chain.doFilter(req, res);
     }
 
