@@ -13,6 +13,8 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
+import java.util.Objects;
+
 @RequiredArgsConstructor
 public class PrincipalDetailsArgumentResolver implements HandlerMethodArgumentResolver {
 
@@ -28,6 +30,12 @@ public class PrincipalDetailsArgumentResolver implements HandlerMethodArgumentRe
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
 
         SecurityContext context = SecurityContextHolder.createEmptyContext();
+
+        if(Objects.isNull(user1)) {
+            Authentication auth =
+                    new UsernamePasswordAuthenticationToken("anonymous", null, null);
+            return null;
+        }
 
         UserAdapter userDetails = new UserAdapter(user1);
 
