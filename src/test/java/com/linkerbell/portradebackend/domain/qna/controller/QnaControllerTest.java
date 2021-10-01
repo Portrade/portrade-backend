@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.qna.dto.CreateQnaRequestDto;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
+import com.linkerbell.portradebackend.global.config.CustomSecurityFilter;
 import com.linkerbell.portradebackend.global.config.PrincipalDetailsArgumentResolver;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,20 +40,20 @@ class QnaControllerTest {
     private ObjectMapper objectMapper;
 
     @Autowired
-    private QnaController qnaController;
-    @Autowired
     private UserRepository userRepository;
 
     User user1;
+    User admin1;
+
 
     @Test
-    @DisplayName("1:1 문의 등록 API")
-    public void test() throws Exception {
+    @DisplayName("1:1 문의 등록 API - 로그인 한 유저")
+    public void saveQnaApi() throws Exception {
         user1 = userRepository.findByUsername("user1").get();
 
         mvc = MockMvcBuilders
-                .standaloneSetup(qnaController)
-                .setCustomArgumentResolvers(new PrincipalDetailsArgumentResolver(user1))
+                .webAppContextSetup(context)
+                .apply(springSecurity(new CustomSecurityFilter(user1)))
                 .build();
         //given
         CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
@@ -77,10 +79,10 @@ class QnaControllerTest {
 
     @Test
     @WithAnonymousUser
-    @DisplayName("1:1 문의 등록 API 실패")
-    public void test_anonymous() throws Exception {
+    @DisplayName("1:1 문의 등록 API 실패 - 로그인 안함")
+    public void saveQnaApi_anonymous() throws Exception {
 
-        mvc= MockMvcBuilders
+        mvc = MockMvcBuilders
                 .webAppContextSetup(context)
                 .apply(springSecurity())
                 .build();
@@ -105,5 +107,36 @@ class QnaControllerTest {
         //then
         result.andExpect(status().is4xxClientError())
                 .andDo(print());
+    }
+
+    @Test
+    @DisplayName("1:1 문의 등록 API - 어드민 계정")
+    public void saveQnaApi_admin() throws Exception {
+        admin1 = userRepository.findByUsername("admin1").get();
+
+        mvc = MockMvcBuilders
+                .webAppContextSetup(context)
+                .apply(springSecurity(new CustomSecurityFilter(admin1)))
+                .build();
+        //given
+        CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
+                .category("업로드")
+                .name("김질문")
+                .email("admin1@gmail.com")
+                .phoneNumber("12341234")
+                .title("관리자도 질문 작성은 가능하다.")
+                .content("관리자도 질문 작성은 가능하다.")
+                .isPublic(false)
+                .build();
+        //when
+        ResultActions result = mvc.perform(post(PREFIX_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(createQnaRequestDto))
+        );
+
+        //then
+        result.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty());
     }
 }
