@@ -3,6 +3,8 @@ package com.linkerbell.portradebackend.domain.user.service;
 import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
 import com.linkerbell.portradebackend.global.config.security.jwt.TokenProvider;
+import com.linkerbell.portradebackend.global.exception.ErrorCode;
+import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -28,7 +30,7 @@ public class AuthService {
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
-            throw new IllegalArgumentException("아이디 또는 비밀번호가 잘못 입력 되었습니다.");
+            throw new InvalidValueException(ErrorCode.INVALID_USER_ID_PASSWORD);
         }
 
         String accessToken = tokenProvider.createAccessToken(authentication);
