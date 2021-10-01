@@ -52,7 +52,7 @@ class AuthControllerTest {
                 .andDo(print());
     }
 
-    @DisplayName("로그인 API 실패 - 아이디 또는 비밀번호 틀림")
+    @DisplayName("로그인 API 실패 - 잘못된 아이디 혹은 비밀번호")
     @Test
     void logInApi_wrongLoginInfo() throws Exception {
         // given

@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.EntityManager;
-import java.io.IOException;
 
 @Service
 @Transactional(readOnly = true)
@@ -65,7 +64,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) throws IOException {
+    public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) {
         UploadResponseDto uploadResponseDto = s3Util.upload(file);
 
         user.getProfile().updateProfileUrl(uploadResponseDto.getUrl());
