@@ -29,16 +29,4 @@ public class AuthController {
     public ResponseEntity<Void> logOutApi(@AuthenticationPrincipal User user) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
-    // Security test
-    @GetMapping("/user")
-    public ResponseEntity<Void> checkUserRoleApi(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // Security test
-    @GetMapping("/admin")
-    public ResponseEntity<Void> checkAdminRoleApi(@AuthenticationPrincipal User user) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 }

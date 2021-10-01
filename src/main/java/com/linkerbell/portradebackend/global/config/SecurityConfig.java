@@ -50,8 +50,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
-                .antMatchers(PREFIX_URL + "/auth/user").authenticated()
-                .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
                 .anyRequest().permitAll();
     }
 

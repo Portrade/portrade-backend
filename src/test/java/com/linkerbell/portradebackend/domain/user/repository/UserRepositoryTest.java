@@ -6,19 +6,14 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@ExtendWith(SpringExtension.class)
 class UserRepositoryTest {
 
     @Autowired
@@ -41,7 +36,7 @@ class UserRepositoryTest {
                 .build();
     }
 
-    @DisplayName("User 엔티티 저장")
+    @DisplayName("사용자 엔티티 저장 성공")
     @Test
     void saveUser() throws Exception {
         // given
@@ -59,7 +54,7 @@ class UserRepositoryTest {
         assertEquals(user.getProfile().isGraduated(), savedUser.getProfile().isGraduated());
     }
 
-    @DisplayName("User 엔티티 조회")
+    @DisplayName("사용자 엔티티 조회 성공")
     @Test
     void findUserById() throws Exception {
         // given
@@ -80,7 +75,7 @@ class UserRepositoryTest {
         assertEquals(user.getProfile().isGraduated(), foundUser.getProfile().isGraduated());
     }
 
-    @DisplayName("User 엔티티 삭제")
+    @DisplayName("사용자 엔티티 삭제 성공")
     @Test
     void deleteUser() throws Exception {
         // given
@@ -94,7 +89,7 @@ class UserRepositoryTest {
         assertEquals(Optional.empty(), foundPost);
     }
 
-    @DisplayName("User 엔티티 권한 추가")
+    @DisplayName("사용자 엔티티 권한 추가 성공")
     @Test
     void addRoleUser() throws Exception {
         // given
@@ -107,7 +102,7 @@ class UserRepositoryTest {
         assertTrue(savedUser.getRoles().contains(Role.ROLE_ADMIN));
     }
 
-    @DisplayName("User 엔티티 권한 삭제")
+    @DisplayName("사용자 엔티티 권한 삭제 성공")
     @Test
     void deleteRoleUser() throws Exception {
         // given

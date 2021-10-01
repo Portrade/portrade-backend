@@ -53,7 +53,7 @@ public class UserService implements UserDetailsService {
         }
 
         Profile profile = Profile.builder().build();
-        User user = signUpMapper.toEntity(signUpRequestDto,profile);
+        User user = signUpMapper.toEntity(signUpRequestDto, profile);
         user.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
         user.addRole(Role.ROLE_USER);
         userRepository.save(user);
