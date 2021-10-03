@@ -2,59 +2,44 @@ package com.linkerbell.portradebackend.domain.qna.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.qna.dto.CreateQnaRequestDto;
-import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.config.CustomSecurityFilter;
+import com.linkerbell.portradebackend.domain.qna.dto.ReplyQnaRequestDto;
+import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
+import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-
-import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-
 @SpringBootTest
 @AutoConfigureMockMvc
 class QnaControllerTest {
 
     final String PREFIX_URI = "/api/v1/qnas";
+
+    @Autowired
     private MockMvc mvc;
 
     @Autowired
-    private WebApplicationContext context;
-    @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private UserRepository userRepository;
-
-    User user1;
-    User admin1;
 
 
     @Test
-    @DisplayName("1:1 문의 등록 API - 로그인 한 유저")
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 등록 API 성공 - 로그인 한 유저")
     public void saveQnaApi() throws Exception {
-        user1 = userRepository.findByUsername("user1").get();
 
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity(new CustomSecurityFilter()))
-                .build();
         //given
         CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
                 .category("업로드")
@@ -69,7 +54,6 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .principal(new UsernamePasswordAuthenticationToken(user1, null))
                 .content(objectMapper.writeValueAsString(createQnaRequestDto))
         );
 
@@ -82,11 +66,6 @@ class QnaControllerTest {
     @WithAnonymousUser
     @DisplayName("1:1 문의 등록 API 실패 - 로그인 안함")
     public void saveQnaApi_anonymous() throws Exception {
-
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
 
         //given
         CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
@@ -111,14 +90,10 @@ class QnaControllerTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 등록 API - 어드민 계정")
+    @WithMockPortradeAdmin
+    @DisplayName("1:1 문의 등록 API 성공 - 어드민 계정")
     public void saveQnaApi_admin() throws Exception {
-        admin1 = userRepository.findByUsername("admin1").get();
 
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity(new CustomSecurityFilter()))
-                .build();
         //given
         CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
                 .category("업로드")
@@ -141,21 +116,57 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
-    //비공개 글 상세 조회 시도하는 api 테스트할 때 역할 나눠서 시도
     @Test
-    @DisplayName("1:1 문의 글 - 글쓴이가 비공개 글 상세 조회")
-    public void getQnaDetailApi_user() throws Exception {
-        //given
-        user1 = userRepository.findByUsername("user1").get();
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 답변 글 작성 API 실패 - 유저가 작성")
+    public void replyQnaApi_user() throws Exception {
 
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity(new CustomSecurityFilter()))
+        ReplyQnaRequestDto replyQnaRequestDto = ReplyQnaRequestDto.builder()
+                .title("1:1 답변글")
+                .content("1:1 답변글 남깁니다.")
+                .secret(false)
                 .build();
 
         //when
-        ResultActions result = mvc.perform(get(PREFIX_URI + "/1")
-                .principal(new UsernamePasswordAuthenticationToken(user1, null)));
+        ResultActions result = mvc.perform(post(PREFIX_URI + "/1/answer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(replyQnaRequestDto)));
+
+        //then
+        result.andDo(print())
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    @WithMockPortradeAdmin
+    @DisplayName("1:1 문의 답변 글 작성 API 성공 - 관리자가 작성")
+    public void replyQnaApi_admin() throws Exception {
+        //given
+        ReplyQnaRequestDto replyQnaRequestDto = ReplyQnaRequestDto.builder()
+                .title("1:1 답변글")
+                .content("1:1 답변글 남깁니다.")
+                .secret(false)
+                .build();
+
+        //when
+        ResultActions result = mvc.perform(post(PREFIX_URI + "/1/answer")
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(replyQnaRequestDto)));
+
+        //then
+        result.andDo(print())
+                .andExpect(status().isCreated());
+    }
+
+    @Test
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 글 상세 조회 - 글쓴이가 비공개 글 상세 조회")
+    public void getQnaDetailApi_user() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
         //then
         result.andDo(print())
                 .andExpect(status().isOk());
@@ -166,11 +177,6 @@ class QnaControllerTest {
     @DisplayName("1:1 문의 글 - 로그인 안한 유저가 비공개 글 상세 조회")
     public void getQnaDetailApi_anonymous() throws Exception {
         //given
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity())
-                .build();
-
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
         //then
@@ -179,18 +185,13 @@ class QnaControllerTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 글 - 로그인한 권한 없는 유저가 비공개 글 상세 조회")
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 글 - 로그인 한 권한 없는 유저가 비공개 글 상세 조회")
     public void getQnaDetailApi_noauthentication() throws Exception {
-        User user2 = userRepository.findByUsername("user2").get();
         //given
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity(new CustomSecurityFilter()))
-                .build();
-
         //when
-        ResultActions result = mvc.perform(get(PREFIX_URI + "/1")
-                .principal(new UsernamePasswordAuthenticationToken(user2, null)));
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/4"));
+
         //then
         result.andDo(print())
                 .andExpect(status().isForbidden())
@@ -198,18 +199,13 @@ class QnaControllerTest {
     }
 
     @Test
+    @WithMockPortradeAdmin
     @DisplayName("1:1 문의 글 - 관리자가 비공개 글 상세 조회")
     public void getQnaDetailApi_admin() throws Exception {
-        admin1 = userRepository.findByUsername("admin1").get();
         //given
-        mvc = MockMvcBuilders
-                .webAppContextSetup(context)
-                .apply(springSecurity(new CustomSecurityFilter()))
-                .build();
-
         //when
-        ResultActions result = mvc.perform(get(PREFIX_URI + "/1")
-                .principal(new UsernamePasswordAuthenticationToken(admin1, null)));
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
+
         //then
         result.andDo(print())
                 .andExpect(status().isOk());

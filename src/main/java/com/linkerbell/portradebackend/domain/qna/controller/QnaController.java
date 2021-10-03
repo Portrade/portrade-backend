@@ -3,10 +3,10 @@ package com.linkerbell.portradebackend.domain.qna.controller;
 import com.linkerbell.portradebackend.domain.qna.dto.*;
 import com.linkerbell.portradebackend.domain.qna.service.QnaService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,7 +22,7 @@ public class QnaController {
     @PostMapping
     public ResponseEntity<CreateQnaResponseDto> saveQnaApi(
             @RequestBody @Valid CreateQnaRequestDto requestDto,
-            @AuthenticationPrincipal User user) {
+            @CurrentUser User user) {
 
         CreateQnaResponseDto savedQnaResponseDto = qnaService.createQna(requestDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedQnaResponseDto);
@@ -33,7 +33,7 @@ public class QnaController {
     public ResponseEntity<ReplyQnaResponseDto> replyQnaApi(
             @PathVariable("qnaId") Long qnaId,
             @RequestBody @Valid ReplyQnaRequestDto requestDto,
-            @AuthenticationPrincipal User user) {
+            @CurrentUser User user) {
         ReplyQnaResponseDto replyQnaResponseDto = qnaService.createReplyQna(qnaId, requestDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(replyQnaResponseDto);
     }
@@ -49,7 +49,7 @@ public class QnaController {
     @GetMapping("/{qnaId}")
     public ResponseEntity<QnaDetailResponseDto> getQnaDetailApi(
             @PathVariable("qnaId") Long qnaId,
-            @AuthenticationPrincipal User user){
+            @CurrentUser User user){
         QnaDetailResponseDto qnaDetailResponseDto = qnaService.getQna(qnaId, user);
         return ResponseEntity.status(HttpStatus.OK).body(qnaDetailResponseDto);
     }
