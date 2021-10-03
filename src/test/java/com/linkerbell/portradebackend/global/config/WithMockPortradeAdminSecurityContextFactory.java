@@ -2,7 +2,7 @@ package com.linkerbell.portradebackend.global.config;
 
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.UserDetailsImpl;
+import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -28,7 +28,7 @@ public class WithMockPortradeAdminSecurityContextFactory implements WithSecurity
 
         admin.addRole(Role.ROLE_ADMIN);
 
-        UserDetailsImpl principal = new UserDetailsImpl(admin);
+        UserAdapter principal = new UserAdapter(admin);
 
         Authentication auth =
                 new UsernamePasswordAuthenticationToken(principal, "password", principal.getAuthorities());

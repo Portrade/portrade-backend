@@ -1,8 +1,7 @@
 package com.linkerbell.portradebackend.global.config;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.UserDetailsImpl;
-import org.hibernate.type.UUIDBinaryType;
+import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -17,8 +16,8 @@ public class WithMockPortradeUserSecurityContextFactory implements WithSecurityC
     public SecurityContext createSecurityContext(WithMockPortradeUser annotation) {
         SecurityContext context = SecurityContextHolder.createEmptyContext();
 
-        UserDetailsImpl principal =
-                new UserDetailsImpl(User.builder()
+        UserAdapter principal =
+                new UserAdapter(User.builder()
                         .id(UUID.fromString("3cbe539a-33ba-4550-a82c-63be333ac2d0"))
                         .username("user1")
                         .password("1234Aa@@")
