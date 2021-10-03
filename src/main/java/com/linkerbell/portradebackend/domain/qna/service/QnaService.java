@@ -1,16 +1,14 @@
 package com.linkerbell.portradebackend.domain.qna.service;
 
-
 import com.linkerbell.portradebackend.domain.qna.domain.Answer;
 import com.linkerbell.portradebackend.domain.qna.dto.*;
 import com.linkerbell.portradebackend.domain.qna.domain.Qna;
 import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
-import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExsitException;
+import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -34,7 +33,7 @@ public class QnaService {
     private final QnaRepository qnaRepository;
 
     @Transactional
-    public CreateQnaResponseDto createQna(CreateQnaRequestDto requestDto, User user) {
+    public CreateQnaResponseDto createQuestion(CreateQnaRequestDto requestDto, User user) {
         Question qna = requestDto.toEntity(user, Status.UNANSWERED);
         qnaRepository.save(qna);
         return CreateQnaResponseDto.builder()
@@ -43,15 +42,15 @@ public class QnaService {
     }
 
     @Transactional
-    public ReplyQnaResponseDto createReplyQna(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
+    public CreateQnaResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
         Question foundQna = qnaRepository.findByIdAndDType(qnaId)
-                .orElseThrow(() -> new NotExsitException(ErrorCode.NONEXISTENT_QNA_ID));
+                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA_ID));
 
         Answer answer = requestDto.toEntity(user, foundQna);
         qnaRepository.save(answer);
         foundQna.changeStatus(Status.ANSWERED);
 
-        return ReplyQnaResponseDto.builder()
+        return CreateQnaResponseDto.builder()
                 .id(answer.getId())
                 .build();
     }
@@ -71,22 +70,35 @@ public class QnaService {
 
     public QnaDetailResponseDto getQna(Long qnaId, User user) {
         Qna qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new NotExsitException(ErrorCode.NONEXISTENT_QNA));
+                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA));
 
         if (!qna.isPublic()) {
-            if(Objects.isNull(user) || !user.getId().equals(qna.Id()) && !user.getRoles().contains(Role.ROLE_ADMIN)) {
+            if(Objects.isNull(user) || !user.getId().equals(qna.Id()) && !user.isAdmin()) {
                 throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
             }
         }
 
-        Qna nextQna = qnaRepository.findTopByIdIsGreaterThanOrderByIdAsc(qnaId)
-                .orElse(null);
-        Qna prevQna = qnaRepository.findTopByIdIsLessThanOrderByIdDesc(qnaId)
-                .orElse(null);
+        Optional<Qna> nextQnaOptional = qnaRepository.findTopByIdIsGreaterThanOrderByIdAsc(qnaId);
+        Optional<Qna> prevQnaOptional = qnaRepository.findTopByIdIsLessThanOrderByIdDesc(qnaId);
 
-        QnaCurDetailResponseDto curDetailResponseDto = QnaCurDetailResponseDto.toDto(qna);
-        QnaNextDetailResponseDto nextResponseDto = QnaNextDetailResponseDto.toDto(nextQna);
-        QnaNextDetailResponseDto prevResponseDto = QnaNextDetailResponseDto.toDto(prevQna);
-        return new QnaDetailResponseDto(curDetailResponseDto, nextResponseDto, prevResponseDto);
+        QnaNextDetailResponseDto nextQnaResponseDto = nextQnaOptional.isPresent()
+                ? QnaNextDetailResponseDto.of(nextQnaOptional.get())
+                : null;
+
+        QnaNextDetailResponseDto prevQnaResponseDto = prevQnaOptional.isPresent()
+                ? QnaNextDetailResponseDto.of(prevQnaOptional.get())
+                : null;
+
+        return QnaDetailResponseDto.builder()
+                .id(qna.getId())
+                .creator(qna.name())
+                .title(qna.getTitle())
+                .content(qna.getContent())
+                .secret(qna.isPublic())
+                .createdDate(qna.getCreatedDate())
+                .lastModifiedDate(qna.getLastModifiedDate())
+                .next(nextQnaResponseDto)
+                .prev(prevQnaResponseDto)
+                .build();
     }
 }

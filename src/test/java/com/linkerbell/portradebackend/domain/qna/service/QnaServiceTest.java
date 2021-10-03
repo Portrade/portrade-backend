@@ -11,7 +11,7 @@ import com.linkerbell.portradebackend.domain.qna.dto.ReplyQnaRequestDto;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NotExsitException;
+import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -112,7 +112,7 @@ class QnaServiceTest {
 
         //when
         //then
-        assertThrows(NotExsitException.class,
+        assertThrows(NotExistException.class,
                 () -> qnaService.createReplyQna(qnaId,any(ReplyQnaRequestDto.class), admin));
     }
 
@@ -190,7 +190,7 @@ class QnaServiceTest {
 
         //when
         //then
-        assertThrows(NotExsitException.class, () -> {
+        assertThrows(NotExistException.class, () -> {
             qnaService.getQna(qnaId, user);
         });
     }
@@ -281,8 +281,8 @@ class QnaServiceTest {
         QnaDetailResponseDto qnaDetailResponseDto = qnaService.getQna(qnaId, admin);
 
         //then
-        assertEquals(qnaDetailResponseDto.getCur().getId(), question.getId());
-        assertEquals(qnaDetailResponseDto.getCur().getCreator(), question.name());
+        assertEquals(qnaDetailResponseDto.getId(), question.getId());
+        assertEquals(qnaDetailResponseDto.getCreator(), question.name());
         assertEquals(qnaDetailResponseDto.getNext().getId(), qna3.getId());
         assertEquals(qnaDetailResponseDto.getNext().getCreator(), qna3.name());
         assertEquals(qnaDetailResponseDto.getPrev().getId(), qna1.getId());
@@ -338,8 +338,8 @@ class QnaServiceTest {
         QnaDetailResponseDto qnaDetailResponseDto = qnaService.getQna(qnaId, user);
 
         //then
-        assertEquals(qnaDetailResponseDto.getCur().getId(), question.getId());
-        assertEquals(qnaDetailResponseDto.getCur().getCreator(), question.name());
+        assertEquals(qnaDetailResponseDto.getId(), question.getId());
+        assertEquals(qnaDetailResponseDto.getCreator(), question.name());
         assertEquals(qnaDetailResponseDto.getNext().getId(), qna3.getId());
         assertEquals(qnaDetailResponseDto.getNext().getCreator(), qna3.name());
         assertEquals(qnaDetailResponseDto.getPrev().getId(), qna1.getId());

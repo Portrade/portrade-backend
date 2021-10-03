@@ -56,6 +56,7 @@ class QnaRepositoryTest {
     @DisplayName("현재 id 이전 글 정보 가져오기")
     @Test
     void findLessThan() {
+        //given
         Qna savedQna = qnaRepository.save(question);
 
         //when

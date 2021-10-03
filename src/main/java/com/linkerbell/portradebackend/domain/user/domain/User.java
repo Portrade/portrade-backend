@@ -72,4 +72,8 @@ public class User extends BaseTimeEntity {
     public void deleteRole(Role role) {
         roles.remove(role);
     }
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
+    }
 }

@@ -20,22 +20,22 @@ public class QnaController {
 
     //로그인한 유저만 접근 가능
     @PostMapping
-    public ResponseEntity<CreateQnaResponseDto> saveQnaApi(
+    public ResponseEntity<CreateQnaResponseDto> createQuestionApi(
             @RequestBody @Valid CreateQnaRequestDto requestDto,
             @CurrentUser User user) {
 
-        CreateQnaResponseDto savedQnaResponseDto = qnaService.createQna(requestDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedQnaResponseDto);
+        CreateQnaResponseDto createQnaResponseDto = qnaService.createQuestion(requestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createQnaResponseDto);
     }
 
     //로그인한 관리자만 접근 가능
     @PostMapping("/{qnaId}/answer")
-    public ResponseEntity<ReplyQnaResponseDto> replyQnaApi(
+    public ResponseEntity<CreateQnaResponseDto> createAnswerApi(
             @PathVariable("qnaId") Long qnaId,
             @RequestBody @Valid ReplyQnaRequestDto requestDto,
             @CurrentUser User user) {
-        ReplyQnaResponseDto replyQnaResponseDto = qnaService.createReplyQna(qnaId, requestDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(replyQnaResponseDto);
+        CreateQnaResponseDto createQnaResponseDto = qnaService.createAnswer(qnaId, requestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createQnaResponseDto);
     }
 
     @GetMapping

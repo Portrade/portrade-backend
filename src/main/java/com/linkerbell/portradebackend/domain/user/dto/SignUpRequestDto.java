@@ -47,4 +47,6 @@ public class SignUpRequestDto {
         this.wantedJob = wantedJob;
         this.birthDate = birthDate;
     }
+
+
 }
