@@ -7,7 +7,7 @@ import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.notice.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
+import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -66,7 +66,8 @@ class NoticeServiceTest {
         noticeService.createNotice(noticeRequestDto, admin);
 
         // then
-        verify(noticeRepository, times(1)).save(any(Notice.class));
+        verify(noticeRepository, times(1))
+                .save(any(Notice.class));
     }
 
     @DisplayName("공지사항 목록 조회 성공")
@@ -121,6 +122,7 @@ class NoticeServiceTest {
         NoticeDetailResponseDto foundNoticeDetailResponseDto = noticeService.getNotice(1L);
 
         // then
+        assertNotNull(notice);
         assertNotNull(foundNoticeDetailResponseDto);
         assertEquals(notice.getUser().getUsername(), foundNoticeDetailResponseDto.getCreator());
         assertEquals(notice.getTitle(), foundNoticeDetailResponseDto.getTitle());
@@ -139,11 +141,11 @@ class NoticeServiceTest {
 
         // when
         // then
-        assertThrows(InvalidValueException.class,
+        assertThrows(NotExistException.class,
                 () -> noticeService.getNotice(1L));
     }
 
-    @DisplayName("공지사항 상세 조회 성공 - 조회수 증가")
+    @DisplayName("공지사항 상세 조회 성공 - 조회수 증가 확인")
     @Test
     void getNotice_addViewCount() throws Exception {
         // given
@@ -209,7 +211,7 @@ class NoticeServiceTest {
 
         // when
         // then
-        assertThrows(InvalidValueException.class,
+        assertThrows(NotExistException.class,
                 () -> noticeService.updateNotice(1L, noticeRequestDto));
     }
 
@@ -231,7 +233,8 @@ class NoticeServiceTest {
         noticeService.deleteNotice(1L);
 
         // then
-        verify(noticeRepository, times(1)).delete(any(Notice.class));
+        verify(noticeRepository, times(1))
+                .delete(any(Notice.class));
     }
 
     @DisplayName("공지사항 삭제 실패 - 존재하지 않는 ID")
@@ -243,7 +246,7 @@ class NoticeServiceTest {
 
         // when
         // then
-        assertThrows(InvalidValueException.class,
+        assertThrows(NotExistException.class,
                 () -> noticeService.deleteNotice(1L));
     }
 }

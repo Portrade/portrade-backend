@@ -2,40 +2,52 @@ package com.linkerbell.portradebackend.domain.notice.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.notice.dto.NoticeRequestDto;
+import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
+import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc
 class NoticeControllerTest {
 
     final String PREFIX_URI = "/api/v1/notices";
 
-    @Value("${ADMIN_ACCESS_TOKEN}")
-    private String adminAccessToken;
-    @Value("${USER_ACCESS_TOKEN}")
-    private String userAccessToken;
-
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private WebApplicationContext ctx;
 
-    @Order(12)
+    @BeforeEach
+    public void setup() {
+        mvc = MockMvcBuilders.webAppContextSetup(ctx)
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(springSecurity())
+                .alwaysDo(print())
+                .build();
+    }
+
     @DisplayName("공지사항 등록 API 성공")
     @Test
+    @Order(12)
+    @WithMockPortradeAdmin
     void writeNoticeApi() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -45,20 +57,19 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(post(PREFIX_URI)
-                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
         result.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value("4"))
-                .andDo(print());
+                .andExpect(jsonPath("$.id").value("4"));
     }
 
-    @Order(13)
     @DisplayName("공지사항 등록 API 실패 - 권한 없는 사용자")
     @Test
+    @Order(13)
+    @WithMockPortradeUser
     void writeNoticeApi_unAuthorizedUser() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -68,19 +79,17 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(post(PREFIX_URI)
-                .header("Authorization", userAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
-        result.andExpect(status().isForbidden())
-                .andDo(print());
+        result.andExpect(status().isForbidden());
     }
 
-    @Order(14)
     @DisplayName("공지사항 등록 API 실패 - 비로그인")
     @Test
+    @Order(14)
     void writeNoticeApi_unAuthenticatedUser() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -95,13 +104,13 @@ class NoticeControllerTest {
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
-        result.andExpect(status().isUnauthorized())
-                .andDo(print());
+        result.andExpect(status().isUnauthorized());
     }
 
-    @Order(15)
     @DisplayName("공지사항 등록 API 실패 - 유효하지 않은 요청 값")
     @Test
+    @Order(15)
+    @WithMockPortradeAdmin
     void writeNoticeApi_invalidRequestBody() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -110,20 +119,18 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(post(PREFIX_URI)
-                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("N101"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("N101"));
     }
 
-    @Order(1)
     @DisplayName("공지사항 목록 조회 API 성공")
     @Test
+    @Order(1)
     void getNoticesApi() throws Exception {
         // given
         // when
@@ -138,13 +145,12 @@ class NoticeControllerTest {
                 .andExpect(jsonPath("$.notices[2].title").value("[공지사항 분류]공지사항 제목입니다."))
                 .andExpect(jsonPath("$.notices[0].viewCount").value("1500"))
                 .andExpect(jsonPath("$.notices[1].viewCount").value("1220"))
-                .andExpect(jsonPath("$.notices[2].viewCount").value("1200"))
-                .andDo(print());
+                .andExpect(jsonPath("$.notices[2].viewCount").value("1200"));
     }
 
-    @Order(2)
     @DisplayName("공지사항 목록 조회 API 성공 - page=1&size=2")
     @Test
+    @Order(2)
     void getNoticesApi_size2() throws Exception {
         // given
         // when
@@ -157,13 +163,12 @@ class NoticeControllerTest {
                 .andExpect(jsonPath("$.notices[0].title").value("[공지사항 분류]공지사항 제목입니다."))
                 .andExpect(jsonPath("$.notices[1].title").value("[공지사항 분류]공지사항 제목입니다."))
                 .andExpect(jsonPath("$.notices[0].viewCount").value("1500"))
-                .andExpect(jsonPath("$.notices[1].viewCount").value("1220"))
-                .andDo(print());
+                .andExpect(jsonPath("$.notices[1].viewCount").value("1220"));
     }
 
-    @Order(3)
     @DisplayName("공지사항 목록 조회 API 성공 - 빈 페이지네이션")
     @Test
+    @Order(3)
     void getNoticesApi_empty() throws Exception {
         // given
         // when
@@ -172,13 +177,12 @@ class NoticeControllerTest {
         // then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.maxPage").value("1"))
-                .andExpect(jsonPath("$.notices.size()").value("0"))
-                .andDo(print());
+                .andExpect(jsonPath("$.notices.size()").value("0"));
     }
 
-    @Order(4)
     @DisplayName("공지사항 상세 조회 API 성공")
     @Test
+    @Order(4)
     void getNoticeApi() throws Exception {
         // given
         // when
@@ -190,27 +194,26 @@ class NoticeControllerTest {
                 .andExpect(jsonPath("$.creator").value("admin1"))
                 .andExpect(jsonPath("$.title").value("[공지사항 분류]공지사항 제목입니다."))
                 .andExpect(jsonPath("$.content").value("공지사항1 내용입니다."))
-                .andExpect(jsonPath("$.viewCount").value("1201"))
-                .andDo(print());
+                .andExpect(jsonPath("$.viewCount").value("1201"));
     }
 
-    @Order(5)
     @DisplayName("공지사항 상세 조회 API 실패 - 존재하지 않는 ID")
     @Test
+    @Order(5)
     void getNoticeApi_nonexistentNoticeId() throws Exception {
         // given
         // when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1234"));
 
         // then
-        result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("N001"))
-                .andDo(print());
+        result.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("N001"));
     }
 
-    @Order(6)
     @DisplayName("공지사항 수정 API 성공")
     @Test
+    @Order(6)
+    @WithMockPortradeAdmin
     void updateNoticeApi() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -220,19 +223,18 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(put(PREFIX_URI + "/3")
-                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
-        result.andExpect(status().isNoContent())
-                .andDo(print());
+        result.andExpect(status().isNoContent());
     }
 
-    @Order(7)
     @DisplayName("공지사항 수정 API 실패 - 유효하지 않은 요청 값")
     @Test
+    @Order(7)
+    @WithMockPortradeAdmin
     void updateNoticeApi_invalidRequestBody() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -241,20 +243,19 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(put(PREFIX_URI + "/3")
-                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("N101"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("N101"));
     }
 
-    @Order(8)
     @DisplayName("공지사항 수정 API 실패 - 존재하지 않는 ID")
     @Test
+    @Order(8)
+    @WithMockPortradeAdmin
     void updateNoticeApi_nonexistentId() throws Exception {
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
                 .title("공지사항 수정 제목")
@@ -263,57 +264,52 @@ class NoticeControllerTest {
 
         // when
         ResultActions result = mvc.perform(put(PREFIX_URI + "/13")
-                .header("Authorization", adminAccessToken)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
-        result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("N001"))
-                .andDo(print());
+        result.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("N001"));
     }
 
-    @Order(9)
     @DisplayName("공지사항 삭제 API 성공")
     @Test
+    @Order(9)
+    @WithMockPortradeAdmin
     void deleteNoticeApi() throws Exception {
         // given
         // when
-        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1")
-                .header("Authorization", adminAccessToken));
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
 
         // then
-        result.andExpect(status().isNoContent())
-                .andDo(print());
+        result.andExpect(status().isNoContent());
     }
 
-    @Order(10)
     @DisplayName("공지사항 삭제 API 실패 - 존재하지 않는 ID")
     @Test
+    @Order(10)
+    @WithMockPortradeAdmin
     void deleteNoticeApi_nonexistentId() throws Exception {
         // given
         // when
-        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1")
-                .header("Authorization", adminAccessToken));
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
 
         // then
-        result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("N001"))
-                .andDo(print());
+        result.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("N001"));
     }
 
-    @Order(11)
     @DisplayName("공지사항 삭제 API 실패 - 권한 없는 사용자")
     @Test
+    @Order(11)
+    @WithMockPortradeUser
     void deleteNoticeApi_unAuthorizedUser() throws Exception {
         // given
         // when
-        ResultActions result = mvc.perform(delete(PREFIX_URI + "/2")
-                .header("Authorization", userAccessToken));
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/2"));
 
         // then
-        result.andExpect(status().isForbidden())
-                .andDo(print());
+        result.andExpect(status().isForbidden());
     }
 }
