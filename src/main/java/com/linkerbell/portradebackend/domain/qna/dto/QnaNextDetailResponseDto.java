@@ -28,7 +28,7 @@ public class QnaNextDetailResponseDto {
 
         return QnaNextDetailResponseDto.builder()
                 .id(qna.getId())
-                .creator(qna.name())
+                .creator(qna.getCreatorName())
                 .title(qna.getTitle())
                 .createdDate(qna.getCreatedDate())
                 .build();

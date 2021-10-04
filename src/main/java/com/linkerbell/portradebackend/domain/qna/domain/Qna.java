@@ -54,17 +54,7 @@ public abstract class Qna extends BaseTimeEntity {
         this.isPublic = isPublic;
     }
 
-    public UUID Id() {
-        if(Objects.isNull(user)) {
-            throw new NotExistException(ErrorCode.NONEXISTENT_USER);
-        }
-        return user.getId();
-    }
-
-    public String name() {
-        if(Objects.isNull(user)) {
-            throw new NotExistException(ErrorCode.NONEXISTENT_USER);
-        }
+    public String getCreatorName() {
         return user.getName();
     }
 }

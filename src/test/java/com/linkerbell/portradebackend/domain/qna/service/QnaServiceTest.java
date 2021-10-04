@@ -282,11 +282,11 @@ class QnaServiceTest {
 
         //then
         assertEquals(qnaDetailResponseDto.getId(), question.getId());
-        assertEquals(qnaDetailResponseDto.getCreator(), question.name());
+        assertEquals(qnaDetailResponseDto.getCreator(), question.getCreatorName());
         assertEquals(qnaDetailResponseDto.getNext().getId(), qna3.getId());
-        assertEquals(qnaDetailResponseDto.getNext().getCreator(), qna3.name());
+        assertEquals(qnaDetailResponseDto.getNext().getCreator(), qna3.getCreatorName());
         assertEquals(qnaDetailResponseDto.getPrev().getId(), qna1.getId());
-        assertEquals(qnaDetailResponseDto.getPrev().getCreator(), qna1.name());
+        assertEquals(qnaDetailResponseDto.getPrev().getCreator(), qna1.getCreatorName());
     }
 
     @Test
@@ -339,10 +339,10 @@ class QnaServiceTest {
 
         //then
         assertEquals(qnaDetailResponseDto.getId(), question.getId());
-        assertEquals(qnaDetailResponseDto.getCreator(), question.name());
+        assertEquals(qnaDetailResponseDto.getCreator(), question.getCreatorName());
         assertEquals(qnaDetailResponseDto.getNext().getId(), qna3.getId());
-        assertEquals(qnaDetailResponseDto.getNext().getCreator(), qna3.name());
+        assertEquals(qnaDetailResponseDto.getNext().getCreator(), qna3.getCreatorName());
         assertEquals(qnaDetailResponseDto.getPrev().getId(), qna1.getId());
-        assertEquals(qnaDetailResponseDto.getPrev().getCreator(), qna1.name());
+        assertEquals(qnaDetailResponseDto.getPrev().getCreator(), qna1.getCreatorName());
     }
 }

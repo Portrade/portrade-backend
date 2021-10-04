@@ -11,6 +11,9 @@ import java.util.Optional;
 
 public interface QnaRepository extends JpaRepository<Qna, Long> {
 
+    @Query("select q from Qna q join fetch q.user u where q.id=:qnaId")
+    Optional<Qna> findById(@Param(value = "qnaId") Long qnaId);
+
     @Query("select q from Question q where q.id=:qnaId")
     Optional<Question> findByIdAndDType(@Param("qnaId") Long qnaId);
 

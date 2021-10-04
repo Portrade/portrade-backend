@@ -7,6 +7,7 @@ import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
@@ -33,16 +34,14 @@ public class QnaService {
     private final QnaRepository qnaRepository;
 
     @Transactional
-    public CreateQnaResponseDto createQuestion(CreateQnaRequestDto requestDto, User user) {
+    public CreateResponseDto createQuestion(CreateQnaRequestDto requestDto, User user) {
         Question qna = requestDto.toEntity(user, Status.UNANSWERED);
         qnaRepository.save(qna);
-        return CreateQnaResponseDto.builder()
-                .id(qna.getId())
-                .build();
+        return new CreateResponseDto(qna.getId());
     }
 
     @Transactional
-    public CreateQnaResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
+    public CreateResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
         Question foundQna = qnaRepository.findByIdAndDType(qnaId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA_ID));
 
@@ -50,9 +49,7 @@ public class QnaService {
         qnaRepository.save(answer);
         foundQna.changeStatus(Status.ANSWERED);
 
-        return CreateQnaResponseDto.builder()
-                .id(answer.getId())
-                .build();
+        return new CreateResponseDto(answer.getId());
     }
 
     public QnasResponseDto getQnas(int page, int size) {
@@ -77,7 +74,7 @@ public class QnaService {
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA));
 
         if (!qna.isPublic()) {
-            if(Objects.isNull(user) || !user.getId().equals(qna.Id()) && !user.isAdmin()) {
+            if(Objects.isNull(user) || !user.equals(qna.getUser()) && !user.isAdmin()) {
                 throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
             }
         }
@@ -95,7 +92,7 @@ public class QnaService {
 
         return QnaDetailResponseDto.builder()
                 .id(qna.getId())
-                .creator(qna.name())
+                .creator(qna.getCreatorName())
                 .title(qna.getTitle())
                 .content(qna.getContent())
                 .secret(qna.isPublic())

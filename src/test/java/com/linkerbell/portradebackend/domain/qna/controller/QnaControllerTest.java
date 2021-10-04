@@ -5,6 +5,7 @@ import com.linkerbell.portradebackend.domain.qna.dto.CreateQnaRequestDto;
 import com.linkerbell.portradebackend.domain.qna.dto.ReplyQnaRequestDto;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -31,6 +35,17 @@ class QnaControllerTest {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    @Autowired
+    private WebApplicationContext ctx;
+
+    @BeforeEach
+    public void setup() {
+        mvc = MockMvcBuilders.webAppContextSetup(ctx)
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
+                .build();
+    }
 
 
     @Test
@@ -80,7 +95,8 @@ class QnaControllerTest {
         );
 
         //then
-        result.andExpect(jsonPath("$.id").isNotEmpty())
+        result.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
                 .andDo(print());
     }
 
@@ -152,10 +168,23 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").isNotEmpty())
                 .andDo(print());
     }
 
-    //목록조회
+    @Test
+    @DisplayName("1:1 문의 글 목록 조회 API 성공")
+    public void test() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(get(PREFIX_URI));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.qnas").isNotEmpty())
+                .andExpect(jsonPath("$.maxPage").isNotEmpty())
+                .andDo(print());
+    }
 
 
     @Test
@@ -163,7 +192,7 @@ class QnaControllerTest {
     public void getQnaDetailApi_nonexistentId() throws Exception {
         //given
         //when
-        ResultActions result = mvc.perform(get(PREFIX_URI + "/123"));
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/1230"));
         //then
         result.andExpect(status().isNotFound())
                 .andDo(print());
@@ -177,7 +206,8 @@ class QnaControllerTest {
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
         //then
-        result.andExpect(status().is4xxClientError())
+        result.andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("M201"))
                 .andDo(print());
     }
 
