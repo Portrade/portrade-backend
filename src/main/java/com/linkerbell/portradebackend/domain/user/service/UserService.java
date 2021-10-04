@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
@@ -35,7 +36,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new InvalidValueException(ErrorCode.NOT_FOUND_USER_USERNAME));
+                .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_USER));
 
         return new UserAdapter(user);
     }

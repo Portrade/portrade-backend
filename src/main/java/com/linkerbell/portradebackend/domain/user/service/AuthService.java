@@ -43,8 +43,6 @@ public class AuthService {
 
         String accessToken = tokenProvider.createAccessToken(authentication);
 
-        return TokenResponseDto.builder()
-                .accessToken(accessToken)
-                .build();
+        return new TokenResponseDto(accessToken);
     }
 }

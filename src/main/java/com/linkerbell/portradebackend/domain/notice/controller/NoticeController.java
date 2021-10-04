@@ -5,11 +5,11 @@ import com.linkerbell.portradebackend.domain.notice.dto.NoticeRequestDto;
 import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.notice.service.NoticeService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,9 +22,9 @@ public class NoticeController {
     private final NoticeService noticeService;
 
     @PostMapping
-    public ResponseEntity<CreateResponseDto> writeNoticeApi(
+    public ResponseEntity<CreateResponseDto> createNoticeApi(
             @RequestBody @Valid NoticeRequestDto noticeRequestDto,
-            @AuthenticationPrincipal User user) {
+            @CurrentUser User user) {
         CreateResponseDto createResponseDto = noticeService.createNotice(noticeRequestDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createResponseDto);
     }

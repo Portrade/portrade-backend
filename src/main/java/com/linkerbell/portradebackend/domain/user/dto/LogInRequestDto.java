@@ -1,6 +1,5 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
-import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

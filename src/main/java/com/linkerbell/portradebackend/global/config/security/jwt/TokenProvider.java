@@ -63,7 +63,6 @@ public class TokenProvider implements InitializingBean {
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
-        log.info("get Authentication : 멤버 쿼리 " );
         return new UsernamePasswordAuthenticationToken(userAdapter, token, authorities);
     }
 
