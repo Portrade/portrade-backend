@@ -3,10 +3,12 @@ package com.linkerbell.portradebackend.global.config;
 
 import com.linkerbell.portradebackend.global.config.security.CustomAccessDeniedHandler;
 import com.linkerbell.portradebackend.global.config.security.CustomAuthenticationEntryPoint;
-import com.linkerbell.portradebackend.global.config.security.jwt.JwtFilter;
+import com.linkerbell.portradebackend.global.config.security.jwt.JwtSecurityConfig;
+import com.linkerbell.portradebackend.global.config.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import org.springframework.web.cors.CorsUtils;
 
@@ -24,9 +25,9 @@ import org.springframework.web.cors.CorsUtils;
 @RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private final TokenProvider tokenProvider;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-    private final JwtFilter jwtFilter;
 
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
@@ -50,14 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .accessDeniedHandler(customAccessDeniedHandler);
 
-        http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        http.apply(new JwtSecurityConfig(tokenProvider));
 
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/user").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/qnas").authenticated()
+                .antMatchers(PREFIX_URL + "/qnas/{qnaId}/answer").hasRole("ADMIN")
                 .anyRequest().permitAll();
+
     }
 
     @Bean

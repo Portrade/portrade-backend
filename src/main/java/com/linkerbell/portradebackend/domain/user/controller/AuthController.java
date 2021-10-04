@@ -4,10 +4,10 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.AuthService;
+import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -26,19 +26,19 @@ public class AuthController {
     }
 
     @GetMapping("/logout")
-    public ResponseEntity<Void> logOutApi(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Void> logOutApi(@CurrentUser User user) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // Security test
     @GetMapping("/user")
-    public ResponseEntity<Void> checkUserRoleApi(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Void> checkUserRoleApi(@CurrentUser User user) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     // Security test
     @GetMapping("/admin")
-    public ResponseEntity<Void> checkAdminRoleApi(@AuthenticationPrincipal User user) {
+    public ResponseEntity<Void> checkAdminRoleApi(@CurrentUser User user) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
