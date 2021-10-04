@@ -1,5 +1,7 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
+import com.linkerbell.portradebackend.domain.user.domain.Profile;
+import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -48,5 +50,17 @@ public class SignUpRequestDto {
         this.birthDate = birthDate;
     }
 
-
+    public User toEntity(String password) {
+        return User.builder()
+                .username(userId)
+                .name(name)
+                .password(password)
+                .profile(Profile.builder()
+                        .college(college)
+                        .isGraduated(graduation)
+                        .build())
+                .wantedJob(wantedJob)
+                .birthDate(birthDate)
+                .build();
+    }
 }

@@ -97,7 +97,7 @@ class QnaServiceTest {
                 .build();
 
         //when
-        qnaService.createQna(createRequestDto, user);
+        qnaService.createQuestion(createRequestDto, user);
 
         //then
         verify(qnaRepository, times(1)).save(any(Qna.class));
@@ -113,7 +113,7 @@ class QnaServiceTest {
         //when
         //then
         assertThrows(NotExistException.class,
-                () -> qnaService.createReplyQna(qnaId,any(ReplyQnaRequestDto.class), admin));
+                () -> qnaService.createAnswer(qnaId,any(ReplyQnaRequestDto.class), admin));
     }
 
     @Test
@@ -130,7 +130,7 @@ class QnaServiceTest {
         given(qnaRepository.findByIdAndDType(qnaId))
                 .willReturn(Optional.of(question));
         //when
-        qnaService.createReplyQna(qnaId, replyQnaRequestDto, admin);
+        qnaService.createAnswer(qnaId, replyQnaRequestDto, admin);
 
         //then
         assertEquals(question.getStatus(), Status.ANSWERED);

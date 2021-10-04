@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
@@ -35,7 +34,6 @@ class QnaControllerTest {
 
 
     @Test
-    @WithAnonymousUser
     @DisplayName("1:1 문의 등록 API 실패 - 로그인 안함")
     public void saveQnaApi_anonymous() throws Exception {
         //given
@@ -173,7 +171,6 @@ class QnaControllerTest {
 
 
     @Test
-    @WithAnonymousUser
     @DisplayName("1:1 문의 글 상세 조회 API 실패 - 로그인 안한 유저가 비공개 글 상세 조회")
     public void getQnaDetailApi_anonymous() throws Exception {
         //given
