@@ -1,15 +1,14 @@
 package com.linkerbell.portradebackend.domain.user.controller;
 
-
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.UserService;
+import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -31,7 +30,7 @@ public class UserController {
 
     @PutMapping("/profile/image")
     public ResponseEntity<ProfileImageResponseDto> uploadProfileImageApi(MultipartFile file,
-                                                                         @AuthenticationPrincipal User user) throws IOException {
+                                                                         @CurrentUser User user) throws IOException {
         ProfileImageResponseDto profileImageResponseDto = userService.uploadProfileImage(user, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponseDto);
     }

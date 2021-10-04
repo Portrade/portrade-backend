@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.global.exception;
 
 import lombok.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 
 @Getter
@@ -21,5 +22,14 @@ public class ErrorResponse {
         this.message = message;
         this.code = code;
         this.timestamp = LocalDateTime.now();
+    }
+
+    public static ErrorResponse of(ErrorCode e, HttpServletRequest request) {
+        return ErrorResponse.builder()
+                .method(request.getMethod())
+                .path(request.getRequestURI())
+                .message(e.getMessage())
+                .code(e.getCode())
+                .build();
     }
 }
