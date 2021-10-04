@@ -65,7 +65,11 @@ public class QnaService {
         List<QnaResponseDto> qnaResponseDto = pageQnas.stream()
                 .map(qna -> QnaResponseDto.toDto(qna))
                 .collect(Collectors.toList());
-        return new QnasResponseDto(qnaResponseDto, pageQnas.getTotalPages());
+
+        return QnasResponseDto.builder()
+                .qnas(qnaResponseDto)
+                .maxPage(pageQnas.getTotalPages())
+                .build();
     }
 
     public QnaDetailResponseDto getQna(Long qnaId, User user) {
