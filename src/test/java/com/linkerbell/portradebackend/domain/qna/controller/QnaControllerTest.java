@@ -18,6 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -43,6 +44,7 @@ class QnaControllerTest {
     public void setup() {
         mvc = MockMvcBuilders.webAppContextSetup(ctx)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(springSecurity())
                 .alwaysDo(print())
                 .build();
     }

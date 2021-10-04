@@ -3,11 +3,9 @@ package com.linkerbell.portradebackend.global.config;
 
 import com.linkerbell.portradebackend.global.config.security.CustomAccessDeniedHandler;
 import com.linkerbell.portradebackend.global.config.security.CustomAuthenticationEntryPoint;
-import com.linkerbell.portradebackend.global.config.security.jwt.JwtFilter;
 import com.linkerbell.portradebackend.global.config.security.jwt.JwtSecurityConfig;
 import com.linkerbell.portradebackend.global.config.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -18,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -50,15 +47,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(customAuthenticationEntryPoint)
                 .accessDeniedHandler(customAccessDeniedHandler);
 
+        http.apply(new JwtSecurityConfig(tokenProvider));
+
         http.authorizeRequests()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/user").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/qnas").authenticated()
                 .antMatchers(PREFIX_URL + "/qnas/{qnaId}/answer").hasRole("ADMIN")
-                .anyRequest().permitAll()
-                .and()
-                .apply(new JwtSecurityConfig(tokenProvider));
+                .anyRequest().permitAll();
+
     }
 
     @Bean
