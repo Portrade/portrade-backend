@@ -1,7 +1,9 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
+import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
+import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import com.linkerbell.portradebackend.global.config.security.jwt.TokenProvider;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
@@ -25,8 +27,14 @@ public class AuthService {
     public TokenResponseDto logIn(LogInRequestDto logInRequestDto) {
         UsernamePasswordAuthenticationToken authenticationToken = null;
         Authentication authentication = null;
+        User user = null;
         try {
-            authenticationToken = new UsernamePasswordAuthenticationToken(logInRequestDto.getUserId(), logInRequestDto.getPassword());
+            user = User.builder()
+                    .username(logInRequestDto.getUserId())
+                    .password(logInRequestDto.getPassword())
+                    .build();
+
+            authenticationToken = new UsernamePasswordAuthenticationToken(new UserAdapter(user), logInRequestDto.getPassword());
             authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {

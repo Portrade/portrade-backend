@@ -1,12 +1,9 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
-import com.linkerbell.portradebackend.domain.user.domain.Profile;
-import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
-import com.linkerbell.portradebackend.domain.user.mapper.SignUpMapper;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
@@ -14,7 +11,6 @@ import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
-import org.mapstruct.factory.Mappers;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -31,7 +27,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
 
-    private final SignUpMapper signUpMapper = Mappers.getMapper(SignUpMapper.class);
     private final EntityManager entityManager;
 
     private final UserRepository userRepository;
@@ -39,8 +34,8 @@ public class UserService implements UserDetailsService {
     private final S3Util s3Util;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(email)
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new InvalidValueException(ErrorCode.NOT_FOUND_USER_USERNAME));
 
         return new UserAdapter(user);
@@ -52,10 +47,8 @@ public class UserService implements UserDetailsService {
             throw new InvalidValueException(ErrorCode.ALREADY_INUSE_USER_USERNAME);
         }
 
-        Profile profile = Profile.builder().build();
-        User user = signUpMapper.toEntity(signUpRequestDto,profile);
-        user.setPassword(passwordEncoder.encode(signUpRequestDto.getPassword()));
-        user.addRole(Role.ROLE_USER);
+        String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
+        User user = signUpRequestDto.toEntity(encodedPassword);
         userRepository.save(user);
 
         return UserResponseDto.builder()

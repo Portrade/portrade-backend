@@ -11,9 +11,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Getter
 public class UserAdapter extends org.springframework.security.core.userdetails.User {
 
+    @Getter
     private User user;
 
     public UserAdapter(User user) {
@@ -27,7 +27,7 @@ public class UserAdapter extends org.springframework.security.core.userdetails.U
 
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> authorities = new ArrayList<GrantedAuthority>();
+        List<GrantedAuthority> authorities = new ArrayList<>();
 
         for(Role roles : user.getRoles())
             authorities.add(new SimpleGrantedAuthority(roles.toString()));
@@ -37,7 +37,7 @@ public class UserAdapter extends org.springframework.security.core.userdetails.U
 
     @Override
     public String getPassword() {
-        return null;
+        return user.getPassword();
     }
 
     @Override
