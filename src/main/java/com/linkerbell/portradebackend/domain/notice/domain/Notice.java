@@ -36,10 +36,21 @@ public class Notice extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Notice(Long id, User user, String title, int viewCount) {
+    public Notice(Long id, User user, String title, String content, int viewCount) {
         this.id = id;
         this.user = user;
         this.title = title;
+        this.content = content;
         this.viewCount = viewCount;
+    }
+
+    public void update(String title, String content) {
+        this.title = title;
+        this.content = content;
+        lastModifiedDate = LocalDateTime.now();
+    }
+
+    public void addViewCount() {
+        viewCount += 1;
     }
 }

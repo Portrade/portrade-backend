@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
 import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ public class TokenResponseDto {
     @NotNull
     private String accessToken;
 
-    @Builder
     public TokenResponseDto(String accessToken) {
         this.accessToken = accessToken;
     }

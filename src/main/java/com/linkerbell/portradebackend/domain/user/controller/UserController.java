@@ -28,7 +28,7 @@ public class UserController {
 
     @Operation(summary = "회원가입")
     @PostMapping
-    public ResponseEntity<UserResponseDto> signUpApi(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
+    public ResponseEntity<UserResponseDto> createUserApi(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
         UserResponseDto userResponseDto = userService.createUser(signUpRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
     }

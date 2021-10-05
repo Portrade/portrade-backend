@@ -49,7 +49,6 @@ class QnaControllerTest {
                 .build();
     }
 
-
     @Test
     @DisplayName("1:1 문의 등록 API 실패 - 로그인 안함")
     public void saveQnaApi_anonymous() throws Exception {
@@ -63,6 +62,7 @@ class QnaControllerTest {
                 .content("질문있어요.")
                 .isPublic(false)
                 .build();
+
         //when
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -88,6 +88,7 @@ class QnaControllerTest {
                 .content("질문있어요.")
                 .isPublic(false)
                 .build();
+
         //when
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -114,6 +115,7 @@ class QnaControllerTest {
                 .content("관리자도 질문 작성은 가능하다.")
                 .isPublic(false)
                 .build();
+
         //when
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -189,6 +191,7 @@ class QnaControllerTest {
         //given
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1230"));
+
         //then
         result.andExpect(status().isNotFound());
     }
@@ -200,9 +203,10 @@ class QnaControllerTest {
         //given
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
+
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"));
+                .andExpect(jsonPath("$.code").value("M001"));
     }
 
     @Test
@@ -215,7 +219,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"));
+                .andExpect(jsonPath("$.code").value("M001"));
     }
 
     @Test
@@ -225,6 +229,7 @@ class QnaControllerTest {
         //given
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
+
         //then
         result.andExpect(status().isOk());
     }

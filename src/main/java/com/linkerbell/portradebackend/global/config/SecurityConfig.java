@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-
 import org.springframework.web.cors.CorsUtils;
 
 
@@ -59,12 +58,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/notices").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/notices/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/notices/**").hasRole("ADMIN")
+
                 .antMatchers(PREFIX_URL + "/auth/user").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/qnas").authenticated()
                 .antMatchers(PREFIX_URL + "/qnas/{qnaId}/answer").hasRole("ADMIN")
                 .anyRequest().permitAll();
-
     }
 
     @Bean
