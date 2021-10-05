@@ -298,4 +298,16 @@ class QnaControllerTest {
         //then
         result.andExpect(status().isNoContent());
     }
+
+    @Test
+    @WithMockPortradeAdmin
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 관리자가 삭제")
+    public void deleteQnaApi_admin() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+
+        //then
+        result.andExpect(status().isNoContent());
+    }
 }
