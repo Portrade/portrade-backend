@@ -71,8 +71,7 @@ class QnaControllerTest {
         );
 
         //then
-        result.andExpect(status().is4xxClientError())
-                .andDo(print());
+        result.andExpect(status().is4xxClientError());
     }
 
     @Test
@@ -98,8 +97,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andDo(print());
+                .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
     @Test
@@ -125,8 +123,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andDo(print());
+                .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
     @Test
@@ -147,8 +144,7 @@ class QnaControllerTest {
                 .content(objectMapper.writeValueAsString(replyQnaRequestDto)));
 
         //then
-        result.andExpect(status().isForbidden())
-                .andDo(print());
+        result.andExpect(status().isForbidden());
     }
 
     @Test
@@ -170,8 +166,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNotEmpty())
-                .andDo(print());
+                .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
     @Test
@@ -184,8 +179,7 @@ class QnaControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.qnas").isNotEmpty())
-                .andExpect(jsonPath("$.maxPage").isNotEmpty())
-                .andDo(print());
+                .andExpect(jsonPath("$.maxPage").isNotEmpty());
     }
 
 
@@ -196,8 +190,7 @@ class QnaControllerTest {
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1230"));
         //then
-        result.andExpect(status().isNotFound())
-                .andDo(print());
+        result.andExpect(status().isNotFound());
     }
 
 
@@ -209,8 +202,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("M201"));
     }
 
     @Test
@@ -223,8 +215,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("M201"));
     }
 
     @Test
@@ -235,8 +226,7 @@ class QnaControllerTest {
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
         //then
-        result.andExpect(status().isOk())
-                .andDo(print());
+        result.andExpect(status().isOk());
     }
 
     @Test
@@ -248,7 +238,6 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
 
         //then
-        result.andExpect(status().isOk())
-                .andDo(print());
+        result.andExpect(status().isOk());
     }
 }
