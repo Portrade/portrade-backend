@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.notice.repository;
 
 import com.linkerbell.portradebackend.domain.notice.domain.Notice;
-import com.linkerbell.portradebackend.domain.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,15 +22,7 @@ class NoticeRepositoryTest {
 
     @BeforeEach
     public void setUp() {
-        User admin = User.builder()
-                .username("admin1")
-                .password("1234Aa@@")
-                .name("관리자1")
-                .birthDate("20030327")
-                .wantedJob("marketing")
-                .build();
         notice = Notice.builder()
-                .user(admin)
                 .title("공지사항 제목1")
                 .content("공지사항 내용1")
                 .build();
@@ -48,7 +39,6 @@ class NoticeRepositoryTest {
         assertEquals(notice.getId(), savedNotice.getId());
         assertEquals(notice.getTitle(), savedNotice.getTitle());
         assertEquals(notice.getContent(), savedNotice.getContent());
-        assertEquals(notice.getUser().getUsername(), savedNotice.getUser().getUsername());
         assertEquals(notice.getViewCount(), savedNotice.getViewCount());
         assertEquals(notice.getCreatedDate(), savedNotice.getCreatedDate());
     }
@@ -67,7 +57,6 @@ class NoticeRepositoryTest {
         assertEquals(notice.getId(), foundNotice.getId());
         assertEquals(notice.getTitle(), foundNotice.getTitle());
         assertEquals(notice.getContent(), foundNotice.getContent());
-        assertEquals(notice.getUser().getUsername(), foundNotice.getUser().getUsername());
         assertEquals(notice.getViewCount(), foundNotice.getViewCount());
         assertEquals(notice.getCreatedDate(), foundNotice.getCreatedDate());
     }
@@ -84,5 +73,31 @@ class NoticeRepositoryTest {
         // then
         Optional<Notice> foundNotice = noticeRepository.findById(savedNotice.getId());
         assertEquals(Optional.empty(), foundNotice);
+    }
+
+    @DisplayName("ID 기준 이전 공지사항 조회 성공")
+    @Test
+    void findPrevNoticeById() throws Exception {
+        // given
+        Notice savedNotice = noticeRepository.save(notice);
+
+        // when
+        Notice foundPrevNotice = noticeRepository.findTopByIdIsLessThanOrderByIdDesc(savedNotice.getId() + 1).get();
+
+        // then
+        assertEquals(savedNotice.getId(), foundPrevNotice.getId());
+    }
+
+    @DisplayName("ID 기준 다음 공지사항 조회 성공")
+    @Test
+    void findNextNoticeById() throws Exception {
+        // given
+        Notice savedNotice = noticeRepository.save(notice);
+
+        // when
+        Notice foundNextNotice = noticeRepository.findTopByIdIsGreaterThanOrderByIdAsc(savedNotice.getId() - 1).get();
+
+        // then
+        assertEquals(savedNotice.getId(), foundNextNotice.getId());
     }
 }
