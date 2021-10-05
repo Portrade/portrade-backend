@@ -5,6 +5,9 @@ import com.linkerbell.portradebackend.domain.qna.service.QnaService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
+@Tag(name = "1:1 문의 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/qnas")
@@ -19,38 +23,41 @@ public class QnaController {
 
     private final QnaService qnaService;
 
-    //로그인한 유저만 접근 가능
+    @Operation(summary = "1:1 문의 게시글 등록", description = "1:1 문의 게시글을 등록한다.")
     @PostMapping
     public ResponseEntity<CreateResponseDto> createQuestionApi(
             @RequestBody @Valid CreateQnaRequestDto requestDto,
-            @CurrentUser User user) {
+            @Parameter(hidden = true) @CurrentUser User user) {
 
         CreateResponseDto createQnaResponseDto = qnaService.createQuestion(requestDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createQnaResponseDto);
     }
 
     //로그인한 관리자만 접근 가능
+    @Operation(summary = "1:1 문의 답변 등록", description = "1:1 문의 게시글의 답변을 등록한다.")
     @PostMapping("/{qnaId}/answer")
     public ResponseEntity<CreateResponseDto> createAnswerApi(
-            @PathVariable("qnaId") Long qnaId,
+            @Parameter(description="답변 할 게시글 id") @PathVariable("qnaId") Long qnaId,
             @RequestBody @Valid ReplyQnaRequestDto requestDto,
-            @CurrentUser User user) {
+            @Parameter(hidden = true) @CurrentUser User user) {
         CreateResponseDto createQnaResponseDto = qnaService.createAnswer(qnaId, requestDto, user);
         return ResponseEntity.status(HttpStatus.CREATED).body(createQnaResponseDto);
     }
 
+    @Operation(summary = "1:1 문의 게시글 목록 조회", description = "1:1 문의 게시글 목록을 조회한다.")
     @GetMapping
     public ResponseEntity<QnasResponseDto> getQnasApi(
-            @RequestParam(value = "page", defaultValue = "1") int page,
-            @RequestParam(value = "size", defaultValue = "10") int size) {
+            @Parameter(description="페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description="반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
         QnasResponseDto qnasResponseDto = qnaService.getQnas(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(qnasResponseDto);
     }
 
+    @Operation(summary = "1:1 문의 게시글 상세 조회", description = "1:1 문의 게시글을 상세 조회한다.")
     @GetMapping("/{qnaId}")
     public ResponseEntity<QnaDetailResponseDto> getQnaDetailApi(
-            @PathVariable("qnaId") Long qnaId,
-            @CurrentUser User user){
+            @Parameter(description="조회 할 게시글 id") @PathVariable("qnaId") Long qnaId,
+            @Parameter(hidden = true) @CurrentUser User user){
         QnaDetailResponseDto qnaDetailResponseDto = qnaService.getQna(qnaId, user);
         return ResponseEntity.status(HttpStatus.OK).body(qnaDetailResponseDto);
     }
