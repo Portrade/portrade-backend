@@ -57,6 +57,8 @@ public enum ErrorCode {
     INVALID_FAQ_TITLE("F002", "제목은 1~20자 사이로 입력해주세요."),
     NULL_FAQ_CONTENT("F003", "내용은 필수 입니다."),
     INVALID_FAQ_CONTENT("Q007", "문의글 내용은 1~500자 사이로 입력해주세요."),
+
+    NONEXISTENT_FAQ("Q201", "존재하지 않는 자주묻는질문 글 입니다."),
     ;
 
     private String code;

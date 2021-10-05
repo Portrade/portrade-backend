@@ -1,6 +1,7 @@
 package com.linkerbell.portradebackend.domain.faq.controller;
 
 import com.linkerbell.portradebackend.domain.faq.dto.CreateFaqRequestDto;
+import com.linkerbell.portradebackend.domain.faq.dto.FaqDetailResponseDto;
 import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.service.FaqService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
@@ -36,6 +37,19 @@ public class FaqController {
             @RequestParam(value = "size", defaultValue = "10") int size) {
 
         FaqsResponseDto faqsResponseDto = faqService.getFaqs(page, size);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        return ResponseEntity.status(HttpStatus.OK).body(faqsResponseDto);
     }
+
+    @GetMapping("/{faqId}")
+    public ResponseEntity<FaqDetailResponseDto> getFaq(@PathVariable("faqId") Long faqId) {
+        FaqDetailResponseDto faqDetailResponseDto = faqService.getFaq(faqId);
+        return ResponseEntity.status(HttpStatus.OK).body(faqDetailResponseDto);
+    }
+
+    @DeleteMapping("/{faqId}")
+    public ResponseEntity<Void> deleteFaq(@PathVariable("faqId") Long faqId) {
+        faqService.deleteFaq(faqId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
