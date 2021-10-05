@@ -60,6 +60,7 @@ public class FaqService {
                 .build();
     }
 
+    @Transactional
     public void deleteFaq(Long faqId) {
         Faq faq = faqRepository.findById(faqId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_FAQ));
