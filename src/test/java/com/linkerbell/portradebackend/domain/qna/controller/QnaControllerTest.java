@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -180,8 +179,16 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.qnas").isNotEmpty())
-                .andExpect(jsonPath("$.maxPage").isNotEmpty());
+                .andExpect(jsonPath("$.maxPage").value("1"))
+                .andExpect(jsonPath("$.qnas.size()").value("4"))
+                .andExpect(jsonPath("$.qnas[0].id").value(4L))
+                .andExpect(jsonPath("$.qnas[1].id").value(3L))
+                .andExpect(jsonPath("$.qnas[2].id").value(2L))
+                .andExpect(jsonPath("$.qnas[3].id").value(1L))
+                .andExpect(jsonPath("$.qnas[0].title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.qnas[1].title").value("1:1 답변해드립니다."))
+                .andExpect(jsonPath("$.qnas[2].title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.qnas[3].title").value("1:1 문의합니다."));
     }
 
 
@@ -192,7 +199,8 @@ class QnaControllerTest {
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1230"));
         //then
-        result.andExpect(status().isNotFound());
+        result.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("Q001"));
     }
 
 
@@ -204,7 +212,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"));
+                .andExpect(jsonPath("$.code").value("M001"));
     }
 
     @Test
@@ -217,7 +225,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"));
+                .andExpect(jsonPath("$.code").value("M001"));
     }
 
     @Test
@@ -240,9 +248,15 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
 
         //then
-        result.andExpect(status().isOk());
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.creator").value("김가입"))
+                .andExpect(jsonPath("$.title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.content").value("이력서 업로드 문의합니다."))
+                .andExpect(jsonPath("$.secret").value(false))
+                .andExpect(jsonPath("$.next.creator").value("사나"))
+                .andExpect(jsonPath("$.next.title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.prev").doesNotExist());
     }
-
 
     @Test
     @WithMockPortradeUser
@@ -254,11 +268,11 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M201"));
+                .andExpect(jsonPath("$.code").value("M001"));
     }
 
     @Test
-    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 로그인 안한 사용자가 삭제")
     public void deleteQnaApi_anonymous() throws Exception {
         //given
         //when

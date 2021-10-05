@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new InvalidValueException(ErrorCode.NOT_FOUND_USER_USERNAME));
+                .orElseThrow(() -> new InvalidValueException(ErrorCode.NONEXISTENT_USER));
 
         return new UserAdapter(user);
     }
@@ -44,7 +44,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public UserResponseDto createUser(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findByUsername(signUpRequestDto.getUserId()).orElse(null) != null) {
-            throw new InvalidValueException(ErrorCode.ALREADY_INUSE_USER_USERNAME);
+            throw new InvalidValueException(ErrorCode.DUPLICATED_USER_USERNAME);
         }
 
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
