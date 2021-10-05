@@ -172,7 +172,7 @@ class QnaControllerTest {
 
     @Test
     @DisplayName("1:1 문의 글 목록 조회 API 성공")
-    public void test() throws Exception {
+    public void getQnasApi() throws Exception {
         //given
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI));
