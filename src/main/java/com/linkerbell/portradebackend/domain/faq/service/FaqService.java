@@ -2,7 +2,6 @@ package com.linkerbell.portradebackend.domain.faq.service;
 
 import com.linkerbell.portradebackend.domain.faq.domain.Faq;
 import com.linkerbell.portradebackend.domain.faq.dto.CreateFaqRequestDto;
-import com.linkerbell.portradebackend.domain.faq.dto.FaqDetailResponseDto;
 import com.linkerbell.portradebackend.domain.faq.dto.FaqResponseDto;
 import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.repository.FaqRepository;
@@ -49,14 +48,6 @@ public class FaqService {
         return FaqsResponseDto.builder()
                 .faqs(faqs)
                 .maxPage(pageFaqs.getTotalPages())
-                .build();
-    }
-
-    public FaqDetailResponseDto getFaq(Long faqId) {
-        Faq faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_FAQ));
-        return FaqDetailResponseDto.builder()
-                .content(faq.getContent())
                 .build();
     }
 

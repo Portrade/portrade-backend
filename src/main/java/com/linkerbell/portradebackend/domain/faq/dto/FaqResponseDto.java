@@ -10,17 +10,20 @@ import lombok.NoArgsConstructor;
 public class FaqResponseDto {
     private final Long id;
     private final String title;
+    private final String content;
 
     @Builder
-    public FaqResponseDto(Long id, String title) {
+    public FaqResponseDto(Long id, String title, String content) {
         this.id = id;
         this.title = title;
+        this.content = content;
     }
 
     public static FaqResponseDto of(Faq faq) {
         return FaqResponseDto.builder()
                 .id(faq.getId())
                 .title(faq.getTitle())
+                .content(faq.getContent())
                 .build();
     }
 }

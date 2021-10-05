@@ -2,7 +2,6 @@ package com.linkerbell.portradebackend.domain.faq.service;
 
 import com.linkerbell.portradebackend.domain.faq.domain.Faq;
 import com.linkerbell.portradebackend.domain.faq.dto.CreateFaqRequestDto;
-import com.linkerbell.portradebackend.domain.faq.dto.FaqDetailResponseDto;
 import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.repository.FaqRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
@@ -102,36 +101,6 @@ class FaqServiceTest {
         assertEquals(foundFaqResponseDto.getFaqs().size(), 3);
     }
 
-    @Test
-    @DisplayName("자주 묻는 질문 상세 조회 실패 - 존재하지 않는 ID")
-    void getFaq_nonexistentId() {
-        //given
-        given(faqRepository.findById(anyLong())).willReturn(Optional.empty());
-
-        //when
-        //then
-        assertThrows(NotExistException.class,
-                () -> faqService.getFaq(1230L));
-    }
-
-    @Test
-    @DisplayName("자주 묻는 질문 상세 성공")
-    void getFaq() {
-        //given
-        Faq faq = Faq.builder()
-                .user(user)
-                .title("아이디 혹은 비밀번호를 잊었습니다.")
-                .content("아이디 혹은 비밀번호를 잊은 경우, 아이디/비밀번호 찾기를 이용해 주세요.")
-                .build();
-
-        given(faqRepository.findById(anyLong())).willReturn(Optional.of(faq));
-
-        //when
-        FaqDetailResponseDto foundFaqDetailResponseDto = faqService.getFaq(1L);
-
-        //then
-        assertEquals(faq.getContent(), foundFaqDetailResponseDto.getContent());
-    }
 
     @Test
     @DisplayName("자주 묻는 질문 삭제 실패 - 존재하지 않는 ID")
@@ -146,7 +115,7 @@ class FaqServiceTest {
     }
 
     @Test
-    @DisplayName("자주 묻는 질문 삭제 실패 성공")
+    @DisplayName("자주 묻는 질문 삭제 성공")
     void deleteFaq() {
         //given
         Faq faq = Faq.builder()

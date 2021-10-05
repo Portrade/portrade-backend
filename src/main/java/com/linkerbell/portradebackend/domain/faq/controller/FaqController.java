@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.faq.controller;
 
 import com.linkerbell.portradebackend.domain.faq.dto.CreateFaqRequestDto;
-import com.linkerbell.portradebackend.domain.faq.dto.FaqDetailResponseDto;
 import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.service.FaqService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
@@ -42,14 +41,6 @@ public class FaqController {
 
         FaqsResponseDto faqsResponseDto = faqService.getFaqs(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(faqsResponseDto);
-    }
-
-    @Operation(summary = "자주 묻는 질문 상세 조회", description = "자주 묻는 질문을 상세 조회한다.")
-    @GetMapping("/{faqId}")
-    public ResponseEntity<FaqDetailResponseDto> getFaq(
-            @Parameter(description="조회 할 게시글 id") @PathVariable("faqId") Long faqId) {
-        FaqDetailResponseDto faqDetailResponseDto = faqService.getFaq(faqId);
-        return ResponseEntity.status(HttpStatus.OK).body(faqDetailResponseDto);
     }
 
     @Operation(summary = "자주 묻는 질문 삭제", description = "자주 묻는 질문을 삭제한다.")

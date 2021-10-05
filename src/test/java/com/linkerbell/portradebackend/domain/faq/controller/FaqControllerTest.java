@@ -105,10 +105,13 @@ class FaqControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.faqs[0].id").value(3L))
                 .andExpect(jsonPath("$.faqs[0].title").value("포트폴리오를 암호화해서 공유하고 싶어요."))
+                .andExpect(jsonPath("$.faqs[0].content").value("공유하기 버튼을 누르시면 됩니다."))
                 .andExpect(jsonPath("$.faqs[1].id").value(2L))
                 .andExpect(jsonPath("$.faqs[1].title").value("포트폴리오를 비공개로 전환하고 싶어요."))
+                .andExpect(jsonPath("$.faqs[1].content").value("비공개 탭을 누르시면 됩니다."))
                 .andExpect(jsonPath("$.faqs[2].id").value(1L))
                 .andExpect(jsonPath("$.faqs[2].title").value("포트폴리오 업로드는 어떻게 하나요?"))
+                .andExpect(jsonPath("$.faqs[2].content").value("포트레이트는 간편하게 포트폴리오를 업로드할 수 있어요."))
                 .andExpect(jsonPath("$.maxPage").value(1));
     }
 
