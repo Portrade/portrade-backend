@@ -37,7 +37,7 @@ class FaqServiceTest {
     User user;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         user = User.builder()
                 .id(UUID.randomUUID())
                 .username("user1")
@@ -94,11 +94,11 @@ class FaqServiceTest {
                 .willReturn(faqPage);
 
         //when
-        FaqsResponseDto foundFaqResponseDto = faqService.getFaqs(1, 3);
+        FaqsResponseDto foundFaqsResponseDto = faqService.getFaqs(1, 3);
 
         //then
-        assertEquals(foundFaqResponseDto.getMaxPage(), 1);
-        assertEquals(foundFaqResponseDto.getFaqs().size(), 3);
+        assertEquals(foundFaqsResponseDto.getMaxPage(), 1);
+        assertEquals(foundFaqsResponseDto.getFaqs().size(), 3);
     }
 
 

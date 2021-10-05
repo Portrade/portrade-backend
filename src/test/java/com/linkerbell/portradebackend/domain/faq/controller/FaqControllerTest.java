@@ -39,7 +39,7 @@ class FaqControllerTest {
     private WebApplicationContext webApplicationContext;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(springSecurity())
@@ -50,7 +50,7 @@ class FaqControllerTest {
     @Test
     @WithMockPortradeUser
     @DisplayName("자주 묻는 질문 등록 API 실패 - 권한 없음")
-    public void createFaqApi_unAuthorizedUser() throws Exception {
+    void createFaqApi_unAuthorizedUser() throws Exception {
         //given
         CreateFaqRequestDto createFaqRequestDto = CreateFaqRequestDto
                 .builder()
@@ -71,7 +71,7 @@ class FaqControllerTest {
     @Test
     @WithMockPortradeAdmin
     @DisplayName("자주 묻는 질문 등록 API 성공 - 관리자 계정")
-    public void createFaqApi_admin() throws Exception {
+    void createFaqApi_admin() throws Exception {
         //given
         CreateFaqRequestDto createFaqRequestDto = CreateFaqRequestDto
                 .builder()
@@ -92,7 +92,7 @@ class FaqControllerTest {
 
     @Test
     @DisplayName("자주 묻는 질문 목록 조회 API 성공")
-    public void getFaqsApi() throws Exception {
+    void getFaqsApi() throws Exception {
         //given
         int page = 1;
         int size = 10;
@@ -118,10 +118,8 @@ class FaqControllerTest {
     @Test
     @WithMockPortradeUser
     @DisplayName("자주 묻는 질문 삭제 API 실패 - 로그인 한 유저, 권한 없음")
-    public void deleteFaqApi_unAuthorizedUser() throws Exception {
+    void deleteFaqApi_unAuthorizedUser() throws Exception {
         //given
-        Long faqId = 1L;
-
         //when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
 
@@ -131,24 +129,20 @@ class FaqControllerTest {
 
     @Test
     @DisplayName("자주 묻는 질문 삭제 API 실패 - 로그인 안한 유저, 권한 없음")
-    public void deleteFaqApi_anonymous() throws Exception {
+    void deleteFaqApi_anonymous() throws Exception {
         //given
-        Long faqId = 1L;
-
         //when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
 
         //then
-        result.andExpect(status().is4xxClientError());
+        result.andExpect(status().isUnauthorized());
     }
 
     @Test
     @WithMockPortradeAdmin
     @DisplayName("자주 묻는 질문 삭제 API 성공 - 관리자 계정")
-    public void deleteFaqApi_admin() throws Exception {
+    void deleteFaqApi_admin() throws Exception {
         //given
-        Long faqId = 1L;
-
         //when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
 
