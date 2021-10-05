@@ -11,7 +11,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SignUpRequestDto {
@@ -25,7 +24,7 @@ public class SignUpRequestDto {
     private String name;
 
     @NotNull(message = "NULL_USER_PASSWORD")
-    @Pattern(regexp="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}", message = "INVALID_USER_PASSWORD")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}", message = "INVALID_USER_PASSWORD")
     private String password;
 
     private String college;
@@ -36,7 +35,7 @@ public class SignUpRequestDto {
     private String wantedJob;
 
     @NotNull(message = "NULL_USER_BIRTHDATE")
-    @Pattern(regexp="^[0-9]{8}", message="INVALID_SIZE_USER_BIRTHDATE")
+    @Pattern(regexp = "^[0-9]{8}", message = "INVALID_SIZE_USER_BIRTHDATE")
     private String birthDate;
 
     @Builder

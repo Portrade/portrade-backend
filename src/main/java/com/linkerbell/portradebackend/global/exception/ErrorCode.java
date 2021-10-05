@@ -63,12 +63,11 @@ public enum ErrorCode {
     INVALID_FAQ_TITLE("F102", "제목은 1~20자 사이로 입력해주세요."),
     NULL_FAQ_CONTENT("F103", "내용은 필수입니다."),
     INVALID_FAQ_CONTENT("Q104", "문의글 내용은 1~500자 사이로 입력해주세요."),
-
     ;
+
 
     private String code;
     private String message;
-
     ErrorCode(String code, String message) {
         this.code = code;
         this.message = message;

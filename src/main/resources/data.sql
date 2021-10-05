@@ -29,11 +29,11 @@ VALUES (3, 'https://portfolioImage1.com', 1);
 
 
 INSERT INTO notice(notice_id, created_date, content, last_modified_date, title, view_count, user_id)
-VALUES (1, '2017-01-21T08:17:09.478881', '공지사항1 내용입니다.', now(), '[공지사항 분류]공지사항 제목 입니다.', 1200, 'd9b4adce82bd48fe9456cfb20d43537d');
+VALUES (1, '2017-01-21T08:17:09.478881', '공지사항1 내용입니다.', now(), '[공지사항 분류]공지사항 제목입니다.', 1200, 'd9b4adce82bd48fe9456cfb20d43537d');
 INSERT INTO notice(notice_id, created_date, content, last_modified_date, title, view_count, user_id)
-VALUES (2, '2017-01-23T08:17:09.478881', '공지사항2 내용입니다.', now(), '[공지사항 분류]공지사항 제목 입니다.', 1220, 'd9b4adce82bd48fe9456cfb20d43537d');
+VALUES (2, '2017-01-23T08:17:09.478881', '공지사항2 내용입니다.', now(), '[공지사항 분류]공지사항 제목입니다.', 1220, 'd9b4adce82bd48fe9456cfb20d43537d');
 INSERT INTO notice(notice_id, created_date, content, last_modified_date, title, view_count, user_id)
-VALUES (3, '2017-01-25T08:17:09.478881', '공지사항3 내용입니다.', now(), '[공지사항 분류]공지사항 제목 입니다.', 1500, 'd9b4adce82bd48fe9456cfb20d43537d');
+VALUES (3, '2017-01-25T08:17:09.478881', '공지사항3 내용입니다.', now(), '[공지사항 분류]공지사항 제목입니다.', 1500, 'd9b4adce82bd48fe9456cfb20d43537d');
 
 
 INSERT INTO faq(faq_id, created_date, content, last_modified_date, title, user_id)
