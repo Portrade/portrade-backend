@@ -102,4 +102,14 @@ public class QnaService {
                 .prev(prevQnaResponseDto)
                 .build();
     }
+
+    @Transactional
+    public void deleteQna(Long qnaId, User user) {
+        Qna qna = qnaRepository.findById(qnaId)
+                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA));
+        if(user.equals(qna.getUser()) || user.isAdmin())
+            qnaRepository.delete(qna);
+        else
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+    }
 }
