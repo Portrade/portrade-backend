@@ -48,6 +48,15 @@ public enum ErrorCode {
     NULL_QNA_ISPUBLIC("Q011", "공개/비공개 여부를 선택해 주세요."),
 
     NONEXISTENT_QNA("Q201", "존재하지 않는 문의글 입니다."),
+
+
+    /**
+     * F: Faq 관련
+     */
+    NULL_FAQ_TITLE("F001", "제목은 필수 입니다."),
+    INVALID_FAQ_TITLE("F002", "제목은 1~20자 사이로 입력해주세요."),
+    NULL_FAQ_CONTENT("F003", "내용은 필수 입니다."),
+    INVALID_FAQ_CONTENT("Q007", "문의글 내용은 1~500자 사이로 입력해주세요."),
     ;
 
     private String code;

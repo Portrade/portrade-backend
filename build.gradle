@@ -25,7 +25,7 @@ dependencies {
 	compileOnly 'org.projectlombok:lombok'
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor 'org.projectlombok:lombok'
-	// swagger
+	// Swagger
 	implementation 'org.springdoc:springdoc-openapi-ui:1.5.10'
 
 	/**

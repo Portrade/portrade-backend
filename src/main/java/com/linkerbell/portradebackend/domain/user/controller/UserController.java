@@ -18,7 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.Valid;
 import java.io.IOException;
 
-@Tag(name = "회원가입/프로필 업로드 API")
+@Tag(name = "사용자 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
