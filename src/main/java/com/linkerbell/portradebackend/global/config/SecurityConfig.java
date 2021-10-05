@@ -16,6 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.cors.CorsUtils;
+
 
 @Configuration
 @EnableWebSecurity
@@ -29,13 +31,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity webSecurity) throws Exception {
         webSecurity.ignoring()
-                .antMatchers("/h2-console/**");
+                .antMatchers("/h2-console/**")
+                .antMatchers("/swagger-ui.html")
+                .antMatchers("/swagger-ui/**")
+                .antMatchers("/v3/api-docs/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         String PREFIX_URL = "/api/v1";
 
+        http.cors();
         http.csrf().disable();
         http.httpBasic().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -50,14 +56,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.apply(new JwtSecurityConfig(tokenProvider));
 
         http.authorizeRequests()
+                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/notices").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/notices/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/notices/**").hasRole("ADMIN")
+
                 .antMatchers(PREFIX_URL + "/auth/user").authenticated()
                 .antMatchers(PREFIX_URL + "/auth/admin").hasRole("ADMIN")
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/qnas").authenticated()
                 .antMatchers(HttpMethod.DELETE,PREFIX_URL + "/qnas/{qnaId}").authenticated()
                 .antMatchers(PREFIX_URL + "/qnas/{qnaId}/answer").hasRole("ADMIN")
                 .anyRequest().permitAll();
-
     }
 
     @Bean
