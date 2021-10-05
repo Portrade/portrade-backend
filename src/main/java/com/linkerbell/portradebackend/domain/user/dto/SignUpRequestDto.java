@@ -1,5 +1,7 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
+import com.linkerbell.portradebackend.domain.user.domain.Profile;
+import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +10,6 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,7 +24,7 @@ public class SignUpRequestDto {
     private String name;
 
     @NotNull(message = "NULL_USER_PASSWORD")
-    @Pattern(regexp="(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}", message = "INVALID_USER_PASSWORD")
+    @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=])(?=\\S+$).{8,}", message = "INVALID_USER_PASSWORD")
     private String password;
 
     private String college;
@@ -34,7 +35,7 @@ public class SignUpRequestDto {
     private String wantedJob;
 
     @NotNull(message = "NULL_USER_BIRTHDATE")
-    @Pattern(regexp="^[0-9]{8}", message="INVALID_SIZE_USER_BIRTHDATE")
+    @Pattern(regexp = "^[0-9]{8}", message = "INVALID_SIZE_USER_BIRTHDATE")
     private String birthDate;
 
     @Builder
@@ -46,5 +47,19 @@ public class SignUpRequestDto {
         this.graduation = graduation;
         this.wantedJob = wantedJob;
         this.birthDate = birthDate;
+    }
+
+    public User toEntity(String password) {
+        return User.builder()
+                .username(userId)
+                .name(name)
+                .password(password)
+                .profile(Profile.builder()
+                        .college(college)
+                        .isGraduated(graduation)
+                        .build())
+                .wantedJob(wantedJob)
+                .birthDate(birthDate)
+                .build();
     }
 }
