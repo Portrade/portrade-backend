@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.notice.dto.NoticeRequestDto;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
@@ -22,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+@Transactional
 @AutoConfigureMockMvc
 class NoticeControllerTest {
 
@@ -33,11 +36,11 @@ class NoticeControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private WebApplicationContext ctx;
+    private WebApplicationContext webApplicationContext;
 
     @BeforeEach
     public void setup() {
-        mvc = MockMvcBuilders.webAppContextSetup(ctx)
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
                 .addFilter(new CharacterEncodingFilter("UTF-8", true))
                 .apply(springSecurity())
                 .alwaysDo(print())
@@ -46,7 +49,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 등록 API 성공")
     @Test
-    @Order(12)
     @WithMockPortradeAdmin
     void writeNoticeApi() throws Exception {
         // given
@@ -68,7 +70,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 등록 API 실패 - 권한 없는 사용자")
     @Test
-    @Order(13)
     @WithMockPortradeUser
     void writeNoticeApi_unAuthorizedUser() throws Exception {
         // given
@@ -89,7 +90,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 등록 API 실패 - 비로그인")
     @Test
-    @Order(14)
     void writeNoticeApi_unAuthenticatedUser() throws Exception {
         // given
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -109,7 +109,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 등록 API 실패 - 유효하지 않은 요청 값")
     @Test
-    @Order(15)
     @WithMockPortradeAdmin
     void writeNoticeApi_invalidRequestBody() throws Exception {
         // given
@@ -130,7 +129,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 목록 조회 API 성공")
     @Test
-    @Order(1)
     void getNoticesApi() throws Exception {
         // given
         // when
@@ -150,7 +148,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 목록 조회 API 성공 - page=1&size=2")
     @Test
-    @Order(2)
     void getNoticesApi_size2() throws Exception {
         // given
         // when
@@ -168,7 +165,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 목록 조회 API 성공 - 빈 페이지네이션")
     @Test
-    @Order(3)
     void getNoticesApi_empty() throws Exception {
         // given
         // when
@@ -182,7 +178,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 상세 조회 API 성공")
     @Test
-    @Order(4)
     void getNoticeApi() throws Exception {
         // given
         // when
@@ -199,7 +194,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 상세 조회 API 실패 - 존재하지 않는 ID")
     @Test
-    @Order(5)
     void getNoticeApi_nonexistentNoticeId() throws Exception {
         // given
         // when
@@ -212,7 +206,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 수정 API 성공")
     @Test
-    @Order(6)
     @WithMockPortradeAdmin
     void updateNoticeApi() throws Exception {
         // given
@@ -233,7 +226,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 수정 API 실패 - 유효하지 않은 요청 값")
     @Test
-    @Order(7)
     @WithMockPortradeAdmin
     void updateNoticeApi_invalidRequestBody() throws Exception {
         // given
@@ -254,7 +246,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 수정 API 실패 - 존재하지 않는 ID")
     @Test
-    @Order(8)
     @WithMockPortradeAdmin
     void updateNoticeApi_nonexistentId() throws Exception {
         NoticeRequestDto noticeRequestDto = NoticeRequestDto.builder()
@@ -275,7 +266,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 삭제 API 성공")
     @Test
-    @Order(9)
     @WithMockPortradeAdmin
     void deleteNoticeApi() throws Exception {
         // given
@@ -288,12 +278,11 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 삭제 API 실패 - 존재하지 않는 ID")
     @Test
-    @Order(10)
     @WithMockPortradeAdmin
     void deleteNoticeApi_nonexistentId() throws Exception {
         // given
         // when
-        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/12"));
 
         // then
         result.andExpect(status().isNotFound())
@@ -302,7 +291,6 @@ class NoticeControllerTest {
 
     @DisplayName("공지사항 삭제 API 실패 - 권한 없는 사용자")
     @Test
-    @Order(11)
     @WithMockPortradeUser
     void deleteNoticeApi_unAuthorizedUser() throws Exception {
         // given
