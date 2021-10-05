@@ -345,4 +345,53 @@ class QnaServiceTest {
         assertEquals(qnaDetailResponseDto.getPrev().getId(), qna1.getId());
         assertEquals(qnaDetailResponseDto.getPrev().getCreator(), qna1.getCreatorName());
     }
+
+    @Test
+    @DisplayName("1:1 문의 삭제 실패 - 존재 하지 않는 게시글 ID")
+    public void deleteQna_nonexistentId(){
+        //given
+        Long qnaId = 1230L;
+        given(qnaRepository.findById(qnaId)).willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NotExistException.class, () -> {
+            qnaService.deleteQna(qnaId, user);
+        });
+    }
+
+    @Test
+    @DisplayName("1:1 문의 삭제 실패 - 권한 없는 유저")
+    public void test(){
+        //given
+        Long qnaId = 1L;
+        User user1 = User.builder()
+                .id(UUID.randomUUID())
+                .username("user1")
+                .name("유저1")
+                .build();
+
+        given(qnaRepository.findById(qnaId)).willReturn(Optional.of(question));
+
+        //when
+        //then
+        assertThrows(UnAuthorizedException.class, () -> {
+           qnaService.deleteQna(qnaId, user1);
+        });
+    }
+
+    @Test
+    @DisplayName("1:1 문의 삭제 성공")
+    public void deleteQna_user(){
+        //given
+        Long qnaId = 1L;
+        given(qnaRepository.findById(qnaId)).willReturn(Optional.of(question));
+
+        //when
+        qnaService.deleteQna(qnaId, user);
+
+        //then
+        verify(qnaRepository, times(1)).findById(any());
+        verify(qnaRepository, times(1)).delete(any(Qna.class));
+    }
 }

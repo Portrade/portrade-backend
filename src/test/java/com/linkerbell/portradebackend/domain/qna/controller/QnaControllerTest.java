@@ -12,19 +12,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class QnaControllerTest {
@@ -207,7 +209,7 @@ class QnaControllerTest {
 
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 로그인 한 권한 없는 유저가 비공개 글 상세 조회")
+    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 권한 없는 유저가 비공개 글 상세 조회")
     public void getQnaDetailApi_noauthentication() throws Exception {
         //given
         //when
@@ -239,5 +241,42 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isOk());
+    }
+
+
+    @Test
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
+    public void deleteQnaApi_noauthentication() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/3"));
+
+        //then
+        result.andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("M201"));
+    }
+
+    @Test
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
+    public void deleteQnaApi_anonymous() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+
+        //then
+        result.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 글쓴이가 삭제")
+    public void deleteQnaApi_user() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+
+        //then
+        result.andExpect(status().isNoContent());
     }
 }
