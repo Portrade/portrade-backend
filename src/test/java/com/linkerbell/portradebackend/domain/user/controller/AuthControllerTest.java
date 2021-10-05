@@ -2,35 +2,50 @@ package com.linkerbell.portradebackend.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
+import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 class AuthControllerTest {
 
     final String PREFIX_URI = "/api/v1/auth";
 
-    @Value("${USER_ACCESS_TOKEN}")
-    private String userAccessToken;
-
     @Autowired
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @BeforeEach
+    public void setup() {
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(springSecurity())
+                .alwaysDo(print())
+                .build();
+    }
 
     @DisplayName("로그인 API 성공")
     @Test
@@ -49,7 +64,7 @@ class AuthControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andDo(print());
+                .andExpect(jsonPath("$.accessToken").isNotEmpty());
     }
 
     @DisplayName("로그인 API 실패 - 잘못된 아이디 혹은 비밀번호")
@@ -69,21 +84,19 @@ class AuthControllerTest {
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("M012"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("M200"));
     }
 
     @DisplayName("로그아웃 API 성공")
     @Test
+    @WithMockPortradeUser
     void logOutApi() throws Exception {
         // given
         // when
-        ResultActions result = mvc.perform(get(PREFIX_URI + "/logout")
-                .header("Authorization", userAccessToken));
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/logout"));
 
         // then
-        result.andExpect(status().isNoContent())
-                .andDo(print());
+        result.andExpect(status().isNoContent());
     }
 
     @DisplayName("로그아웃 API 실패 - 비로그인")
@@ -94,7 +107,6 @@ class AuthControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI + "/logout"));
 
         // then
-        result.andExpect(status().isUnauthorized())
-                .andDo(print());
+        result.andExpect(status().isUnauthorized());
     }
 }

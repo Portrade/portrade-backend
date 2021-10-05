@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.user.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +11,19 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
+import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
+@SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 class UserControllerTest {
 
@@ -26,10 +33,21 @@ class UserControllerTest {
     private MockMvc mvc;
     @Autowired
     private ObjectMapper objectMapper;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+
+    @BeforeEach
+    public void setup() {
+        mvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
+                .addFilter(new CharacterEncodingFilter("UTF-8", true))
+                .apply(springSecurity())
+                .alwaysDo(print())
+                .build();
+    }
 
     @DisplayName("회원가입 API 성공")
     @Test
-    void signUpApi() throws Exception {
+    void creatUserApi() throws Exception {
         // given
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId("userid")
@@ -50,13 +68,12 @@ class UserControllerTest {
         // then
         result.andExpect(status().isCreated())
                 .andExpect(jsonPath("$.userId").value("userid"))
-                .andExpect(jsonPath("$.name").value("name1"))
-                .andDo(print());
+                .andExpect(jsonPath("$.name").value("name1"));
     }
 
     @DisplayName("회원가입 API 실패 - 중복된 username")
     @Test
-    void signUpApi_duplicatedUsername() throws Exception {
+    void creatUserApi_duplicatedUsername() throws Exception {
         // given
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId("user1")
@@ -76,13 +93,12 @@ class UserControllerTest {
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("M010"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("M109"));
     }
 
     @DisplayName("회원가입 API 실패 - NULL USER NAME")
     @Test
-    void signUpApi_NULL_USER_NAME() throws Exception {
+    void creatUserApi_NULL_USER_NAME() throws Exception {
         // given
         SignUpRequestDto signUpRequestDto = SignUpRequestDto.builder()
                 .userId("userid2")
@@ -101,7 +117,6 @@ class UserControllerTest {
 
         // then
         result.andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.code").value("M004"))
-                .andDo(print());
+                .andExpect(jsonPath("$.code").value("M103"));
     }
 }

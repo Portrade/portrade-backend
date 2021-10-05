@@ -3,7 +3,7 @@ package com.linkerbell.portradebackend.domain.user.controller;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
-import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.UserService;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
@@ -28,15 +28,17 @@ public class UserController {
 
     @Operation(summary = "회원가입")
     @PostMapping
-    public ResponseEntity<UserResponseDto> createUserApi(@RequestBody @Valid SignUpRequestDto signUpRequestDto) {
-        UserResponseDto userResponseDto = userService.createUser(signUpRequestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userResponseDto);
+    public ResponseEntity<SignUpResponseDto> createUserApi(
+            @RequestBody @Valid SignUpRequestDto signUpRequestDto) {
+        SignUpResponseDto signUpResponseDto = userService.createUser(signUpRequestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(signUpResponseDto);
     }
 
-    @Operation(summary = "프로필 업로드")
+    @Operation(summary = "프로필 사진 업로드")
     @PutMapping("/profile/image")
-    public ResponseEntity<ProfileImageResponseDto> uploadProfileImageApi(MultipartFile file,
-                                                                         @Parameter(hidden = true) @CurrentUser User user) throws IOException {
+    public ResponseEntity<ProfileImageResponseDto> uploadProfileImageApi(
+            MultipartFile file,
+            @Parameter(hidden = true) @CurrentUser User user) throws IOException {
         ProfileImageResponseDto profileImageResponseDto = userService.uploadProfileImage(user, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponseDto);
     }

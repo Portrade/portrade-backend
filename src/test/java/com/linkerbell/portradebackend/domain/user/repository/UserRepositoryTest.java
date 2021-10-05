@@ -56,12 +56,12 @@ class UserRepositoryTest {
 
     @DisplayName("사용자 엔티티 조회 성공")
     @Test
-    void findUserById() throws Exception {
+    void findUserByUsername() throws Exception {
         // given
         userRepository.save(user);
 
         // when
-        User foundUser = userRepository.findById(user.getId()).get();
+        User foundUser = userRepository.findByUsername(user.getUsername()).get();
 
         // then
         assertNotNull(foundUser);

@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.qna.dto;
 
 import com.linkerbell.portradebackend.domain.qna.domain.Answer;
-import com.linkerbell.portradebackend.domain.qna.domain.Qna;
 import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
@@ -20,7 +19,7 @@ public class ReplyQnaRequestDto {
     private String title;
 
     @NotNull(message = "NULL_QNA_CONTENT")
-    @Size(min=1, max = 500, message = "INVALID_QNA_CONTENT")
+    @Size(min = 1, max = 500, message = "INVALID_QNA_CONTENT")
     private String content;
 
     @NotNull(message = "NULL_QNA_ISPUBLIC")

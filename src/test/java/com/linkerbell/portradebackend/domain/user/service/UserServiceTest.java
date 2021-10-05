@@ -4,7 +4,7 @@ import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
-import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.exception.custom.FileUploadException;
@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.EntityManager;
+import java.io.IOException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -83,11 +84,11 @@ class UserServiceTest {
                 .willReturn("1234Aa@@");
 
         // when
-        UserResponseDto savedUserResponseDto = userService.createUser(signUpRequestDto);
+        SignUpResponseDto savedSignUpResponseDto = userService.createUser(signUpRequestDto);
 
         // then
-        assertEquals("user1", savedUserResponseDto.getUserId());
-        assertEquals("name1", savedUserResponseDto.getName());
+        assertEquals("user1", savedSignUpResponseDto.getUserId());
+        assertEquals("name1", savedSignUpResponseDto.getName());
     }
 
     @DisplayName("사용자 생성 실패 - 중복된 username")
@@ -113,28 +114,9 @@ class UserServiceTest {
                 () -> userService.createUser(signUpRequestDto));
     }
 
-    @DisplayName("프로필 이미지 변경 실패 - 파일 업로드")
-    @Test
-    void uploadProfileImage_failure() {
-        //given
-        MockMultipartFile file = new MockMultipartFile(
-                "mainImage",
-                "mainImage",
-                "image/png",
-                "mainImage".getBytes());
-
-        given(s3Util.upload(file)).willThrow(FileUploadException.class);
-
-        //when
-        //then
-        assertThrows(FileUploadException.class, () -> {
-            userService.uploadProfileImage(user, file);
-        });
-    }
-
     @DisplayName("프로필 이미지 변경 성공")
     @Test
-    void uploadProfileImage() {
+    void uploadProfileImage() throws IOException {
         //given
         MockMultipartFile file = new MockMultipartFile(
                 "mainImage",
@@ -157,5 +139,23 @@ class UserServiceTest {
         //then
         assertEquals(uploadResponseDto.getNewFileName(), profileImageResponseDto.getFileName());
         assertEquals(uploadResponseDto.getUrl(), profileImageResponseDto.getUrl());
+    }
+
+    @DisplayName("프로필 이미지 변경 실패 - 파일 업로드")
+    @Test
+    void uploadProfileImage_failure() {
+        //given
+        MockMultipartFile file = new MockMultipartFile(
+                "mainImage",
+                "mainImage",
+                "image/png",
+                "mainImage".getBytes());
+
+        given(s3Util.upload(file)).willThrow(FileUploadException.class);
+
+        //when
+        //then
+        assertThrows(FileUploadException.class,
+                () -> userService.uploadProfileImage(user, file));
     }
 }

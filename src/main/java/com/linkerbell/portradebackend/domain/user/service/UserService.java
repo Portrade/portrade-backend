@@ -3,7 +3,7 @@ package com.linkerbell.portradebackend.domain.user.service;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileImageResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
-import com.linkerbell.portradebackend.domain.user.dto.UserResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
@@ -42,7 +42,7 @@ public class UserService implements UserDetailsService {
     }
 
     @Transactional
-    public UserResponseDto createUser(SignUpRequestDto signUpRequestDto) {
+    public SignUpResponseDto createUser(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findByUsername(signUpRequestDto.getUserId()).orElse(null) != null) {
             throw new InvalidValueException(ErrorCode.DUPLICATED_USER_USERNAME);
         }
@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
         User user = signUpRequestDto.toEntity(encodedPassword);
         userRepository.save(user);
 
-        return UserResponseDto.builder()
+        return SignUpResponseDto.builder()
                 .userId(user.getUsername())
                 .name(user.getName())
                 .build();

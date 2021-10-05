@@ -6,7 +6,7 @@ import javax.annotation.PostConstruct;
 import java.util.TimeZone;
 
 @Configuration
-public class TimezoneConfig {
+public class TimeZoneConfig {
 
     @PostConstruct
     void started() {
