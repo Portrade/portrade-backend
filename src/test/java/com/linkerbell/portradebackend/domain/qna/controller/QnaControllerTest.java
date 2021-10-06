@@ -15,16 +15,19 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Transactional
 @SpringBootTest
 @AutoConfigureMockMvc
 class QnaControllerTest {
@@ -71,7 +74,7 @@ class QnaControllerTest {
         );
 
         //then
-        result.andExpect(status().is4xxClientError());
+        result.andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -173,15 +176,23 @@ class QnaControllerTest {
 
     @Test
     @DisplayName("1:1 문의 글 목록 조회 API 성공")
-    public void test() throws Exception {
+    public void getQnasApi() throws Exception {
         //given
         //when
         ResultActions result = mvc.perform(get(PREFIX_URI));
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.qnas").isNotEmpty())
-                .andExpect(jsonPath("$.maxPage").isNotEmpty());
+                .andExpect(jsonPath("$.maxPage").value("1"))
+                .andExpect(jsonPath("$.qnas.size()").value("4"))
+                .andExpect(jsonPath("$.qnas[0].id").value(4L))
+                .andExpect(jsonPath("$.qnas[1].id").value(3L))
+                .andExpect(jsonPath("$.qnas[2].id").value(2L))
+                .andExpect(jsonPath("$.qnas[3].id").value(1L))
+                .andExpect(jsonPath("$.qnas[0].title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.qnas[1].title").value("1:1 답변해드립니다."))
+                .andExpect(jsonPath("$.qnas[2].title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.qnas[3].title").value("1:1 문의합니다."));
     }
 
 
@@ -193,7 +204,8 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1230"));
 
         //then
-        result.andExpect(status().isNotFound());
+        result.andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("Q001"));
     }
 
 
@@ -211,7 +223,7 @@ class QnaControllerTest {
 
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 로그인 한 권한 없는 유저가 비공개 글 상세 조회")
+    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 권한 없는 유저가 비공개 글 상세 조회")
     public void getQnaDetailApi_noauthentication() throws Exception {
         //given
         //when
@@ -243,6 +255,61 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/1"));
 
         //then
-        result.andExpect(status().isOk());
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.creator").value("김가입"))
+                .andExpect(jsonPath("$.title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.content").value("이력서 업로드 문의합니다."))
+                .andExpect(jsonPath("$.secret").value(false))
+                .andExpect(jsonPath("$.next.creator").value("사나"))
+                .andExpect(jsonPath("$.next.title").value("1:1 문의합니다."))
+                .andExpect(jsonPath("$.prev").doesNotExist());
+    }
+
+    @Test
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
+    public void deleteQnaApi_noauthentication() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/3"));
+
+        //then
+        result.andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.code").value("M001"));
+    }
+
+    @Test
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 로그인 안한 사용자가 삭제")
+    public void deleteQnaApi_anonymous() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+
+        //then
+        result.andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    @WithMockPortradeUser
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 글쓴이가 삭제")
+    public void deleteQnaApi_user() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+
+        //then
+        result.andExpect(status().isNoContent());
+    }
+
+    @Test
+    @WithMockPortradeAdmin
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 관리자가 삭제")
+    public void deleteQnaApi_admin() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
+
+        //then
+        result.andExpect(status().isNoContent());
     }
 }

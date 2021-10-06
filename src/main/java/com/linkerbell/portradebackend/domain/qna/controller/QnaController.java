@@ -64,4 +64,10 @@ public class QnaController {
         QnaDetailResponseDto qnaDetailResponseDto = qnaService.getQna(qnaId, user);
         return ResponseEntity.status(HttpStatus.OK).body(qnaDetailResponseDto);
     }
+
+    @DeleteMapping("/{qnaId}")
+    public ResponseEntity<Void> deleteQnaApi(@PathVariable("qnaId") Long qnaId, @CurrentUser User user) {
+        qnaService.deleteQna(qnaId, user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
