@@ -29,6 +29,11 @@ public enum ErrorCode {
     INVALID_USER_ID_PASSWORD("M200", "아이디 또는 비밀번호가 잘못 입력되었습니다."),
 
     /**
+     * F: 파일 업로드 관련
+     */
+    FAILURE_FILE_UPLOAD("F001", "파일 업로드에 실패하였습니다."),
+
+    /**
      * N: Notice 관련
      */
     NONEXISTENT_NOTICE_ID("N001", "존재하지 않는 공지사항입니다."),

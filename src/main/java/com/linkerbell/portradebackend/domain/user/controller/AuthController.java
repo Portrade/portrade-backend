@@ -1,11 +1,11 @@
 package com.linkerbell.portradebackend.domain.user.controller;
 
+
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.LogInRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.TokenResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.AuthService;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
-import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,26 +26,16 @@ public class AuthController {
 
     @Operation(summary = "로그인")
     @PostMapping("/login")
-    public ResponseEntity<TokenResponseDto> logInApi(@RequestBody @Valid LogInRequestDto logInRequestDto) {
+    public ResponseEntity<TokenResponseDto> logInApi(
+            @RequestBody @Valid LogInRequestDto logInRequestDto) {
         TokenResponseDto tokenResponseDto = authService.logIn(logInRequestDto);
         return ResponseEntity.status(HttpStatus.OK).body(tokenResponseDto);
     }
 
     @Operation(summary = "로그아웃")
     @GetMapping("/logout")
-    public ResponseEntity<Void> logOutApi(@Parameter(hidden = true) @CurrentUser User user) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // Security test
-    @GetMapping("/user")
-    public @Hidden ResponseEntity<Void> checkUserRoleApi(@CurrentUser User user) {
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    // Security test
-    @GetMapping("/admin")
-    public @Hidden ResponseEntity<Void> checkAdminRoleApi(@CurrentUser User user) {
+    public ResponseEntity<Void> logOutApi(
+            @Parameter(hidden = true) @CurrentUser User user) {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

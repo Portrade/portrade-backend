@@ -26,5 +26,4 @@ public class QnaResponseDto {
                 .createdDate(qna.getCreatedDate())
                 .build();
     }
-
 }
