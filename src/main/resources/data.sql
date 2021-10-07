@@ -13,28 +13,12 @@ VALUES ('067d42d516394118bf54ad37d2f6f61e', 'ROLE_USER');
 INSERT INTO user_roles(user_id, roles)
 VALUES ('d9b4adce82bd48fe9456cfb20d43537d', 'ROLE_ADMIN');
 
-INSERT INTO portfolio(portfolio_id, created_date, category,	description, is_public, last_modified_date, main_image,	title, view_count, user_id)
-VALUES (1, '2019-10-19T08:17:09.478881','programming', '안녕하세요. 포트폴리오1 소개입니다.', true, now(), 'https://image1.com', '포트폴리오1제목', 100, '3cbe539a33ba4550a82c63be333ac2d0');
-INSERT INTO portfolio(portfolio_id, created_date, category,	description, is_public, last_modified_date, main_image,	title, view_count, user_id)
-VALUES (2, '2019-10-20T08:17:09.478881','programming', '안녕하세요. 포트폴리오2 소개입니다.', true, now(), 'https://image2.com', '포트폴리오2제목', 300, '3cbe539a33ba4550a82c63be333ac2d0');
-INSERT INTO portfolio(portfolio_id, created_date, category,	description, is_public, last_modified_date, main_image,	title, view_count, user_id)
-VALUES (3, '2019-10-21T08:17:09.478881','programming', '안녕하세요. 포트폴리오3 소개입니다.', false, now(), 'https://image3.com', '포트폴리오3제목', 0, '3cbe539a33ba4550a82c63be333ac2d0');
-
-INSERT INTO portfolio_image(portfolio_image_id, url, portfolio_id)
-VALUES (1, 'https://portfolioImage1.com', 1);
-INSERT INTO portfolio_image(portfolio_image_id, url, portfolio_id)
-VALUES (2, 'https://portfolioImage1.com', 1);
-INSERT INTO portfolio_image(portfolio_image_id, url, portfolio_id)
-VALUES (3, 'https://portfolioImage1.com', 1);
-
-
 INSERT INTO notice(notice_id, created_date, content, last_modified_date, title, view_count, user_id)
 VALUES (1, '2017-01-21T08:17:09.478881', '공지사항1 내용입니다.', now(), '[공지사항 분류]공지사항 제목입니다.', 1200, 'd9b4adce82bd48fe9456cfb20d43537d');
 INSERT INTO notice(notice_id, created_date, content, last_modified_date, title, view_count, user_id)
 VALUES (2, '2017-01-23T08:17:09.478881', '공지사항2 내용입니다.', now(), '[공지사항 분류]공지사항 제목입니다.', 1220, 'd9b4adce82bd48fe9456cfb20d43537d');
 INSERT INTO notice(notice_id, created_date, content, last_modified_date, title, view_count, user_id)
 VALUES (3, '2017-01-25T08:17:09.478881', '공지사항3 내용입니다.', now(), '[공지사항 분류]공지사항 제목입니다.', 1500, 'd9b4adce82bd48fe9456cfb20d43537d');
-
 
 INSERT INTO faq(faq_id, created_date, content, last_modified_date, title, user_id)
 VALUES (1, '2017-01-21T08:17:09.478881', '포트레이트는 간편하게 포트폴리오를 업로드할 수 있어요.', now(), '포트폴리오 업로드는 어떻게 하나요?', 'd9b4adce82bd48fe9456cfb20d43537d');

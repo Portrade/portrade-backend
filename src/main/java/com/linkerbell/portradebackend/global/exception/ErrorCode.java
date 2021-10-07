@@ -29,11 +29,6 @@ public enum ErrorCode {
     INVALID_USER_ID_PASSWORD("M200", "아이디 또는 비밀번호가 잘못 입력되었습니다."),
 
     /**
-     * F: 파일 업로드 관련
-     */
-    FAILURE_FILE_UPLOAD("F001", "파일 업로드에 실패하였습니다."),
-
-    /**
      * N: Notice 관련
      */
     NONEXISTENT_NOTICE_ID("N001", "존재하지 않는 공지사항입니다."),
@@ -58,7 +53,6 @@ public enum ErrorCode {
     NONEXISTENT_QNA_ID("Q109", "존재하지 않는 문의글입니다."),
     NULL_QNA_ISPUBLIC("Q110", "공개/비공개 여부를 선택해주세요."),
 
-
     /**
      * F: Faq 관련
      */
@@ -68,7 +62,29 @@ public enum ErrorCode {
     INVALID_FAQ_TITLE("F102", "제목은 1~20자 사이로 입력해주세요."),
     NULL_FAQ_CONTENT("F103", "내용은 필수입니다."),
     INVALID_FAQ_CONTENT("F104", "내용은 1~500자 사이로 입력해주세요."),
-    ;
+
+    /**
+     * P: Portfolio 관련
+     */
+    NONEXISTENT_PORTFOLIO_ID("P001", "존재하지 않는 포트폴리오입니다."),
+    // 유효성
+    NULL_PORTFOLIO_TITLE("P100", "제목은 필수입니다."),
+    NULL_PORTFOLIO_DESCRIPTION("P101", "설명은 필수입니다."),
+    INVALID_PORTFOLIO_DESCRIPTION("P102", "설명은 1~500자 사이로 입력해주세요."),
+    NULL_PORTFOLIO_CATEGORY("P103", "카테고리는 필수입니다."),
+    NULL_PORTFOLIO_ISPUBLIC("P104", "공개/비공개 선택은 필수입니다."),
+    NULL_PORTFOLIO_MAINIMAGE("P105", "대표 이미지는 필수입니다."),
+    NULL_PORTFOLIO_CONTENTFILES("P106", "포트폴리오 파일은 필수입니다."),
+
+    /**
+     * G: 파일 업로드 관련
+     */
+    NONEXISTENT_FILE_ID("G001", "존재하지 않는 파일입니다."),
+    // 업로드
+    FILE_UPLOAD_FAILURE("G100", "파일 업로드에 실패하였습니다."),
+    INVALID_FILE_NAME("G101", "올바르지 않은 파일명입니다."),
+    INVALID_FILE_EXTENSION("G102", "올바르지 않은 파일 확장자입니다.");
+
 
     private String code;
     private String message;

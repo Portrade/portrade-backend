@@ -13,11 +13,11 @@ import com.linkerbell.portradebackend.global.exception.custom.FileUploadExceptio
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.Objects;
 
 @Service
 @NoArgsConstructor
@@ -48,9 +48,10 @@ public class S3Util {
     }
 
     public UploadResponseDto upload(MultipartFile file) {
-        String originalFileName = file.getOriginalFilename();
-        String[] fileNames = Objects.requireNonNull(file.getOriginalFilename()).split("\\.");
-        String newFileName = fileNames[0] + "_" + System.currentTimeMillis() + "." + fileNames[1];
+        String fileName = extractFileName(file);
+        String name = extractName(fileName);
+        String extension = extractExtension(fileName);
+        String newFileName = generateNewFileName(name, extension);
 
         try {
             s3Client.putObject(new PutObjectRequest(bucket, newFileName, file.getInputStream(), null)
@@ -58,12 +59,46 @@ public class S3Util {
             String url = s3Client.getUrl(bucket, newFileName).toString();
 
             return UploadResponseDto.builder()
-                    .originalFileName(originalFileName)
-                    .newFileName(newFileName)
                     .url(url)
+                    .newFileName(newFileName)
+                    .originalFileName(fileName)
+                    .extension(extension)
                     .build();
         } catch (IOException e) {
-            throw new FileUploadException(ErrorCode.FAILURE_FILE_UPLOAD);
+            throw new FileUploadException(ErrorCode.FILE_UPLOAD_FAILURE);
         }
+    }
+
+    // TODO delete uploaded file
+
+    /**
+     * 파일명 관련
+     */
+    public String extractFileName(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        if (!StringUtils.hasText(fileName) || !fileName.contains(".")) {
+            throw new FileUploadException(ErrorCode.INVALID_FILE_NAME);
+        }
+        return fileName;
+    }
+
+    public String extractName(String fileName) {
+        int lastIndexOfDot = fileName.lastIndexOf(".");
+        if (lastIndexOfDot == 0) {
+            throw new FileUploadException(ErrorCode.INVALID_FILE_NAME);
+        }
+        return fileName.substring(0, lastIndexOfDot);
+    }
+
+    public String extractExtension(String fileName) {
+        int lastIndexOfDot = fileName.lastIndexOf(".");
+        if (lastIndexOfDot == fileName.length() - 1) {
+            throw new FileUploadException(ErrorCode.INVALID_FILE_NAME);
+        }
+        return fileName.substring(fileName.lastIndexOf(".") + 1);
+    }
+
+    public String generateNewFileName(String fileName, String extension) {
+        return fileName + "_" + System.currentTimeMillis() + "." + extension;
     }
 }
