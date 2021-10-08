@@ -12,6 +12,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -75,5 +76,17 @@ public class PortfolioService {
                 .createdDate(portfolio.getCreatedDate())
                 .lastModifiedDate(portfolio.getLastModifiedDate())
                 .build();
+    }
+
+    @Transactional
+    public void deletePortfolio(Long portfolioId, User user) {
+        Portfolio portfolio = portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
+
+        if (user.equals(portfolio.getCreator()) || user.isAdmin()) {
+            portfolioRepository.delete(portfolio);
+        } else {
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+        }
     }
 }

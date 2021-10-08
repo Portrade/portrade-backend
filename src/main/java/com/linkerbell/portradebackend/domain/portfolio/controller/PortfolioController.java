@@ -57,11 +57,12 @@ public class PortfolioController {
 //        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 //    }
 
-//    @Operation(summary = "포트폴리오 삭제", description = "포트폴리오를 삭제한다.")
-//    @DeleteMapping("/{portfolioId}")
-//    public ResponseEntity<Void> deletePortfolioApi(
-//            @Parameter(description = "삭제할 포트폴리오 ID") @PathVariable Long portfolioId) {
-//        portfolioService.deletePortfolio(portfolioId);
-//        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-//    }
+    @Operation(summary = "포트폴리오 삭제", description = "포트폴리오를 삭제한다.")
+    @DeleteMapping("/{portfolioId}")
+    public ResponseEntity<Void> deletePortfolioApi(
+            @Parameter(description = "삭제할 포트폴리오 ID") @PathVariable Long portfolioId,
+            @Parameter(hidden = true) @CurrentUser User user) {
+        portfolioService.deletePortfolio(portfolioId, user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
