@@ -23,7 +23,7 @@ public class Portfolio extends BaseTimeEntity {
     @Column(name = "portfolio_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User creator;
 
@@ -45,7 +45,7 @@ public class Portfolio extends BaseTimeEntity {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
-    @OneToOne(mappedBy = "portfolio", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "portfolio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private PortfolioMainImage mainImage;
 
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)

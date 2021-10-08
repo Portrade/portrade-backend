@@ -12,8 +12,9 @@ public enum ErrorCode {
     /**
      * M: User 관련
      */
-    NONEXISTENT_AUTHORITY("M001", "권한이 없습니다."),
+    NONEXISTENT_AUTHORIZATION("M001", "권한이 없습니다."),
     NONEXISTENT_USER("M002", "존재하지 않는 사용자입니다."),
+    NONEXISTENT_AUTHENTICATION("M003", "로그인이 필요합니다."),
     // 유효성
     INVALID_USER_ID("M100", "아이디는 영문 소문자, 숫자만 입력하세요."),
     NULL_USER_ID("M101", "아이디는 필수입니다."),

@@ -75,7 +75,7 @@ public class QnaService {
 
         if (!qna.isPublic()) {
             if(Objects.isNull(user) || !user.equals(qna.getUser()) && !user.isAdmin()) {
-                throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+                throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
             }
         }
 
@@ -110,6 +110,6 @@ public class QnaService {
         if(user.equals(qna.getUser()) || user.isAdmin())
             qnaRepository.delete(qna);
         else
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
     }
 }

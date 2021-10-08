@@ -12,6 +12,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +30,14 @@ public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
     private final FileService fileService;
+
+    private void checkUserPermission(Portfolio portfolio, User user) {
+        if (Objects.isNull(user)) {
+            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
+        } else if (!user.equals(portfolio.getCreator()) && !user.isAdmin()) {
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
+        }
+    }
 
     @Transactional
     public CreateResponseDto createPortfolio(CreatePortfolioRequestDto createPortfolioRequestDto, User user) {
@@ -49,9 +59,13 @@ public class PortfolioService {
     }
 
     @Transactional
-    public PortfolioDetailResponseDto getPortfolio(Long portfolioId) {
+    public PortfolioDetailResponseDto getPortfolio(Long portfolioId, User user) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
+
+        if (!portfolio.isPublic()) {
+            checkUserPermission(portfolio, user);
+        }
 
         portfolio.addViewCount();
 
@@ -83,10 +97,8 @@ public class PortfolioService {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
 
-        if (user.equals(portfolio.getCreator()) || user.isAdmin()) {
-            portfolioRepository.delete(portfolio);
-        } else {
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
-        }
+        checkUserPermission(portfolio, user);
+
+        portfolioRepository.delete(portfolio);
     }
 }

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
@@ -14,14 +15,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CreatePortfolioRequestDto {
 
-    @NotNull(message = "NULL_PORTFOLIO_TITLE")
+    @NotEmpty(message = "NULL_PORTFOLIO_TITLE")
     private String title;
 
     @Size(min = 1, max = 500, message = "INVALID_PORTFOLIO_DESCRIPTION")
     @NotNull(message = "NULL_PORTFOLIO_DESCRIPTION")
     private String description;
 
-    @NotNull(message = "NULL_PORTFOLIO_CATEGORY")
+    @NotEmpty(message = "NULL_PORTFOLIO_CATEGORY")
     private String category;
 
     @NotNull(message = "NULL_PORTFOLIO_ISPUBLIC")
