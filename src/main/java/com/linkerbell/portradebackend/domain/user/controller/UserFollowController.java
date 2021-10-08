@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class UserFollowController {
 
-    private final UserFollowService userService;
+    private final UserFollowService userFollowService;
 
     @Operation(summary = "회원 팔로우/취소")
     @PatchMapping("/{userId}/follow/{following-Id}")
@@ -27,7 +27,7 @@ public class UserFollowController {
             @Parameter(description = "유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "팔로잉 할 유저 Id") @PathVariable("following-Id") String followingId,
             @Parameter(hidden = true) @CurrentUser User user){
-        userService.followUser(userId, followingId, user);
+        userFollowService.followUser(userId, followingId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -37,7 +37,7 @@ public class UserFollowController {
             @Parameter(description = "조회 할 유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size){
-        FollowersResponseDto followersResponseDto = userService.getFollowers(userId, page, size);
+        FollowersResponseDto followersResponseDto = userFollowService.getFollowers(userId, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(followersResponseDto);
     }
 
@@ -47,7 +47,7 @@ public class UserFollowController {
             @Parameter(description = "조회 할 유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size){
-        FollowingsResponseDto followingsResponseDto = userService.getFollowings(userId, page, size);
+        FollowingsResponseDto followingsResponseDto = userFollowService.getFollowings(userId, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(followingsResponseDto);
     }
 }
