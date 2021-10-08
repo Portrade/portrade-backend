@@ -9,7 +9,8 @@ create table user (
        is_graduated boolean,
        profile_url varchar(255),
        username varchar(255) not null,
-       wanted_job varchar(255) not null
+       wanted_job varchar(255) not null,
+       job varchar(255)
 );
 
 create table comment (
@@ -48,8 +49,8 @@ create table faq (
 create table follow (
        follow_id bigint AUTO_INCREMENT PRIMARY KEY,
        created_date timestamp,
-       follow_user_id BINARY(16),
-       following_user_id BINARY(16)
+       follower BINARY(16),
+       following BINARY(16)
 );
 
 

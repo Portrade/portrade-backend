@@ -21,14 +21,22 @@ public class Profile {
     @Column(name = "profile_url")
     private String profileUrl;
 
+    private String job;
+
     @Builder
-    public Profile(String college, boolean isGraduated, String profileUrl) {
+    public Profile(String college, boolean isGraduated, String profileUrl, String job) {
         this.college = college;
         this.isGraduated = isGraduated;
         this.profileUrl = profileUrl;
+        this.job = job;
     }
 
     public void updateProfileUrl(String profileUrl) {
         this.profileUrl = profileUrl;
+    }
+
+    public void updateProfile(String college, boolean isGraduated) {
+        this.college = college;
+        this.isGraduated = isGraduated;
     }
 }

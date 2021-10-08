@@ -1,6 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.domain;
 
-import com.linkerbell.portradebackend.domain.follow.domain.Follow;
+import com.linkerbell.portradebackend.domain.user.dto.ProfileRequestDto;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -50,9 +50,6 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles = new HashSet<>();
 
-    @OneToMany(mappedBy = "followUser")
-    private List<Follow> follows = new ArrayList<>();
-
     @Builder
     public User(UUID id, String username, String password, String name, String birthDate, String wantedJob, Profile profile) {
         this.id = id;
@@ -77,6 +74,22 @@ public class User extends BaseTimeEntity {
         return roles.contains(Role.ROLE_ADMIN);
     }
 
+    public String getUserProfileUrl() {
+        return profile.getProfileUrl();
+    }
+
+    public String getUserJob() {
+        return profile.getJob();
+    }
+
+    public boolean isUserGraduated() {
+        return profile.isGraduated();
+    }
+
+    public String getUserCollege() {
+        return profile.getCollege();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -88,5 +101,12 @@ public class User extends BaseTimeEntity {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public void updateUserProfile(ProfileRequestDto profileRequestDto) {
+        this.name = profileRequestDto.getName();
+        this.birthDate = profileRequestDto.getBirthDate();
+        this.wantedJob = profileRequestDto.getWantedJob();
+        //profile.updateProfile(profileRequestDto.getCollege(), profileRequestDto.isGraduate());
     }
 }

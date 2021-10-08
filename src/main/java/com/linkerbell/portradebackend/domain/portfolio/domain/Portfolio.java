@@ -1,11 +1,15 @@
 package com.linkerbell.portradebackend.domain.portfolio.domain;
 
+import com.linkerbell.portradebackend.domain.comment.domain.Comment;
+import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +47,12 @@ public class Portfolio extends BaseTimeEntity {
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "portfolio")
+    private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "portfolio")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Portfolio(Long id, User user, String title, String description, String category, boolean isPublic, int viewCount, String mainImage) {
