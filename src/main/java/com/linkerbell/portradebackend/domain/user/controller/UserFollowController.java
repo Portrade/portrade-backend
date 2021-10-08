@@ -33,7 +33,7 @@ public class UserFollowController {
 
     @Operation(summary = "팔로워 목록 조회")
     @GetMapping("/{userId}/followers")
-    public ResponseEntity<FollowersResponseDto> getFollowsApi(
+    public ResponseEntity<FollowersResponseDto> getFollowersApi(
             @Parameter(description = "조회 할 유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size){
@@ -43,7 +43,7 @@ public class UserFollowController {
 
     @Operation(summary = "팔로잉 목록 조회")
     @GetMapping("/{userId}/followings")
-    public ResponseEntity<FollowingsResponseDto> getFollowersApi(
+    public ResponseEntity<FollowingsResponseDto> getFollowingsApi(
             @Parameter(description = "조회 할 유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size){
