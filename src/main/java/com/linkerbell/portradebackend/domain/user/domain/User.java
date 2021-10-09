@@ -11,7 +11,7 @@ import java.util.*;
 
 @Entity
 @Getter
-@ToString(exclude = {"password", "follows"})
+@ToString(exclude = {"password"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user")
 public class User extends BaseTimeEntity {

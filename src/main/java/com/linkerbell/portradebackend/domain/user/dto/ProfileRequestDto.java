@@ -3,6 +3,7 @@ package com.linkerbell.portradebackend.domain.user.dto;
 import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,6 +28,15 @@ public class ProfileRequestDto {
     private String college;
 
     private boolean isGraduate;
+
+    @Builder
+    public ProfileRequestDto(String name, String birthDate, String wantedJob, String college, boolean isGraduate) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.wantedJob = wantedJob;
+        this.college = college;
+        this.isGraduate = isGraduate;
+    }
 
     public User toEntity(User user) {
         return User.builder()

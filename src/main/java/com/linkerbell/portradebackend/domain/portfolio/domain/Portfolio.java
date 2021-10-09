@@ -55,7 +55,7 @@ public class Portfolio extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Portfolio(Long id, User user, String title, String description, String category, boolean isPublic, int viewCount, String mainImage) {
+    public Portfolio(Long id, User user, String title, String description, String category, boolean isPublic, int viewCount, String mainImage, LocalDateTime lastModifiedDate, List<Likes> likes, List<Comment> comments) {
         this.id = id;
         this.user = user;
         this.title = title;
@@ -64,5 +64,8 @@ public class Portfolio extends BaseTimeEntity {
         this.isPublic = isPublic;
         this.viewCount = viewCount;
         this.mainImage = mainImage;
+        this.lastModifiedDate = lastModifiedDate;
+        this.likes = likes;
+        this.comments = comments;
     }
 }

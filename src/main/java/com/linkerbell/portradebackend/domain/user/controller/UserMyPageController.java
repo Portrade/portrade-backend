@@ -28,7 +28,7 @@ public class UserMyPageController {
     @Operation(summary = "프로필 사진 업로드")
     @PutMapping("/me/profile/image")
     public ResponseEntity<ProfileImageResponseDto> uploadProfileImageApi(
-            MultipartFile file,
+            @RequestBody MultipartFile file,
             @Parameter(hidden = true) @CurrentUser User user) throws IOException {
         ProfileImageResponseDto profileImageResponseDto = userMyPageService.uploadProfileImage(user, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponseDto);

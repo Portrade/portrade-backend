@@ -15,6 +15,10 @@ public class JobRequestDto {
     @NotNull(message = "NULL_USER_JOB")
     private String job;
 
+    public JobRequestDto(String job) {
+        this.job = job;
+    }
+
     public User toEntity(User user) {
         return User.builder()
                 .id(user.getId())

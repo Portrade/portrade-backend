@@ -42,7 +42,7 @@ public class UserMyPageService {
         UploadResponseDto uploadResponseDto = s3Util.upload(file);
 
         user.getProfile().updateProfileUrl(uploadResponseDto.getUrl());
-        entityManager.merge(user);
+        userRepository.save(user);
 
         return ProfileImageResponseDto.builder()
                 .fileName(uploadResponseDto.getNewFileName())
