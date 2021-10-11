@@ -50,7 +50,9 @@ public class PortfolioService {
                 .build();
         portfolioRepository.save(portfolio);
 
-        fileService.createFile(PortfolioMainImage.class, portfolio, createPortfolioRequestDto.getMainImage());
+        if (Objects.nonNull(createPortfolioRequestDto.getMainImage())) {
+            fileService.createFile(PortfolioMainImage.class, portfolio, createPortfolioRequestDto.getMainImage());
+        }
         for (MultipartFile contentFile : createPortfolioRequestDto.getContentFiles()) {
             fileService.createFile(PortfolioContentFile.class, portfolio, contentFile);
         }
@@ -69,7 +71,9 @@ public class PortfolioService {
 
         portfolio.addViewCount();
 
-        FileResponseDto mainImage = FileResponseDto.of(portfolio.getMainImage());
+        FileResponseDto mainImage = Objects.isNull(portfolio.getMainImage())
+                ? null
+                : FileResponseDto.of(portfolio.getMainImage());
         List<FileResponseDto> contentFiles = portfolio.getContentFiles()
                 .stream()
                 .map(FileResponseDto::of)
