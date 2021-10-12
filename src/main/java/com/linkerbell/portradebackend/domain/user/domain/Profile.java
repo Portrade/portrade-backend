@@ -35,6 +35,10 @@ public class Profile {
         this.profileUrl = profileUrl;
     }
 
+    public void updateProfileJob(String job) {
+        this.job = job;
+    }
+
     public void updateProfile(String college, boolean isGraduated) {
         this.college = college;
         this.isGraduated = isGraduated;

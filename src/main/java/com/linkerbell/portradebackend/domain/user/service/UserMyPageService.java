@@ -15,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -100,8 +99,8 @@ public class UserMyPageService {
 
     @Transactional
     public void updateProfileJob(JobRequestDto jobRequestDto, User user) {
-        User updateUser = jobRequestDto.toEntity(user);
-        userRepository.save(updateUser);
+        user.updateJob(jobRequestDto.getJob());
+        userRepository.save(user);
     }
 
     private Integer getViewCount(List<Portfolio> portfolios) {

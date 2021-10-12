@@ -30,10 +30,10 @@ public class UserController {
 
     @Operation(summary = "아이디 중복 확인")
     @GetMapping("/{userId}/exist")
-    public ResponseEntity<ExistIdResponseDto> checkUsernameExistsApi(
+    public ResponseEntity<Void> checkUsernameExistsApi(
             @Parameter(description = "사용자 id") @PathVariable("userId") String userId) {
-        ExistIdResponseDto existIdResponseDto = userService.checkUsernameExists(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(existIdResponseDto);
+        userService.checkUsernameExists(userId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
 }

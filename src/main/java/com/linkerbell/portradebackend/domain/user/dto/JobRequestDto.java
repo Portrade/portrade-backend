@@ -18,21 +18,4 @@ public class JobRequestDto {
     public JobRequestDto(String job) {
         this.job = job;
     }
-
-    public User toEntity(User user) {
-        return User.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .name(user.getName())
-                .birthDate(user.getBirthDate())
-                .wantedJob(user.getWantedJob())
-                .profile(Profile.builder()
-                        .college(user.getUserCollege())
-                        .isGraduated(user.isUserGraduated())
-                        .profileUrl(user.getUserProfileUrl())
-                        .job(job)
-                        .build())
-                .build();
-    }
 }

@@ -27,15 +27,15 @@ public class ProfileRequestDto {
 
     private String college;
 
-    private boolean isGraduate;
+    private boolean isGraduated;
 
     @Builder
-    public ProfileRequestDto(String name, String birthDate, String wantedJob, String college, boolean isGraduate) {
+    public ProfileRequestDto(String name, String birthDate, String wantedJob, String college, boolean isGraduated) {
         this.name = name;
         this.birthDate = birthDate;
         this.wantedJob = wantedJob;
         this.college = college;
-        this.isGraduate = isGraduate;
+        this.isGraduated = isGraduated;
     }
 
     public User toEntity(User user) {
@@ -48,7 +48,7 @@ public class ProfileRequestDto {
                 .wantedJob(wantedJob)
                 .profile(Profile.builder()
                         .college(college)
-                        .isGraduated(isGraduate)
+                        .isGraduated(isGraduated)
                         .profileUrl(user.getUserProfileUrl())
                         .job(user.getUserJob())
                         .build())

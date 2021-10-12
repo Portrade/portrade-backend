@@ -49,11 +49,9 @@ public class UserService implements UserDetailsService {
                 .build();
     }
 
-    public ExistIdResponseDto checkUsernameExists(String userId) {
+    public void checkUsernameExists(String userId) {
         Optional<User> usernameExist = userRepository.findByUsername(userId);
         if(usernameExist.isPresent())
-            throw new NotUniqueException(ErrorCode.NONUNIQUE_USERN_NAME);
-
-        return new ExistIdResponseDto(userId);
+            throw new NotUniqueException(ErrorCode.DUPLICATED_USER_USERNAME);
     }
 }

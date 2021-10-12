@@ -22,10 +22,10 @@ public class UserFollowController {
     private final UserFollowService userFollowService;
 
     @Operation(summary = "회원 팔로우/취소")
-    @PatchMapping("/{userId}/follow/{following-Id}")
+    @PatchMapping("/{userId}/follow/{followingId}")
     public ResponseEntity<Void> followApi(
             @Parameter(description = "유저 Id") @PathVariable("userId") String userId,
-            @Parameter(description = "팔로잉 할 유저 Id") @PathVariable("following-Id") String followingId,
+            @Parameter(description = "팔로잉 할 유저 Id") @PathVariable("followingId") String followingId,
             @Parameter(hidden = true) @CurrentUser User user){
         userFollowService.followUser(userId, followingId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

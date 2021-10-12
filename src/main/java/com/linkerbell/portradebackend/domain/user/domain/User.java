@@ -107,6 +107,10 @@ public class User extends BaseTimeEntity {
         this.name = profileRequestDto.getName();
         this.birthDate = profileRequestDto.getBirthDate();
         this.wantedJob = profileRequestDto.getWantedJob();
-        //profile.updateProfile(profileRequestDto.getCollege(), profileRequestDto.isGraduate());
+        profile.updateProfile(profileRequestDto.getCollege(), profileRequestDto.isGraduated());
+    }
+
+    public void updateJob(String job) {
+        profile.updateProfileJob(job);
     }
 }
