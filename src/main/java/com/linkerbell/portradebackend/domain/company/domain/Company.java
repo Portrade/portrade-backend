@@ -44,13 +44,13 @@ public class Company extends BaseTimeEntity {
     private String ceo;
 
     @Column(name = "founding_date")
-    private LocalDate foundingDate;
+    private String foundingDate;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Company(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, LocalDate foundingDate) {
+    public Company(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
         this.id = id;
         this.name = name;
         this.form = form;

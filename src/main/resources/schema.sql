@@ -8,6 +8,7 @@ create table user (
        college varchar(255),
        is_graduated boolean,
        profile_url varchar(255),
+       job varchar(255),
        username varchar(255) not null,
        wanted_job varchar(255) not null
 );
@@ -27,7 +28,7 @@ create table company (
        address varchar(255) not null,
        ceo varchar(255) not null,
        form varchar(255) not null,
-       founding_date date,
+       founding_date varchar(255) not null,
        homepage varchar(255) not null,
        industry varchar(255) not null,
        last_modified_date timestamp,
@@ -109,8 +110,8 @@ create table qna (
 );
 
 
-create table recruit (
-       recruit_id bigint AUTO_INCREMENT PRIMARY KEY,
+create table recruitment (
+       recruitment_id bigint AUTO_INCREMENT PRIMARY KEY,
        created_date timestamp,
        address varchar(255) not null,
        career varchar(255),
@@ -118,6 +119,7 @@ create table recruit (
        education varchar(255),
        last_modified_date timestamp,
        logo varchar(255),
+       title varchar(255) not null,
        pay varchar(255) not null,
        view_count integer,
        work_type varchar(255),
@@ -125,9 +127,9 @@ create table recruit (
 );
 
 
-create table user_company (
-         user_company_id bigint AUTO_INCREMENT PRIMARY KEY,
-         company_id bigint,
+create table user_recruitment (
+         user_recruitment_id bigint AUTO_INCREMENT PRIMARY KEY,
+         recruitment_id bigint,
          user_id BINARY(16)
 );
 

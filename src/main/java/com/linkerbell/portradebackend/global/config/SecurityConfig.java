@@ -70,6 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/faqs").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/faqs/{faqId}").hasRole("ADMIN")
 
+                .antMatchers(PREFIX_URL + "/save/**").authenticated()
+
                 .anyRequest().permitAll();
     }
 
