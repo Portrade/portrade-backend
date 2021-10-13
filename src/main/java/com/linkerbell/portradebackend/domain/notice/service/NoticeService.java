@@ -41,12 +41,17 @@ public class NoticeService {
         return new CreateResponseDto(notice.getId());
     }
 
-    public NoticesResponseDto getNotices(int page, int size) {
+    public NoticesResponseDto getNotices(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<Notice> noticePage = noticeRepository.findAll(pageable);
+        Page<Notice> noticePage = null;
+
+        if(keyword.equals(""))
+            noticePage = noticeRepository.findAll(pageable);
+        else
+            noticePage = noticeRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
 
         List<NoticeResponseDto> notices = noticePage.stream()
                 .map(NoticeResponseDto::of)

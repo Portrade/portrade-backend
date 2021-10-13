@@ -50,9 +50,10 @@ public class QnaController {
     @Operation(summary = "1:1 문의 게시글 목록 조회", description = "1:1 문의 게시글 목록을 조회한다.")
     @GetMapping
     public ResponseEntity<QnasResponseDto> getQnasApi(
+            @Parameter(description = "검색할 키워드") @RequestParam(value = "keyword", defaultValue = "") String keyword,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
-        QnasResponseDto qnasResponseDto = qnaService.getQnas(page, size);
+        QnasResponseDto qnasResponseDto = qnaService.getQnas(page, size, keyword);
         return ResponseEntity.status(HttpStatus.OK).body(qnasResponseDto);
     }
 
@@ -65,6 +66,7 @@ public class QnaController {
         return ResponseEntity.status(HttpStatus.OK).body(qnaDetailResponseDto);
     }
 
+    @Operation(summary = "1:1 문의 게시글 삭제", description = "1:1 문의 게시글을 삭제한다.")
     @DeleteMapping("/{qnaId}")
     public ResponseEntity<Void> deleteQnaApi(@PathVariable("qnaId") Long qnaId, @CurrentUser User user) {
         qnaService.deleteQna(qnaId, user);

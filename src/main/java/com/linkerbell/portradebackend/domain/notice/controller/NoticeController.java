@@ -39,7 +39,7 @@ public class NoticeController {
     public ResponseEntity<NoticesResponseDto> getNoticesApi(
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
-        NoticesResponseDto noticesResponseDto = noticeService.getNotices(page, size);
+        NoticesResponseDto noticesResponseDto = noticeService.getNotices(page, size, "");
         return ResponseEntity.status(HttpStatus.OK).body(noticesResponseDto);
     }
 
