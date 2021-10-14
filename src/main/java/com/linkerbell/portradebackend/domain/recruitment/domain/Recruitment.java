@@ -11,31 +11,34 @@ import java.time.LocalDateTime;
 @Getter
 @ToString(exclude = {"company"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "recruit")
+@Table(name = "recruitment")
 public class Recruitment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "recruit_id")
+    @Column(name = "recruitment_id")
     private Long id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
 
     private String logo;
 
+    @Column(nullable = false)
+    private String title;
+
     @Column(name = "view_count")
     private int viewCount = 0;
 
-    @Enumerated(EnumType.STRING)
-    private Career career;
+    @Column(nullable = false)
+    private String career;
 
-    @Enumerated(EnumType.STRING)
-    private Education education;
+    @Column(nullable = false)
+    private String education;
 
-    @Enumerated(EnumType.STRING)
-    private WorkType workType;
+    @Column(nullable = false)
+    private String workType;
 
     @Column(nullable = false)
     private String pay;
@@ -50,7 +53,7 @@ public class Recruitment extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Recruitment(Long id, Company company, String logo, int viewCount, Career career, Education education, WorkType workType, String pay, String address, String category) {
+    public Recruitment(Long id, Company company, String logo, int viewCount, String career, String education, String workType, String pay, String address, String category) {
         this.id = id;
         this.company = company;
         this.logo = logo;

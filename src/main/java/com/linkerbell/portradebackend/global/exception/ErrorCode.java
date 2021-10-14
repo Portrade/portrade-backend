@@ -68,6 +68,21 @@ public enum ErrorCode {
     INVALID_FAQ_TITLE("F102", "제목은 1~20자 사이로 입력해주세요."),
     NULL_FAQ_CONTENT("F103", "내용은 필수입니다."),
     INVALID_FAQ_CONTENT("F104", "내용은 1~500자 사이로 입력해주세요."),
+
+
+    /**
+     * C: Company 관련
+     */
+    NONEXISTENT_COMPANY_ID("C001", "존재하지 않는 기업입니다."),
+    NONUNIQUE_COMPANY("C002", "이미 존재하는 기업입니다."),
+    //유효성
+    NULL_COMPANY_NAME("C101", "기업명은 필수입니다."),
+    NULL_COMPANY_FORM("C102", "기업형태는 필수입니다."),
+    NULL_COMPANY_INDUSTRY("C103", "업종은 필수입니다."),
+    NULL_COMPANY_SALES("C104", "매출액은 필수입니다."),
+    NULL_COMPANY_HOMEPAGE("C105", "홈페이지는 필수입니다."),
+    NULL_COMPANY_ADDRESS("C106", "기업주소는 필수입니다."),
+    NULL_COMPANY_CEO("C107", "대표자명은 필수입니다."),
     ;
 
     private String code;

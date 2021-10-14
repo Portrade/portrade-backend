@@ -9,7 +9,8 @@ create table user (
        is_graduated boolean,
        profile_url varchar(255),
        username varchar(255) not null,
-       wanted_job varchar(255) not null
+       wanted_job varchar(255) not null,
+       job varchar(255)
 );
 
 create table comment (
@@ -27,13 +28,14 @@ create table company (
        address varchar(255) not null,
        ceo varchar(255) not null,
        form varchar(255) not null,
-       founding_date date,
+       founding_date varchar(255),
        homepage varchar(255) not null,
        industry varchar(255) not null,
        last_modified_date timestamp,
        member_count varchar(255),
        name varchar(255) not null,
-       sales varchar(255) not null
+       sales varchar(255) not null,
+       user_id BINARY(16)
 );
 
 create table faq (
@@ -109,9 +111,10 @@ create table qna (
 );
 
 
-create table recruit (
-       recruit_id bigint AUTO_INCREMENT PRIMARY KEY,
+create table recruitment (
+       recruitment_id bigint AUTO_INCREMENT PRIMARY KEY,
        created_date timestamp,
+       title varchar(255) not null,
        address varchar(255) not null,
        career varchar(255),
        category varchar(255) not null,
