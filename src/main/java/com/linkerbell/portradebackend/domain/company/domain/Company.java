@@ -1,15 +1,12 @@
 package com.linkerbell.portradebackend.domain.company.domain;
 
 import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
-import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter

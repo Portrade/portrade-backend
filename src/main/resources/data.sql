@@ -56,7 +56,7 @@ VALUES (3, 'ANSWER', '2020-11-22T08:17:09.478881', null, '1:1문의 답변해드
 INSERT INTO qna(qna_id, dtype, created_date, category, content, email, is_public, last_modified_date, name, phone_number, status, title, question_id, user_id)
 VALUES (4, 'QUESTION', '2021-01-21T08:17:09.478881', '업로드 문의', '이력서 업로드 문의합니다.', 'sa@naver.com', false, now(), '사나', '12341234', 'UNANSWERED', '1:1 문의합니다.', null, '067d42d516394118bf54ad37d2f6f61e');
 
--- 회사
+-- 기업
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date, member_count, name, sales, user_id)
 VALUES (1, '2017-01-21T08:17:09.478881', '서울특별시 금천구 가산디지털1로 2 (가산동) 1213호 (주)지니프릭스', '지니', '스타트업', '2014년 2월 8일', 'https://www.gnifrix.com', 'IT', now(), '124명', '지니프릭스', '12억', 'db3e7741982a40d5919767ac9a0bb94a');
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date, member_count, name, sales, user_id)

@@ -10,7 +10,7 @@ import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
 import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
+import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +54,7 @@ public class CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY_ID));
         if(!user.equals(company.getUser()))
-            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHORITY);
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
 
         company.updateCompany(companyRequestDto);
         companyRepository.save(company);
@@ -87,7 +87,7 @@ public class CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY_ID));
         if(!user.equals(company.getUser()))
-            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHORITY);
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
 
         companyRepository.delete(company);
     }

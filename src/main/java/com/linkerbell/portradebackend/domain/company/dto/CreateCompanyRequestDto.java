@@ -3,6 +3,7 @@ package com.linkerbell.portradebackend.domain.company.dto;
 import com.linkerbell.portradebackend.domain.company.domain.Company;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -30,6 +31,19 @@ public class CreateCompanyRequestDto {
     private String ceo;
 
     private String foundingDate;
+
+    @Builder
+    public CreateCompanyRequestDto(String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
+        this.name = name;
+        this.form = form;
+        this.industry = industry;
+        this.sales = sales;
+        this.homepage = homepage;
+        this.memberCount = memberCount;
+        this.address = address;
+        this.ceo = ceo;
+        this.foundingDate = foundingDate;
+    }
 
     public Company toEntity(User user) {
         return Company.builder()

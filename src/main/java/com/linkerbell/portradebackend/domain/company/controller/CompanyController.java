@@ -41,7 +41,7 @@ public class CompanyController {
             @Parameter(description = "상세 조회할 기업 ID") @PathVariable Long companyId
     ) {
         CompanyDetailResponseDto companyDetailResponseDto = companyService.getCompany(companyId);
-        return ResponseEntity.status(HttpStatus.CREATED).body(companyDetailResponseDto);
+        return ResponseEntity.status(HttpStatus.OK).body(companyDetailResponseDto);
     }
 
     @Operation(summary = "기업 수정", description = "기업 정보 수정한다.")

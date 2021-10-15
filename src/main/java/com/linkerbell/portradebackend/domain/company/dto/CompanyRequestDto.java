@@ -1,6 +1,7 @@
 package com.linkerbell.portradebackend.domain.company.dto;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -27,4 +28,17 @@ public class CompanyRequestDto {
     private String ceo;
 
     private String foundingDate;
+
+    @Builder
+    public CompanyRequestDto(String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
+        this.name = name;
+        this.form = form;
+        this.industry = industry;
+        this.sales = sales;
+        this.homepage = homepage;
+        this.memberCount = memberCount;
+        this.address = address;
+        this.ceo = ceo;
+        this.foundingDate = foundingDate;
+    }
 }

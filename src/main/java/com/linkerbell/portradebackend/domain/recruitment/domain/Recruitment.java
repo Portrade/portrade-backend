@@ -53,10 +53,11 @@ public class Recruitment extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Recruitment(Long id, Company company, String logo, int viewCount, String career, String education, String workType, String pay, String address, String category) {
+    public Recruitment(Long id, Company company, String logo, String title, int viewCount, String career, String education, String workType, String pay, String address, String category, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.company = company;
         this.logo = logo;
+        this.title = title;
         this.viewCount = viewCount;
         this.career = career;
         this.education = education;
@@ -64,5 +65,6 @@ public class Recruitment extends BaseTimeEntity {
         this.pay = pay;
         this.address = address;
         this.category = category;
+        this.lastModifiedDate = lastModifiedDate;
     }
 }
