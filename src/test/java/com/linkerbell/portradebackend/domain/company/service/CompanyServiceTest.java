@@ -6,7 +6,6 @@ import com.linkerbell.portradebackend.domain.company.repository.CompanyRepositor
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
 import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
@@ -111,10 +110,10 @@ class CompanyServiceTest {
         given(companyRepository.findByNameAndCeo(company.getName(), company.getCeo())).willReturn(Optional.empty());
 
         //when
-        CreateResponseDto company = companyService.createCompany(companyRequestDto, user);
+        companyService.createCompany(companyRequestDto, user);
 
         //then
-        assertEquals(company.getId(), notNull());
+        verify(companyRepository, times(1)).save(any(Company.class));
     }
 
     @Test
