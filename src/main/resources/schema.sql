@@ -1,16 +1,16 @@
-create table user
-(
-    user_id            BINARY(16) not null PRIMARY KEY,
-    created_date       timestamp,
-    birth_date         varchar(255) not null,
-    last_modified_date timestamp,
-    name               varchar(255) not null,
-    password           varchar(255) not null,
-    college            varchar(255),
-    is_graduated       boolean,
-    profile_url        varchar(255),
-    username           varchar(255) not null,
-    wanted_job         varchar(255) not null
+create table user (
+       user_id BINARY(16) not null PRIMARY KEY,
+       created_date timestamp,
+       birth_date varchar(255) not null,
+       last_modified_date timestamp,
+       name varchar(255) not null,
+       password varchar(255) not null,
+       college varchar(255),
+       is_graduated boolean,
+       profile_url varchar(255),
+       username varchar(255) not null,
+       wanted_job varchar(255) not null,
+       job varchar(255)
 );
 
 create table comment
@@ -49,12 +49,11 @@ create table faq
     user_id            BINARY(16)
 );
 
-create table follow
-(
-    follow_id         bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date      timestamp,
-    follow_user_id    BINARY(16),
-    following_user_id BINARY(16)
+create table follow (
+       follow_id bigint AUTO_INCREMENT PRIMARY KEY,
+       created_date timestamp,
+       follower BINARY(16),
+       following BINARY(16)
 );
 
 create table likes

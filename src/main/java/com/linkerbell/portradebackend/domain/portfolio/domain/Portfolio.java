@@ -1,5 +1,7 @@
 package com.linkerbell.portradebackend.domain.portfolio.domain;
 
+import com.linkerbell.portradebackend.domain.comment.domain.Comment;
+import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.file.domain.PortfolioContentFile;
 import com.linkerbell.portradebackend.domain.file.domain.PortfolioMainImage;
 import com.linkerbell.portradebackend.domain.user.domain.User;
@@ -65,6 +67,7 @@ public class Portfolio extends BaseTimeEntity {
         this.isPublic = isPublic;
         this.viewCount = viewCount;
         this.mainImage = mainImage;
+        this.lastModifiedDate = lastModifiedDate;
         this.contentFiles = contentFiles;
     }
 

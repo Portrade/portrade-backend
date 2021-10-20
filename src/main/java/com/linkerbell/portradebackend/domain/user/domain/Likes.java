@@ -1,4 +1,4 @@
-package com.linkerbell.portradebackend.domain.likes.domain;
+package com.linkerbell.portradebackend.domain.user.domain;
 
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.user.domain.User;

@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.global.config;
 
+import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,6 +25,10 @@ public class WithMockPortradeUserSecurityContextFactory implements WithSecurityC
                         .name("유저1")
                         .birthDate("19900903")
                         .wantedJob("designer")
+                        .profile(Profile.builder()
+                                .college("가나대학교")
+                                .isGraduated(true)
+                                .build())
                         .build());
 
         Authentication auth =

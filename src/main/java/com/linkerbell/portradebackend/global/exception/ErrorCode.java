@@ -26,6 +26,7 @@ public enum ErrorCode {
     INVALID_SIZE_USER_BIRTHDATE("M107", "생일은 8글자로 입력해주세요."),
     NULL_USER_BIRTHDATE("M108", "생일은 필수입니다."),
     DUPLICATED_USER_USERNAME("M109", "이미 존재하는 사용자 아이디입니다."),
+    NULL_USER_JOB("M110", "구직상태는 필수입니다."),
     // 로그인
     INVALID_USER_ID_PASSWORD("M200", "아이디 또는 비밀번호가 잘못 입력되었습니다."),
 

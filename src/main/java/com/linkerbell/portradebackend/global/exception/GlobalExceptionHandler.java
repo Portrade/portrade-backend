@@ -49,4 +49,10 @@ public class GlobalExceptionHandler {
         ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
+
+    @ExceptionHandler(value = NotUniqueException.class)
+    public ResponseEntity<ErrorResponse> handleNotUniqueException(NotUniqueException e, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
+    }
 }
