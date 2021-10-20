@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@ToString(of = {"id"})
+@ToString(exclude = {"id", "user"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_portfolio")
 public class UserPortfolio {
