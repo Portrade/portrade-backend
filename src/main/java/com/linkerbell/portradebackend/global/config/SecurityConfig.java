@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String PREFIX_URL = "/api/v1";
+        final String PREFIX_URL = "/api/v1";
 
         http.cors();
         http.csrf().disable();
@@ -72,6 +72,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/faqs").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/faqs/{faqId}").hasRole("ADMIN")
+
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/portfolios").authenticated()
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
 
                 .anyRequest().permitAll();
     }
