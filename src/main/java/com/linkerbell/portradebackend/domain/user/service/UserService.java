@@ -1,7 +1,8 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.*;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
@@ -14,7 +15,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
 
 @Service
@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public SignUpResponseDto createUser(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findByUsername(signUpRequestDto.getUserId()).orElse(null) != null) {
-            throw new InvalidValueException(ErrorCode.DUPLICATED_USER_USERNAME);
+            throw new NotUniqueException(ErrorCode.DUPLICATED_USER_USERNAME);
         }
 
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
@@ -50,8 +50,8 @@ public class UserService implements UserDetailsService {
     }
 
     public void checkUsernameExists(String userId) {
-        Optional<User> usernameExist = userRepository.findByUsername(userId);
-        if(usernameExist.isPresent())
+        if (userRepository.findByUsername(userId).orElse(null) != null) {
             throw new NotUniqueException(ErrorCode.DUPLICATED_USER_USERNAME);
+        }
     }
 }

@@ -20,7 +20,7 @@ import java.io.IOException;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/users")
-public class UserMyPageController {
+public class MyPageController {
 
     private final UserMyPageService userMyPageService;
 

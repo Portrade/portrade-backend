@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 public class UserMyPageService {
 
     private final UserRepository userRepository;
-    private final EntityManager entityManager;
     private final FollowRepository followRepository;
     private final PortfolioRepository portfolioRepository;
     private final S3Util s3Util;

@@ -1,6 +1,7 @@
 package com.linkerbell.portradebackend.domain.user.controller;
 
-import com.linkerbell.portradebackend.domain.user.dto.*;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -35,5 +36,4 @@ public class UserController {
         userService.checkUsernameExists(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

@@ -1,9 +1,9 @@
 package com.linkerbell.portradebackend.domain.portfolio.domain;
 
 import com.linkerbell.portradebackend.domain.comment.domain.Comment;
-import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.file.domain.PortfolioContentFile;
 import com.linkerbell.portradebackend.domain.file.domain.PortfolioMainImage;
+import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
@@ -53,9 +53,11 @@ public class Portfolio extends BaseTimeEntity {
     @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
     private List<PortfolioContentFile> contentFiles = new ArrayList<>();
 
-//    TODO
-//    @OneToMany(mappedBy = "portfolio")
-//    private List<Likes> likes = new ArrayList<>();
+    @OneToMany(mappedBy = "portfolio")
+    private List<Likes> likes = new ArrayList<>();
+
+    @OneToMany(mappedBy = "portfolio")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Portfolio(Long id, User creator, String title, String description, String category, boolean isPublic, int viewCount, PortfolioMainImage mainImage, List<PortfolioContentFile> contentFiles) {
@@ -67,7 +69,6 @@ public class Portfolio extends BaseTimeEntity {
         this.isPublic = isPublic;
         this.viewCount = viewCount;
         this.mainImage = mainImage;
-        this.lastModifiedDate = lastModifiedDate;
         this.contentFiles = contentFiles;
     }
 

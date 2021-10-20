@@ -36,7 +36,7 @@ public class UserFollowService {
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_USER));
 
         if(!user.getUsername().equals(follower))
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
         Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(follower, following); //1
 
