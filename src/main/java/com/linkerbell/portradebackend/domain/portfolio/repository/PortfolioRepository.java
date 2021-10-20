@@ -11,9 +11,9 @@ import java.util.List;
 
 public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
 
-    @Query("select p from Portfolio p join fetch p.user u where u.username = :userId")
+    @Query("select p from Portfolio p join fetch p.creator u where u.username = :userId")
     List<Portfolio> findAllByUsername(@Param("userId") String userId);
 
-    @Query("select p from Portfolio p join p.user u where u.username = :userId")
+    @Query("select p from Portfolio p join p.creator u where u.username = :userId")
     Page<Portfolio> findAllByUsername(Pageable pageable, @Param("userId") String userId);
 }
