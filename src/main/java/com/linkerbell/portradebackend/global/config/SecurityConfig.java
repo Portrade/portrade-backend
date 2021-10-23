@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        String PREFIX_URL = "/api/v1";
+        final String PREFIX_URL = "/api/v1";
 
         http.cors();
         http.csrf().disable();
@@ -58,6 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
+                .antMatchers(PREFIX_URL + "/users/me/insight").authenticated()
+                .antMatchers(PREFIX_URL + "/users/me/profile/**").authenticated()
+                .antMatchers(PREFIX_URL + "/users/{userId}/follow/{following-Id}").authenticated()
 
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/notices").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/notices/**").hasRole("ADMIN")
@@ -72,6 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/companies").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/companies/{companyId}").authenticated()
+
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/portfolios").authenticated()
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
 
                 .anyRequest().permitAll();
     }

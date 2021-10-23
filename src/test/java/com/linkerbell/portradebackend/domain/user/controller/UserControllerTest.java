@@ -17,6 +17,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -118,5 +119,28 @@ class UserControllerTest {
         // then
         result.andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("M103"));
+    }
+
+    @Test
+    @DisplayName("아이디 중복 확인 API 실패 - 중복인 경우")
+    void checkUsernameExistsApi_duplicate() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/user1/exist"));
+
+        //then
+        result.andExpect(status().isConflict());
+    }
+
+    @Test
+    @DisplayName("아이디 중복 확인 API 성공")
+    void checkUsernameExistsApi() throws Exception {
+        //given
+        //when
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/users/exist"));
+
+        //then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.userId").value("users"));
     }
 }
