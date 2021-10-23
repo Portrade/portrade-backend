@@ -174,7 +174,7 @@ class QnaServiceTest {
         given(qnaRepository.findAll(any(Pageable.class))).willReturn(page);
 
         //when
-        QnasResponseDto qnasResponseDto = qnaService.getQnas(1, 3);
+        QnasResponseDto qnasResponseDto = qnaService.getQnas(1, 3, "");
 
         //then
         assertEquals(qnasResponseDto.getMaxPage(), 1);

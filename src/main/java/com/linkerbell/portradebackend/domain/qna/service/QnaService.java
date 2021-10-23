@@ -52,13 +52,18 @@ public class QnaService {
         return new CreateResponseDto(answer.getId());
     }
 
-    public QnasResponseDto getQnas(int page, int size) {
+    public QnasResponseDto getQnas(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(
                 page-1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 
-        Page<Qna> pageQnas = qnaRepository.findAll(pageable);
+        Page<Qna> pageQnas = null;
+        if(keyword.equals(""))
+            pageQnas = qnaRepository.findAll(pageable);
+        else
+            pageQnas = qnaRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
+
         List<QnaResponseDto> qnaResponseDto = pageQnas.stream()
                 .map(qna -> QnaResponseDto.toDto(qna))
                 .collect(Collectors.toList());

@@ -96,7 +96,7 @@ class NoticeServiceTest {
                 .willReturn(noticePage);
 
         // when
-        NoticesResponseDto foundNoticesResponseDto = noticeService.getNotices(1, 3);
+        NoticesResponseDto foundNoticesResponseDto = noticeService.getNotices(1, 3, "");
 
         // then
         assertEquals(foundNoticesResponseDto.getMaxPage(), 1);
