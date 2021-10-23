@@ -1,10 +1,11 @@
 package com.linkerbell.portradebackend.domain.company.domain;
 
+import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
+import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,6 +19,10 @@ public class Company extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @Column(nullable = false)
     private String name;
@@ -44,14 +49,15 @@ public class Company extends BaseTimeEntity {
     private String ceo;
 
     @Column(name = "founding_date")
-    private LocalDate foundingDate;
+    private String foundingDate;
 
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Company(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, LocalDate foundingDate) {
+    public Company(Long id, User user, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate, LocalDateTime lastModifiedDate) {
         this.id = id;
+        this.user = user;
         this.name = name;
         this.form = form;
         this.industry = industry;
@@ -61,5 +67,18 @@ public class Company extends BaseTimeEntity {
         this.address = address;
         this.ceo = ceo;
         this.foundingDate = foundingDate;
+        this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public void updateCompany(CompanyRequestDto companyRequestDto) {
+        this.name = companyRequestDto.getName();
+        this.form = companyRequestDto.getForm();
+        this.industry = companyRequestDto.getIndustry();
+        this.sales = companyRequestDto.getSales();
+        this.homepage = companyRequestDto.getHomepage();
+        this.memberCount = companyRequestDto.getMemberCount();
+        this.address = companyRequestDto.getAddress();
+        this.ceo = companyRequestDto.getCeo();
+        this.foundingDate = companyRequestDto.getFoundingDate();
     }
 }

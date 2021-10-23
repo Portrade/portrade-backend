@@ -23,20 +23,20 @@ create table comment
     user_id            BINARY(16)
 );
 
-create table company
-(
-    company_id         bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date       timestamp,
-    address            varchar(255) not null,
-    ceo                varchar(255) not null,
-    form               varchar(255) not null,
-    founding_date      date,
-    homepage           varchar(255) not null,
-    industry           varchar(255) not null,
-    last_modified_date timestamp,
-    member_count       varchar(255),
-    name               varchar(255) not null,
-    sales              varchar(255) not null
+create table company (
+       company_id bigint AUTO_INCREMENT PRIMARY KEY,
+       created_date timestamp,
+       address varchar(255) not null,
+       ceo varchar(255) not null,
+       form varchar(255) not null,
+       founding_date varchar(255),
+       homepage varchar(255) not null,
+       industry varchar(255) not null,
+       last_modified_date timestamp,
+       member_count varchar(255),
+       name varchar(255) not null,
+       sales varchar(255) not null,
+       user_id BINARY(16)
 );
 
 create table faq
@@ -123,6 +123,22 @@ create table recruit
     company_id         bigint
 );
 
+create table recruitment (
+       recruitment_id bigint AUTO_INCREMENT PRIMARY KEY,
+       created_date timestamp,
+       title varchar(255) not null,
+       address varchar(255) not null,
+       career varchar(255),
+       category varchar(255) not null,
+       education varchar(255),
+       last_modified_date timestamp,
+       logo varchar(255),
+       pay varchar(255) not null,
+       view_count integer,
+       work_type varchar(255),
+       company_id bigint
+);
+  
 create table user_company
 (
     user_company_id bigint AUTO_INCREMENT PRIMARY KEY,

@@ -73,6 +73,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/faqs").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/faqs/{faqId}").hasRole("ADMIN")
 
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/companies").authenticated()
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/companies/{companyId}").authenticated()
+
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/portfolios").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()

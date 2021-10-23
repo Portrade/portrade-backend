@@ -66,6 +66,20 @@ public enum ErrorCode {
     INVALID_FAQ_CONTENT("F104", "내용은 1~500자 사이로 입력해주세요."),
 
     /**
+     * C: Company 관련
+     */
+    NONEXISTENT_COMPANY_ID("C001", "존재하지 않는 기업입니다."),
+    NONUNIQUE_COMPANY("C002", "이미 존재하는 기업입니다."),
+    //유효성
+    NULL_COMPANY_NAME("C101", "기업명은 필수입니다."),
+    NULL_COMPANY_FORM("C102", "기업형태는 필수입니다."),
+    NULL_COMPANY_INDUSTRY("C103", "업종은 필수입니다."),
+    NULL_COMPANY_SALES("C104", "매출액은 필수입니다."),
+    NULL_COMPANY_HOMEPAGE("C105", "홈페이지는 필수입니다."),
+    NULL_COMPANY_ADDRESS("C106", "기업주소는 필수입니다."),
+    NULL_COMPANY_CEO("C107", "대표자명은 필수입니다."),
+    
+    /**
      * P: Portfolio 관련
      */
     NONEXISTENT_PORTFOLIO_ID("P001", "존재하지 않는 포트폴리오입니다."),
@@ -86,7 +100,6 @@ public enum ErrorCode {
     FILE_UPLOAD_FAILURE("G100", "파일 업로드에 실패하였습니다."),
     INVALID_FILE_NAME("G101", "올바르지 않은 파일명입니다."),
     INVALID_FILE_EXTENSION("G102", "올바르지 않은 파일 확장자입니다.");
-
 
     private String code;
     private String message;
