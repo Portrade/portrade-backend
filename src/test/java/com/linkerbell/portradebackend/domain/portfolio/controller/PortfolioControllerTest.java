@@ -187,7 +187,7 @@ class PortfolioControllerTest {
 
         // then
         result.andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.code").value("M003"));
+                .andExpect(jsonPath("$.code").value("C001"));
     }
 
     @DisplayName("포트폴리오 상세 조회 API 실패 - 비공개 게시물 작성자가 아닌 유저 조회 시도")
@@ -200,7 +200,7 @@ class PortfolioControllerTest {
 
         // then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M001"));
+                .andExpect(jsonPath("$.code").value("C002"));
     }
 
     @DisplayName("포트폴리오 상세 조회 API 실패 - 존재하지 않는 포트폴리오 ID")

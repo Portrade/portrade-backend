@@ -8,13 +8,13 @@ public enum ErrorCode {
     /**
      * C: 공통
      */
-
+    NONEXISTENT_AUTHENTICATION("C001", "로그인이 필요합니다."),
+    NONEXISTENT_AUTHORIZATION("C002", "권한이 없습니다."),
+    
     /**
      * M: User 관련
      */
-    NONEXISTENT_AUTHORIZATION("M001", "권한이 없습니다."),
-    NONEXISTENT_USER("M002", "존재하지 않는 사용자입니다."),
-    NONEXISTENT_AUTHENTICATION("M003", "로그인이 필요합니다."),
+    NONEXISTENT_USER("M001", "존재하지 않는 사용자입니다."),
     // 유효성
     INVALID_USER_ID("M100", "아이디는 영문 소문자, 숫자만 입력하세요."),
     NULL_USER_ID("M101", "아이디는 필수입니다."),
@@ -33,7 +33,7 @@ public enum ErrorCode {
     /**
      * N: Notice 관련
      */
-    NONEXISTENT_NOTICE_ID("N001", "존재하지 않는 공지사항입니다."),
+    NONEXISTENT_NOTICE("N001", "존재하지 않는 공지사항입니다."),
     // 유효성
     NULL_NOTICE_TITLE("N100", "제목은 필수입니다."),
     NULL_NOTICE_CONTENT("N101", "내용은 필수입니다."),
@@ -66,18 +66,18 @@ public enum ErrorCode {
     INVALID_FAQ_CONTENT("F104", "내용은 1~500자 사이로 입력해주세요."),
 
     /**
-     * C: Company 관련
+     * D: Company 관련
      */
-    NONEXISTENT_COMPANY_ID("C001", "존재하지 않는 기업입니다."),
-    NONUNIQUE_COMPANY("C002", "이미 존재하는 기업입니다."),
+    NONEXISTENT_COMPANY("D001", "존재하지 않는 기업입니다."),
     //유효성
-    NULL_COMPANY_NAME("C101", "기업명은 필수입니다."),
-    NULL_COMPANY_FORM("C102", "기업형태는 필수입니다."),
-    NULL_COMPANY_INDUSTRY("C103", "업종은 필수입니다."),
-    NULL_COMPANY_SALES("C104", "매출액은 필수입니다."),
-    NULL_COMPANY_HOMEPAGE("C105", "홈페이지는 필수입니다."),
-    NULL_COMPANY_ADDRESS("C106", "기업주소는 필수입니다."),
-    NULL_COMPANY_CEO("C107", "대표자명은 필수입니다."),
+    DUPLICATED_COMPANY("D100", "이미 존재하는 기업입니다."),
+    NULL_COMPANY_NAME("D101", "기업명은 필수입니다."),
+    NULL_COMPANY_FORM("D102", "기업형태는 필수입니다."),
+    NULL_COMPANY_INDUSTRY("D103", "업종은 필수입니다."),
+    NULL_COMPANY_SALES("D104", "매출액은 필수입니다."),
+    NULL_COMPANY_HOMEPAGE("D105", "홈페이지는 필수입니다."),
+    NULL_COMPANY_ADDRESS("D106", "기업주소는 필수입니다."),
+    NULL_COMPANY_CEO("D107", "대표자명은 필수입니다."),
     
     /**
      * P: Portfolio 관련
