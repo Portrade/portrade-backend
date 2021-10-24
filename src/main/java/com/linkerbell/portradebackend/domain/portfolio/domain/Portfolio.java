@@ -15,7 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString(exclude = {"creator", "mainImage", "contentFiles"})
+@ToString(exclude = {"creator", "mainImage", "contentFiles", "likes", "comments"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "portfolio")
 public class Portfolio extends BaseTimeEntity {
@@ -77,5 +77,13 @@ public class Portfolio extends BaseTimeEntity {
 
     public void addViewCount() {
         viewCount++;
+    }
+
+    public int getLikeCount() {
+        return likes.size();
+    }
+
+    public int getCommentCount() {
+        return comments.size();
     }
 }
