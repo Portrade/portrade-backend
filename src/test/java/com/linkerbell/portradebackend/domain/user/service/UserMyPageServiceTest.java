@@ -31,8 +31,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -120,10 +122,10 @@ class UserMyPageServiceTest {
 
     @Test
     @DisplayName("포트폴리오 조회 성공")
-    void getUserPortfolios(){
+    void getUserPortfolios() {
         //given
         Portfolio portfolio1 = Portfolio.builder()
-                .user(user)
+                .creator(user)
                 .title("포트폴리오1")
                 .description("저의 첫번째 포트폴리오입니다.")
                 .category("security")
@@ -131,7 +133,7 @@ class UserMyPageServiceTest {
                 .build();
 
         Portfolio portfolio2 = Portfolio.builder()
-                .user(user)
+                .creator(user)
                 .title("포트폴리오2")
                 .description("저의 두번째 포트폴리오입니다.")
                 .category("security")
@@ -139,14 +141,14 @@ class UserMyPageServiceTest {
                 .build();
 
         Portfolio portfolio3 = Portfolio.builder()
-                .user(user)
+                .creator(user)
                 .title("포트폴리오3")
                 .description("저의 세번째 포트폴리오입니다.")
                 .category("security")
                 .isPublic(true)
                 .build();
 
-        List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1,portfolio2,portfolio3));
+        List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
         Page<Portfolio> portfoliosPage = new PageImpl<>(portfolios);
         given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString())).willReturn(portfoliosPage);
 
@@ -167,7 +169,7 @@ class UserMyPageServiceTest {
 
     @Test
     @DisplayName("프로필 조회 실패 - 존재하지 않는 Username")
-    void getUserProfile_nonexistentUsername(){
+    void getUserProfile_nonexistentUsername() {
         //given
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.empty());
 
@@ -179,7 +181,7 @@ class UserMyPageServiceTest {
 
     @Test
     @DisplayName("프로필 조회 성공")
-    void getUserProfile(){
+    void getUserProfile() {
         //given
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
 
@@ -194,14 +196,14 @@ class UserMyPageServiceTest {
 
     @Test
     @DisplayName("프로필 수정 성공")
-    void updateProfile(){
+    void updateProfile() {
         //given
         ProfileRequestDto profileRequestDto = ProfileRequestDto.builder()
                 .name("김수정")
                 .birthDate("19990909")
                 .wantedJob("programmer")
                 .college("수정대학교")
-                .isGraduate(true)
+                .isGraduated(true)
                 .build();
         //when
         userMyPageService.updateProfile(profileRequestDto, user);
@@ -212,7 +214,7 @@ class UserMyPageServiceTest {
 
     @Test
     @DisplayName("나의 인사이트 조회 성공")
-    void getMyInsight(){
+    void getMyInsight() {
         //given
         Portfolio portfolio1 = null;
         Portfolio portfolio2 = null;
@@ -240,7 +242,7 @@ class UserMyPageServiceTest {
                 .build();
 
         portfolio1 = Portfolio.builder()
-                .user(user)
+                .creator(user)
                 .title("포트폴리오1")
                 .description("저의 첫번째 포트폴리오입니다.")
                 .category("security")
@@ -251,7 +253,7 @@ class UserMyPageServiceTest {
                 .build();
 
         portfolio2 = Portfolio.builder()
-                .user(user)
+                .creator(user)
                 .title("포트폴리오2")
                 .description("저의 두번째 포트폴리오입니다.")
                 .category("security")
@@ -262,7 +264,7 @@ class UserMyPageServiceTest {
                 .build();
 
         portfolio3 = Portfolio.builder()
-                .user(user)
+                .creator(user)
                 .title("포트폴리오3")
                 .description("저의 세번째 포트폴리오입니다.")
                 .category("security")
@@ -272,7 +274,7 @@ class UserMyPageServiceTest {
                 .viewCount(20)
                 .build();
 
-        List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1,portfolio2,portfolio3));
+        List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
         given(portfolioRepository.findAllByUsername(user.getUsername())).willReturn(portfolios);
         given(followRepository.countByFollowing_Id(any())).willReturn(1L);
         given(followRepository.countByFollower_Id(any())).willReturn(4L);

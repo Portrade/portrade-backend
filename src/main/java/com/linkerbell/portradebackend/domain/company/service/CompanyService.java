@@ -54,7 +54,7 @@ public class CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY_ID));
         if(!user.equals(company.getUser()))
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
         company.updateCompany(companyRequestDto);
         companyRepository.save(company);
@@ -87,7 +87,7 @@ public class CompanyService {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY_ID));
         if(!user.equals(company.getUser()))
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORITY);
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
         companyRepository.delete(company);
     }

@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
+import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -97,7 +98,7 @@ class UserServiceTest {
 
         // when
         // then
-        assertThrows(InvalidValueException.class,
+        assertThrows(NotUniqueException.class,
                 () -> userService.createUser(signUpRequestDto));
     }
 }
