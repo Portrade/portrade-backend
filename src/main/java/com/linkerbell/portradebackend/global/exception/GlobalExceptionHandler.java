@@ -16,7 +16,6 @@ public class GlobalExceptionHandler {
     /**
      * HttpStatus: 400
      */
-    // API 요청 값 유효성 확인
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentNotValidException e, HttpServletRequest request) {
         ErrorCode errorCode = ErrorCode.valueOf(e.getBindingResult().getFieldErrors().get(0).getDefaultMessage());
@@ -26,6 +25,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = InvalidValueException.class)
     public ResponseEntity<ErrorResponse> handleInvalidValueException(InvalidValueException e, HttpServletRequest request) {
+        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
+    }
+
+    @ExceptionHandler(value = FileHandlingException.class)
+    public ResponseEntity<ErrorResponse> handleFileHandlingExceptionException(FileHandlingException e, HttpServletRequest request) {
         ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode(), request);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
