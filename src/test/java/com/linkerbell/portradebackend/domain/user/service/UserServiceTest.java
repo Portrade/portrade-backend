@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
+import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -98,7 +98,7 @@ class UserServiceTest {
 
         // when
         // then
-        assertThrows(NotUniqueException.class,
+        assertThrows(DuplicatedValueException.class,
                 () -> userService.createUser(signUpRequestDto));
     }
 }

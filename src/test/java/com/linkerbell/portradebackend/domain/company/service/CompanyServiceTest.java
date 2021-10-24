@@ -6,8 +6,8 @@ import com.linkerbell.portradebackend.domain.company.repository.CompanyRepositor
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
-import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
+import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -88,7 +88,7 @@ class CompanyServiceTest {
 
         //when
         //then
-        assertThrows(NotUniqueException.class,
+        assertThrows(DuplicatedValueException.class,
                 () -> companyService.createCompany(companyRequestDto, user));
     }
 
@@ -124,7 +124,7 @@ class CompanyServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> companyService.getCompany(1L));
     }
 

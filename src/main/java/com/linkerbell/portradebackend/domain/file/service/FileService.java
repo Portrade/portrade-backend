@@ -9,7 +9,7 @@ import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.FileUploadException;
+import com.linkerbell.portradebackend.global.exception.custom.FileHandlingException;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -42,7 +42,7 @@ public class FileService {
                 fileRepository.save(profileImage);
                 return profileImage;
             default:
-                throw new FileUploadException(ErrorCode.FILE_UPLOAD_FAILURE);
+                throw new FileHandlingException(ErrorCode.FILE_UPLOAD_FAILURE);
         }
     }
 

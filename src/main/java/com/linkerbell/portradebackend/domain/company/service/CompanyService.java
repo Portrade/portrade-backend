@@ -8,8 +8,8 @@ import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentR
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
-import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
+import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +35,7 @@ public class CompanyService {
         //이미 존재하는지 확인 - 일단 기업명과 ceo 가 동일하면 이미 존재하는 기업으로 간주했습니다.
         Optional<Company> savedCompany = companyRepository.findByNameAndCeo(companyRequestDto.getName(), companyRequestDto.getCeo());
         if(savedCompany.isPresent())
-            throw new NotUniqueException(ErrorCode.DUPLICATED_COMPANY);
+            throw new DuplicatedValueException(ErrorCode.DUPLICATED_COMPANY);
 
         Company company = companyRequestDto.toEntity(user);
         companyRepository.save(company);
@@ -44,7 +44,7 @@ public class CompanyService {
 
     public CompanyDetailResponseDto getCompany(Long companyId) {
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
         CompanyDetailResponseDto companyDetailResponseDto = CompanyDetailResponseDto.of(company);
         return companyDetailResponseDto;
     }
@@ -52,7 +52,7 @@ public class CompanyService {
     @Transactional
     public void updateCompany(CompanyRequestDto companyRequestDto, Long companyId, User user) {
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
         if(!user.equals(company.getUser()))
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
@@ -85,7 +85,7 @@ public class CompanyService {
     @Transactional
     public void deleteCompany(Long companyId, User user) {
         Company company = companyRepository.findById(companyId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_COMPANY));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
         if(!user.equals(company.getUser()))
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 

@@ -10,8 +10,8 @@ import com.linkerbell.portradebackend.domain.user.dto.*;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
-import com.linkerbell.portradebackend.global.exception.custom.FileUploadException;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.FileHandlingException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -112,11 +112,11 @@ class UserMyPageServiceTest {
                 "image/png",
                 "mainImage".getBytes());
 
-        given(s3Util.upload(file)).willThrow(FileUploadException.class);
+        given(s3Util.upload(file)).willThrow(FileHandlingException.class);
 
         //when
         //then
-        assertThrows(FileUploadException.class,
+        assertThrows(FileHandlingException.class,
                 () -> userMyPageService.uploadProfileImage(user, file));
     }
 
@@ -175,7 +175,7 @@ class UserMyPageServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class, () ->
+        assertThrows(NonExistentException.class, () ->
                 userMyPageService.getUserProfile(user.getUsername()));
     }
 

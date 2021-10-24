@@ -8,7 +8,7 @@ import com.linkerbell.portradebackend.domain.user.dto.FollowingsResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileResponeDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -79,7 +79,7 @@ class UserFollowServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> userFollowService.followUser(follower.getUsername(), following.getUsername(), follower));
     }
 

@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.FileUploadException;
+import com.linkerbell.portradebackend.global.exception.custom.FileHandlingException;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -65,7 +65,7 @@ public class S3Util {
                     .extension(extension)
                     .build();
         } catch (IOException e) {
-            throw new FileUploadException(ErrorCode.FILE_UPLOAD_FAILURE);
+            throw new FileHandlingException(ErrorCode.FILE_UPLOAD_FAILURE);
         }
     }
 
@@ -77,7 +77,7 @@ public class S3Util {
     public String extractFileName(MultipartFile file) {
         String fileName = file.getOriginalFilename();
         if (!StringUtils.hasText(fileName) || !fileName.contains(".")) {
-            throw new FileUploadException(ErrorCode.INVALID_FILE_NAME);
+            throw new FileHandlingException(ErrorCode.INVALID_FILE_NAME);
         }
         return fileName;
     }
@@ -85,7 +85,7 @@ public class S3Util {
     public String extractName(String fileName) {
         int lastIndexOfDot = fileName.lastIndexOf(".");
         if (lastIndexOfDot == 0) {
-            throw new FileUploadException(ErrorCode.INVALID_FILE_NAME);
+            throw new FileHandlingException(ErrorCode.INVALID_FILE_NAME);
         }
         return fileName.substring(0, lastIndexOfDot);
     }
@@ -93,7 +93,7 @@ public class S3Util {
     public String extractExtension(String fileName) {
         int lastIndexOfDot = fileName.lastIndexOf(".");
         if (lastIndexOfDot == fileName.length() - 1) {
-            throw new FileUploadException(ErrorCode.INVALID_FILE_NAME);
+            throw new FileHandlingException(ErrorCode.INVALID_FILE_NAME);
         }
         return fileName.substring(fileName.lastIndexOf(".") + 1);
     }

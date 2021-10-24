@@ -9,7 +9,7 @@ import com.linkerbell.portradebackend.domain.notice.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -66,7 +66,7 @@ public class NoticeService {
     @Transactional
     public NoticeDetailResponseDto getNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_NOTICE));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_NOTICE));
 
         notice.addViewCount();
 
@@ -96,7 +96,7 @@ public class NoticeService {
     @Transactional
     public void updateNotice(Long noticeId, NoticeRequestDto noticeRequestDto) {
         Notice notice = noticeRepository.findById(noticeId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_NOTICE));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_NOTICE));
 
         notice.update(noticeRequestDto.getTitle(), noticeRequestDto.getContent());
     }
@@ -104,7 +104,7 @@ public class NoticeService {
     @Transactional
     public void deleteNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_NOTICE));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_NOTICE));
 
         noticeRepository.delete(notice);
     }

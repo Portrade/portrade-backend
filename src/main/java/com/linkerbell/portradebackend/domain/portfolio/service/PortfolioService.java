@@ -11,7 +11,7 @@ import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepos
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +63,7 @@ public class PortfolioService {
     @Transactional
     public PortfolioDetailResponseDto getPortfolio(Long portfolioId, User user) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
 
         if (!portfolio.isPublic()) {
             checkUserPermission(portfolio, user);
@@ -99,7 +99,7 @@ public class PortfolioService {
     @Transactional
     public void deletePortfolio(Long portfolioId, User user) {
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_PORTFOLIO_ID));
 
         checkUserPermission(portfolio, user);
 

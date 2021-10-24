@@ -7,7 +7,7 @@ import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
-import com.linkerbell.portradebackend.global.exception.custom.NotUniqueException;
+import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -36,7 +36,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public SignUpResponseDto createUser(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findByUsername(signUpRequestDto.getUserId()).orElse(null) != null) {
-            throw new NotUniqueException(ErrorCode.DUPLICATED_USER_USERNAME);
+            throw new DuplicatedValueException(ErrorCode.DUPLICATED_USER_USERNAME);
         }
 
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
@@ -51,7 +51,7 @@ public class UserService implements UserDetailsService {
 
     public void checkUsernameExists(String userId) {
         if (userRepository.findByUsername(userId).orElse(null) != null) {
-            throw new NotUniqueException(ErrorCode.DUPLICATED_USER_USERNAME);
+            throw new DuplicatedValueException(ErrorCode.DUPLICATED_USER_USERNAME);
         }
     }
 }

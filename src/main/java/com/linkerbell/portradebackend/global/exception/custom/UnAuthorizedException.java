@@ -5,7 +5,8 @@ import lombok.Getter;
 
 @Getter
 public class UnAuthorizedException extends RuntimeException {
-    private ErrorCode errorCode;
+
+    private final ErrorCode errorCode;
 
     public UnAuthorizedException(ErrorCode errorCode) {
         this.errorCode = errorCode;

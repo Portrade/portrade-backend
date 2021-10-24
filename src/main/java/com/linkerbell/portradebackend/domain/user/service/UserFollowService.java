@@ -8,7 +8,7 @@ import com.linkerbell.portradebackend.domain.user.dto.ProfileResponeDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,7 +33,7 @@ public class UserFollowService {
     @Transactional
     public void followUser(String follower, String following, User user) {
         User followUser = userRepository.findByUsername(following)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_USER));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
 
         if(!user.getUsername().equals(follower))
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);

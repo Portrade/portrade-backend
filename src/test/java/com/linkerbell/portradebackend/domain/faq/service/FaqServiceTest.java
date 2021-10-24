@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.faq.dto.CreateFaqRequestDto;
 import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.repository.FaqRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -110,7 +110,7 @@ class FaqServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> faqService.deleteFaq(1230L));
     }
 

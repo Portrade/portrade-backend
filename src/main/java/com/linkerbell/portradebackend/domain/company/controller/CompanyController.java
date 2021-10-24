@@ -56,7 +56,7 @@ public class CompanyController {
     }
 
     @Operation(summary = "기업의 모든 공고 조회", description = "기업의 모든 공고를 조회한다.")
-    @GetMapping("/{companyId}/recruitment")
+    @GetMapping("/{companyId}/recruitments")
     public ResponseEntity<CompanyRecruitmentResponseDto> getRecruitmentsApi(
             @Parameter(description = "조회할 기업 ID") @PathVariable Long companyId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,

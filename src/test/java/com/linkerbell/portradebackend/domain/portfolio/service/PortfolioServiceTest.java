@@ -6,7 +6,7 @@ import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioDetailRespon
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -66,6 +66,8 @@ class PortfolioServiceTest {
                 .isPublic(true)
                 .viewCount(10)
                 .contentFiles(Collections.emptyList())
+                .likes(Collections.emptyList())
+                .comments(Collections.emptyList())
                 .build();
     }
 
@@ -116,7 +118,7 @@ class PortfolioServiceTest {
 
         // when
         // then
-        Assertions.assertThrows(NotExistException.class,
+        Assertions.assertThrows(NonExistentException.class,
                 () -> portfolioService.getPortfolio(1L, user));
     }
 

@@ -4,9 +4,9 @@ import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class InvalidValueException extends RuntimeException{
+public class InvalidValueException extends RuntimeException {
 
-    private ErrorCode errorCode;
+    private final ErrorCode errorCode;
 
     public InvalidValueException(ErrorCode errorCode) {
         this.errorCode = errorCode;
