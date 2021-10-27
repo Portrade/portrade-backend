@@ -218,7 +218,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M001"));
+                .andExpect(jsonPath("$.code").value("C002"));
     }
 
     @Test
@@ -231,7 +231,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M001"));
+                .andExpect(jsonPath("$.code").value("C002"));
     }
 
     @Test
@@ -275,7 +275,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("M001"));
+                .andExpect(jsonPath("$.code").value("C002"));
     }
 
     @Test

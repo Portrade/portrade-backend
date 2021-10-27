@@ -123,8 +123,8 @@ class MyPageControllerTest {
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.viewCount").value("400"))
-                .andExpect(jsonPath("$.likes").value("3"))
+                .andExpect(jsonPath("$.viewCount").value("27"))
+                .andExpect(jsonPath("$.likes").value("2"))
                 .andExpect(jsonPath("$.comment").value("2"))
                 .andExpect(jsonPath("$.followers").value("1"))
                 .andExpect(jsonPath("$.followings").value("1"));
@@ -182,13 +182,11 @@ class MyPageControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.maxPage").value("1"))
-                .andExpect(jsonPath("$.portfolios.size()").value("3"))
-                .andExpect(jsonPath("$.portfolios[0].title").value("포트폴리오3제목"))
-                .andExpect(jsonPath("$.portfolios[0].createdDate").value("2019-10-21T08:17:09.478881"))
-                .andExpect(jsonPath("$.portfolios[1].title").value("포트폴리오2제목"))
-                .andExpect(jsonPath("$.portfolios[1].createdDate").value("2019-10-20T08:17:09.478881"))
-                .andExpect(jsonPath("$.portfolios[2].title").value("포트폴리오1제목"))
-                .andExpect(jsonPath("$.portfolios[2].createdDate").value("2019-10-19T08:17:09.478881"));
+                .andExpect(jsonPath("$.portfolios.size()").value("2"))
+                .andExpect(jsonPath("$.portfolios[0].title").value("포트폴리오 제목"))
+                .andExpect(jsonPath("$.portfolios[0].createdDate").value("2021-10-08T12:01:16.1895"))
+                .andExpect(jsonPath("$.portfolios[1].title").value("포트폴리오 제목1"))
+                .andExpect(jsonPath("$.portfolios[1].createdDate").value("2021-10-08T12:01:16.1895"));
     }
 
     @Test

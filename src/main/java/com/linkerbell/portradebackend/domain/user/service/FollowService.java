@@ -2,13 +2,13 @@ package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.user.domain.Follow;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.FollowingsResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.FollowersResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.FollowingsResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileResponeDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UserFollowService {
+public class FollowService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
@@ -33,17 +33,17 @@ public class UserFollowService {
     @Transactional
     public void followUser(String follower, String following, User user) {
         User followUser = userRepository.findByUsername(following)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_USER));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
 
-        if(!user.getUsername().equals(follower))
+        if (!user.getUsername().equals(follower))
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
-        Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(follower, following); //1
+        Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(follower, following);
 
-        //팔로우 상태 체크 - 팔로우 된 상태
-        if(result.isPresent()) {
+        // 팔로우 상태 체크 - 팔로우 된 상태
+        if (result.isPresent()) {
             followRepository.delete(result.get());
-        }else {
+        } else {
             Follow follow = Follow.builder()
                     .follower(user)
                     .following(followUser)
@@ -53,10 +53,10 @@ public class UserFollowService {
         }
     }
 
+    // 나를 팔로우 하는 user 조회
     public FollowersResponseDto getFollowers(String userId, int page, int size) {
-        //나를 팔로우 하는 user 조회
         Pageable pageable = PageRequest.of(
-                page-1,
+                page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 
@@ -64,11 +64,11 @@ public class UserFollowService {
         List<ProfileResponeDto> followers = followUser
                 .stream()
                 .map(follow -> ProfileResponeDto.builder()
-                                .id(follow.getFollowerId())
-                                .name(follow.getFollowerName())
-                                .profileUrl(follow.getFollowerProfileUrl())
-                                .job(follow.getFollowerJob())
-                                .build())
+                        .id(follow.getFollowerId())
+                        .name(follow.getFollowerName())
+                        .profileUrl(follow.getFollowerProfileUrl())
+                        .job(follow.getFollowerJob())
+                        .build())
                 .collect(Collectors.toList());
 
         return FollowersResponseDto.builder()
@@ -77,10 +77,10 @@ public class UserFollowService {
                 .build();
     }
 
+    // 내가 팔로우 하는
     public FollowingsResponseDto getFollowings(String userId, int page, int size) {
-        //내가 팔로우 하는
         Pageable pageable = PageRequest.of(
-                page-1,
+                page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 
@@ -88,11 +88,11 @@ public class UserFollowService {
         List<ProfileResponeDto> followers = followUser
                 .stream()
                 .map(follow -> ProfileResponeDto.builder()
-                                .id(follow.getFollowingId())
-                                .name(follow.getFollowingName())
-                                .profileUrl(follow.getFollowingProfileUrl())
-                                .job(follow.getFollowingJob())
-                                .build())
+                        .id(follow.getFollowingId())
+                        .name(follow.getFollowingName())
+                        .profileUrl(follow.getFollowingProfileUrl())
+                        .job(follow.getFollowingJob())
+                        .build())
                 .collect(Collectors.toList());
 
         return FollowingsResponseDto.builder()

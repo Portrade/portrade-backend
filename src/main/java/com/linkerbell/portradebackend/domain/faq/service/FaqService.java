@@ -8,7 +8,7 @@ import com.linkerbell.portradebackend.domain.faq.repository.FaqRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -54,7 +54,7 @@ public class FaqService {
     @Transactional
     public void deleteFaq(Long faqId) {
         Faq faq = faqRepository.findById(faqId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_FAQ));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_FAQ));
 
         faqRepository.delete(faq);
     }

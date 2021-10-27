@@ -68,7 +68,7 @@ class UserControllerTest {
 
         // then
         result.andExpect(status().isCreated())
-                .andExpect(jsonPath("$.userId").value("userid"))
+                .andExpect(jsonPath("$.id").value("userid"))
                 .andExpect(jsonPath("$.name").value("name1"));
     }
 
@@ -93,7 +93,7 @@ class UserControllerTest {
                 .content(objectMapper.writeValueAsString(signUpRequestDto)));
 
         // then
-        result.andExpect(status().isBadRequest())
+        result.andExpect(status().isConflict())
                 .andExpect(jsonPath("$.code").value("M109"));
     }
 
@@ -140,7 +140,6 @@ class UserControllerTest {
         ResultActions result = mvc.perform(get(PREFIX_URI + "/users/exist"));
 
         //then
-        result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.userId").value("users"));
+        result.andExpect(status().isNoContent());
     }
 }

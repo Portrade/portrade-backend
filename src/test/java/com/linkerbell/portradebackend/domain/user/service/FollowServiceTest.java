@@ -8,7 +8,7 @@ import com.linkerbell.portradebackend.domain.user.dto.FollowingsResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileResponeDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,10 +31,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class UserFollowServiceTest {
+class FollowServiceTest {
 
     @InjectMocks
-    private UserFollowService userFollowService;
+    private FollowService followService;
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -79,8 +79,8 @@ class UserFollowServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class,
-                () -> userFollowService.followUser(follower.getUsername(), following.getUsername(), follower));
+        assertThrows(NonExistentException.class,
+                () -> followService.followUser(follower.getUsername(), following.getUsername(), follower));
     }
 
     @Test
@@ -92,7 +92,7 @@ class UserFollowServiceTest {
         //when
         //then
         assertThrows(UnAuthorizedException.class,
-                () -> userFollowService.followUser(follower.getUsername(), following.getUsername(), following));
+                () -> followService.followUser(follower.getUsername(), following.getUsername(), following));
     }
 
     @Test
@@ -103,7 +103,7 @@ class UserFollowServiceTest {
                 .willReturn(Optional.empty());
 
         //when
-        userFollowService.followUser(follower.getUsername(), following.getUsername(), follower);
+        followService.followUser(follower.getUsername(), following.getUsername(), follower);
 
         //then
         verify(userRepository, times(1)).findByUsername(anyString());
@@ -125,7 +125,7 @@ class UserFollowServiceTest {
                 .willReturn(Optional.of(follow));
 
         //when
-        userFollowService.followUser(follower.getUsername(), following.getUsername(), follower);
+        followService.followUser(follower.getUsername(), following.getUsername(), follower);
 
         //then
         verify(userRepository, times(1)).findByUsername(anyString());
@@ -167,7 +167,7 @@ class UserFollowServiceTest {
 
         //when
         FollowersResponseDto followersResponseDto
-                = userFollowService.getFollowers(following.getUsername(), 1, 10);
+                = followService.getFollowers(following.getUsername(), 1, 10);
 
         //then
         assertEquals(1, followersResponseDto.getMaxPage());
@@ -213,7 +213,7 @@ class UserFollowServiceTest {
         given(followRepository.findAllByFollower_Username(any(Pageable.class), anyString())).willReturn(followUser);
 
         //when
-        FollowingsResponseDto followingsResponesDto = userFollowService.getFollowings(follower.getUsername(), 1, 10);
+        FollowingsResponseDto followingsResponesDto = followService.getFollowings(follower.getUsername(), 1, 10);
 
         //then
         assertEquals(1, followingsResponesDto.getMaxPage());

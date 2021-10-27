@@ -11,7 +11,7 @@ import com.linkerbell.portradebackend.domain.qna.dto.ReplyQnaRequestDto;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -112,7 +112,7 @@ class QnaServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> qnaService.createAnswer(qnaId,any(ReplyQnaRequestDto.class), admin));
     }
 
@@ -190,7 +190,7 @@ class QnaServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class, () -> {
+        assertThrows(NonExistentException.class, () -> {
             qnaService.getQna(qnaId, user);
         });
     }
@@ -355,7 +355,7 @@ class QnaServiceTest {
 
         //when
         //then
-        assertThrows(NotExistException.class, () -> {
+        assertThrows(NonExistentException.class, () -> {
             qnaService.deleteQna(qnaId, user);
         });
     }

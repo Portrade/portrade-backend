@@ -4,10 +4,11 @@ import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class NotExistException extends RuntimeException{
-    private ErrorCode errorCode;
+public class FileHandlingException extends RuntimeException {
 
-    public NotExistException(ErrorCode errorCode) {
+    private final ErrorCode errorCode;
+
+    public FileHandlingException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 }

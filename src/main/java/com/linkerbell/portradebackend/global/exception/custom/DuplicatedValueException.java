@@ -4,10 +4,11 @@ import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class NotUniqueException extends RuntimeException{
-    private ErrorCode errorCode;
+public class DuplicatedValueException extends RuntimeException {
 
-    public NotUniqueException(ErrorCode errorCode) {
+    private final ErrorCode errorCode;
+
+    public DuplicatedValueException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 }

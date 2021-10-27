@@ -9,7 +9,7 @@ import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class QnaService {
     @Transactional
     public CreateResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
         Question foundQna = qnaRepository.findByIdAndDType(qnaId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA_ID));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA_ID));
 
         Answer answer = requestDto.toEntity(user, foundQna);
         qnaRepository.save(answer);
@@ -76,7 +76,7 @@ public class QnaService {
 
     public QnaDetailResponseDto getQna(Long qnaId, User user) {
         Qna qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA));
 
         if (!qna.isPublic()) {
             if(Objects.isNull(user) || !user.equals(qna.getUser()) && !user.isAdmin()) {
@@ -111,7 +111,7 @@ public class QnaService {
     @Transactional
     public void deleteQna(Long qnaId, User user) {
         Qna qna = qnaRepository.findById(qnaId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_QNA));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA));
         if(user.equals(qna.getUser()) || user.isAdmin())
             qnaRepository.delete(qna);
         else

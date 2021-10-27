@@ -4,10 +4,11 @@ import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import lombok.Getter;
 
 @Getter
-public class InvalidTokenException extends RuntimeException {
-    private ErrorCode errorCode;
+public class NonExistentException extends RuntimeException {
 
-    public InvalidTokenException(ErrorCode errorCode) {
+    private final ErrorCode errorCode;
+
+    public NonExistentException(ErrorCode errorCode) {
         this.errorCode = errorCode;
     }
 }

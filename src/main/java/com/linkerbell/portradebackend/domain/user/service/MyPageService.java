@@ -8,7 +8,7 @@ import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -28,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserMyPageService {
+public class MyPageService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
@@ -50,7 +49,7 @@ public class UserMyPageService {
 
     public UserPortfoliosResponseDto getUserPortfolios(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(
-                page-1,
+                page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 
@@ -68,7 +67,7 @@ public class UserMyPageService {
 
     public ProfileResponeDto getUserProfile(String userId) {
         User user = userRepository.findByUsername(userId)
-                .orElseThrow(() -> new NotExistException(ErrorCode.NONEXISTENT_USER));
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
         return ProfileResponeDto.builder()
                 .id(user.getId())
                 .name(user.getName())

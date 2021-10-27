@@ -182,7 +182,7 @@ class CompanyControllerTest {
     void getRecruitmentsApi() throws Exception {
         //given
         //when
-        ResultActions result = mvc.perform(get(PREFIX_URI + "/4/recruitment"));
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/4/recruitments"));
 
         //then
         result.andExpect(status().isOk())

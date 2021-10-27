@@ -7,7 +7,7 @@ import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.notice.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NotExistException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -141,7 +141,7 @@ class NoticeServiceTest {
 
         // when
         // then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> noticeService.getNotice(1L));
     }
 
@@ -211,7 +211,7 @@ class NoticeServiceTest {
 
         // when
         // then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> noticeService.updateNotice(1L, noticeRequestDto));
     }
 
@@ -246,7 +246,7 @@ class NoticeServiceTest {
 
         // when
         // then
-        assertThrows(NotExistException.class,
+        assertThrows(NonExistentException.class,
                 () -> noticeService.deleteNotice(1L));
     }
 }
