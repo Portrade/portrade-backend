@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
-public class UserMyPageService {
+public class MyPageService {
 
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
@@ -49,7 +49,7 @@ public class UserMyPageService {
 
     public UserPortfoliosResponseDto getUserPortfolios(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(
-                page-1,
+                page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 

@@ -2,7 +2,7 @@ package com.linkerbell.portradebackend.domain.user.controller;
 
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.*;
-import com.linkerbell.portradebackend.domain.user.service.UserMyPageService;
+import com.linkerbell.portradebackend.domain.user.service.MyPageService;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,7 +22,7 @@ import java.io.IOException;
 @RequestMapping("/api/v1/users")
 public class MyPageController {
 
-    private final UserMyPageService userMyPageService;
+    private final MyPageService myPageService;
 
     //user 권한 필요
     @Operation(summary = "프로필 사진 업로드")
@@ -30,7 +30,7 @@ public class MyPageController {
     public ResponseEntity<ProfileImageResponseDto> uploadProfileImageApi(
             @RequestBody MultipartFile file,
             @Parameter(hidden = true) @CurrentUser User user) throws IOException {
-        ProfileImageResponseDto profileImageResponseDto = userMyPageService.uploadProfileImage(user, file);
+        ProfileImageResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponseDto);
     }
 
@@ -38,7 +38,7 @@ public class MyPageController {
     @GetMapping("/me/insight")
     public ResponseEntity<InsightResponseDto> getMyInsightApi(
             @Parameter(hidden = true) @CurrentUser User user) {
-        InsightResponseDto insightResponseDto = userMyPageService.getMyInsight(user);
+        InsightResponseDto insightResponseDto = myPageService.getMyInsight(user);
         return ResponseEntity.status(HttpStatus.OK).body(insightResponseDto);
     }
 
@@ -47,7 +47,7 @@ public class MyPageController {
     public ResponseEntity<Void> updateProfileApi(
             @RequestBody @Valid ProfileRequestDto profileRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        userMyPageService.updateProfile(profileRequestDto, user);
+        myPageService.updateProfile(profileRequestDto, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -56,7 +56,7 @@ public class MyPageController {
     public ResponseEntity<Void> updateProfileJobApi(
             @RequestBody @Valid JobRequestDto jobRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        userMyPageService.updateProfileJob(jobRequestDto, user);
+        myPageService.updateProfileJob(jobRequestDto, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -66,7 +66,7 @@ public class MyPageController {
             @Parameter(description = "사용자 id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "6") int size){
-        UserPortfoliosResponseDto portfolioResponseDto = userMyPageService.getUserPortfolios(userId, page, size);
+        UserPortfoliosResponseDto portfolioResponseDto = myPageService.getUserPortfolios(userId, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(portfolioResponseDto);
     }
 
@@ -74,7 +74,7 @@ public class MyPageController {
     @GetMapping("/{userId}/profile")
     public ResponseEntity<ProfileResponeDto> getUserProfileApi(
             @Parameter(description = "사용자 id") @PathVariable("userId") String userId) {
-        ProfileResponeDto profileResponeDto = userMyPageService.getUserProfile(userId);
+        ProfileResponeDto profileResponeDto = myPageService.getUserProfile(userId);
         return ResponseEntity.status(HttpStatus.OK).body(profileResponeDto);
     }
 }

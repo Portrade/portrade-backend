@@ -40,10 +40,10 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class UserMyPageServiceTest {
+class MyPageServiceTest {
 
     @InjectMocks
-    private UserMyPageService userMyPageService;
+    private MyPageService myPageService;
 
     @Mock
     private S3Util s3Util;
@@ -93,7 +93,7 @@ class UserMyPageServiceTest {
         given(s3Util.upload(file)).willReturn(uploadResponseDto);
 
         //when
-        ProfileImageResponseDto profileImageResponseDto = userMyPageService.uploadProfileImage(user, file);
+        ProfileImageResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
 
         //then
         assertEquals(uploadResponseDto.getNewFileName(), profileImageResponseDto.getFileName());
@@ -117,7 +117,7 @@ class UserMyPageServiceTest {
         //when
         //then
         assertThrows(FileHandlingException.class,
-                () -> userMyPageService.uploadProfileImage(user, file));
+                () -> myPageService.uploadProfileImage(user, file));
     }
 
     @Test
@@ -153,7 +153,7 @@ class UserMyPageServiceTest {
         given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString())).willReturn(portfoliosPage);
 
         //when
-        UserPortfoliosResponseDto userPortfolios = userMyPageService.getUserPortfolios(user.getUsername(), 1, 10);
+        UserPortfoliosResponseDto userPortfolios = myPageService.getUserPortfolios(user.getUsername(), 1, 10);
 
         //then
         assertEquals(3, userPortfolios.getPortfolios().size());
@@ -176,7 +176,7 @@ class UserMyPageServiceTest {
         //when
         //then
         assertThrows(NonExistentException.class, () ->
-                userMyPageService.getUserProfile(user.getUsername()));
+                myPageService.getUserProfile(user.getUsername()));
     }
 
     @Test
@@ -186,7 +186,7 @@ class UserMyPageServiceTest {
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
 
         //when
-        ProfileResponeDto userProfileDto = userMyPageService.getUserProfile(user.getUsername());
+        ProfileResponeDto userProfileDto = myPageService.getUserProfile(user.getUsername());
 
         //then
         assertEquals(user.getName(), userProfileDto.getName());
@@ -206,7 +206,7 @@ class UserMyPageServiceTest {
                 .isGraduated(true)
                 .build();
         //when
-        userMyPageService.updateProfile(profileRequestDto, user);
+        myPageService.updateProfile(profileRequestDto, user);
 
         //then
         verify(userRepository, times(1)).save(any(User.class));
@@ -281,7 +281,7 @@ class UserMyPageServiceTest {
 
 
         //when
-        InsightResponseDto myInsight = userMyPageService.getMyInsight(user);
+        InsightResponseDto myInsight = myPageService.getMyInsight(user);
 
         //then
         assertEquals(170, myInsight.getViewCount());

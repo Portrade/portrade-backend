@@ -3,7 +3,7 @@ package com.linkerbell.portradebackend.domain.user.controller;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.FollowingsResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.FollowersResponseDto;
-import com.linkerbell.portradebackend.domain.user.service.UserFollowService;
+import com.linkerbell.portradebackend.domain.user.service.FollowService;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/v1/users")
 public class FollowController {
 
-    private final UserFollowService userFollowService;
+    private final FollowService followService;
 
     @Operation(summary = "회원 팔로우/취소")
     @PatchMapping("/{userId}/follow/{followingId}")
@@ -27,7 +27,7 @@ public class FollowController {
             @Parameter(description = "유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "팔로잉 할 유저 Id") @PathVariable("followingId") String followingId,
             @Parameter(hidden = true) @CurrentUser User user){
-        userFollowService.followUser(userId, followingId, user);
+        followService.followUser(userId, followingId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
@@ -37,7 +37,7 @@ public class FollowController {
             @Parameter(description = "조회 할 유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size){
-        FollowersResponseDto followersResponseDto = userFollowService.getFollowers(userId, page, size);
+        FollowersResponseDto followersResponseDto = followService.getFollowers(userId, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(followersResponseDto);
     }
 
@@ -47,7 +47,7 @@ public class FollowController {
             @Parameter(description = "조회 할 유저 Id") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size){
-        FollowingsResponseDto followingsResponseDto = userFollowService.getFollowings(userId, page, size);
+        FollowingsResponseDto followingsResponseDto = followService.getFollowings(userId, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(followingsResponseDto);
     }
 }
