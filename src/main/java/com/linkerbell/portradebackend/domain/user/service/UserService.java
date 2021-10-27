@@ -1,13 +1,14 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
+import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpRequestDto;
 import com.linkerbell.portradebackend.domain.user.dto.SignUpResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.config.security.UserAdapter;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
-import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
+import com.linkerbell.portradebackend.global.exception.custom.InvalidValueException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -40,11 +41,21 @@ public class UserService implements UserDetailsService {
         }
 
         String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
-        User user = signUpRequestDto.toEntity(encodedPassword);
+        User user = User.builder()
+                .username(signUpRequestDto.getUserId())
+                .name(signUpRequestDto.getName())
+                .password(encodedPassword)
+                .profile(Profile.builder()
+                        .college(signUpRequestDto.getCollege())
+                        .isGraduated(signUpRequestDto.isGraduation())
+                        .build())
+                .wantedJob(signUpRequestDto.getWantedJob())
+                .birthDate(signUpRequestDto.getBirthDate())
+                .build();
         userRepository.save(user);
 
         return SignUpResponseDto.builder()
-                .userId(user.getUsername())
+                .id(user.getUsername())
                 .name(user.getName())
                 .build();
     }

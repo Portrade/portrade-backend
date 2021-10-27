@@ -75,7 +75,7 @@ class UserServiceTest {
         SignUpResponseDto savedSignUpResponseDto = userService.createUser(signUpRequestDto);
 
         // then
-        assertEquals("user1", savedSignUpResponseDto.getUserId());
+        assertEquals("user1", savedSignUpResponseDto.getId());
         assertEquals("name1", savedSignUpResponseDto.getName());
     }
 

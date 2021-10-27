@@ -38,8 +38,7 @@ public class CompanyController {
     @Operation(summary = "기업 상세 조회", description = "기업 정보를 상세 조회한다.")
     @GetMapping("/{companyId}")
     public ResponseEntity<CompanyDetailResponseDto> getCompanyDetailApi(
-            @Parameter(description = "상세 조회할 기업 ID") @PathVariable Long companyId
-    ) {
+            @Parameter(description = "상세 조회할 기업 ID") @PathVariable Long companyId) {
         CompanyDetailResponseDto companyDetailResponseDto = companyService.getCompany(companyId);
         return ResponseEntity.status(HttpStatus.OK).body(companyDetailResponseDto);
     }
@@ -49,8 +48,7 @@ public class CompanyController {
     public ResponseEntity<Void> editCompanyApi(
             @Parameter(description = "수정할 기업 ID") @PathVariable Long companyId,
             @RequestBody CompanyRequestDto companyRequestDto,
-            @Parameter(hidden = true) @CurrentUser User user
-    ) {
+            @Parameter(hidden = true) @CurrentUser User user) {
         companyService.updateCompany(companyRequestDto, companyId, user);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
