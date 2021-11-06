@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.comment.domain;
 
+import com.linkerbell.portradebackend.domain.comment.dto.CommentRequestDto;
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
@@ -40,5 +41,10 @@ public class Comment extends BaseTimeEntity {
         this.user = user;
         this.portfolio = portfolio;
         this.content = content;
+    }
+
+    public void update(CommentRequestDto commentRequestDto) {
+        this.content = commentRequestDto.getContent();
+        lastModifiedDate = LocalDateTime.now();
     }
 }

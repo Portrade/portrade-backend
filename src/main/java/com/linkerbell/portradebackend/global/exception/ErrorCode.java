@@ -10,7 +10,7 @@ public enum ErrorCode {
      */
     NONEXISTENT_AUTHENTICATION("C001", "로그인이 필요합니다."),
     NONEXISTENT_AUTHORIZATION("C002", "권한이 없습니다."),
-    
+
     /**
      * M: User 관련
      */
@@ -78,11 +78,11 @@ public enum ErrorCode {
     NULL_COMPANY_HOMEPAGE("D105", "홈페이지는 필수입니다."),
     NULL_COMPANY_ADDRESS("D106", "기업주소는 필수입니다."),
     NULL_COMPANY_CEO("D107", "대표자명은 필수입니다."),
-    
+
     /**
      * P: Portfolio 관련
      */
-    NONEXISTENT_PORTFOLIO_ID("P001", "존재하지 않는 포트폴리오입니다."),
+    NONEXISTENT_PORTFOLIO("P001", "존재하지 않는 포트폴리오입니다."),
     // 유효성
     NULL_PORTFOLIO_TITLE("P100", "제목은 필수입니다."),
     NULL_PORTFOLIO_DESCRIPTION("P101", "설명은 필수입니다."),
@@ -93,9 +93,16 @@ public enum ErrorCode {
     NULL_PORTFOLIO_CONTENTFILES("P106", "포트폴리오 파일은 필수입니다."),
 
     /**
+     * E: Comment 관련
+     */
+    NONEXISTENT_COMMENT("E001", "존재하지 않는 댓글입니다."),
+    // 유효성
+    NULL_COMMENT_CONTENT("E100", "내용은 필수입니다."),
+
+    /**
      * G: 파일 업로드 관련
      */
-    NONEXISTENT_FILE_ID("G001", "존재하지 않는 파일입니다."),
+    NONEXISTENT_FILE("G001", "존재하지 않는 파일입니다."),
     // 업로드
     FILE_UPLOAD_FAILURE("G100", "파일 업로드에 실패하였습니다."),
     INVALID_FILE_NAME("G101", "올바르지 않은 파일명입니다."),
