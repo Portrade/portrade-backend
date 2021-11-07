@@ -7,14 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-//    TODO
-//    int countByPortfolio_Id(Long id);
-//
-//    List<Comment> findTop10ByPortfolio_IdAndIdLessThan(Long portfolioId, Long lastCommentId);
-//
-//    boolean existsByPortfolio_IdAndIdLessThan(Long portfolioId, Long lastCommentId);
-//
-//    List<Comment> findTop10ByPortfolio_Id(Long portfolioId);
 
     Page<Comment> findAllByPortfolio_Id(Pageable pageable, Long portfolioId);
 }

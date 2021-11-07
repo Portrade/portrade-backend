@@ -13,15 +13,13 @@ public class CommentResponseDto {
     private final String creator;
     private final String content;
     private final LocalDateTime createdDate;
-    private final LocalDateTime lastModifiedDate;
 
     @Builder
-    public CommentResponseDto(Long id, String creator, String content, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public CommentResponseDto(Long id, String creator, String content, LocalDateTime createdDate) {
         this.id = id;
         this.creator = creator;
         this.content = content;
         this.createdDate = createdDate;
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public static CommentResponseDto of(Comment comment) {
@@ -30,7 +28,6 @@ public class CommentResponseDto {
                 .creator(comment.getCreator().getUsername())
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
-                .lastModifiedDate(comment.getLastModifiedDate())
                 .build();
     }
 }
