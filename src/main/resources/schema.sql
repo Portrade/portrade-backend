@@ -18,7 +18,6 @@ create table comment
     comment_id         bigint AUTO_INCREMENT PRIMARY KEY,
     created_date       timestamp,
     content            varchar(255) not null,
-    last_modified_date timestamp,
     portfolio_id       bigint,
     user_id            BINARY(16)
 );

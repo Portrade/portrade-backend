@@ -25,7 +25,7 @@ public class Portfolio extends BaseTimeEntity {
     @Column(name = "portfolio_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User creator;
 

@@ -72,7 +72,7 @@ class NoticeServiceTest {
 
     @DisplayName("공지사항 목록 조회 성공")
     @Test
-    void getNoticeList() throws Exception {
+    void getNotices() throws Exception {
         // given
         Notice notice1 = Notice.builder()
                 .title("공지사항 제목1")

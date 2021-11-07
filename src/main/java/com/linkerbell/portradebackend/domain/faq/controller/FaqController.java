@@ -36,9 +36,8 @@ public class FaqController {
     @Operation(summary = "자주 묻는 질문 목록 조회", description = "자주 묻는 질문 목록을 조회한다.")
     @GetMapping
     public ResponseEntity<FaqsResponseDto> getFaqs(
-            @Parameter(description="페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
-            @Parameter(description="반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
-
+            @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
         FaqsResponseDto faqsResponseDto = faqService.getFaqs(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(faqsResponseDto);
     }
@@ -46,9 +45,8 @@ public class FaqController {
     @Operation(summary = "자주 묻는 질문 삭제", description = "자주 묻는 질문을 삭제한다.")
     @DeleteMapping("/{faqId}")
     public ResponseEntity<Void> deleteFaq(
-            @Parameter(description="삭제 할 게시글 id") @PathVariable("faqId") Long faqId) {
+            @Parameter(description = "삭제할 게시글 id") @PathVariable("faqId") Long faqId) {
         faqService.deleteFaq(faqId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
-
 }

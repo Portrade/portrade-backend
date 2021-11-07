@@ -236,7 +236,7 @@ class MyPageServiceTest {
                 .build();
 
         Comment comment = Comment.builder()
-                .user(user)
+                .creator(user)
                 .portfolio(portfolio1)
                 .content("댓글 남겨요!")
                 .build();
