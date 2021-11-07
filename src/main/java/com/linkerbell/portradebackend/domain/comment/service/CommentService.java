@@ -13,6 +13,7 @@ import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
+import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +33,14 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PortfolioRepository portfolioRepository;
+
+    private void checkUserPermission(Comment comment, User user) {
+        if (Objects.isNull(user)) {
+            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
+        } else if (!user.equals(comment.getCreator()) && !user.isAdmin()) {
+            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
+        }
+    }
 
     @Transactional
     public CreateResponseDto createComment(CommentRequestDto commentRequestDto, Long portfolioId, User user) {
@@ -44,7 +54,7 @@ public class CommentService {
         Comment comment = Comment.builder()
                 .content(commentRequestDto.getContent())
                 .portfolio(portfolio)
-                .user(user)
+                .creator(user)
                 .build();
         commentRepository.save(comment);
 
@@ -73,5 +83,17 @@ public class CommentService {
                 .page(pageResponseDto)
                 .comments(commentResponseDtos)
                 .build();
+    }
+
+    @Transactional
+    public void deleteComment(Long portfolioId, Long commentId, User user) {
+        portfolioRepository.findById(portfolioId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_PORTFOLIO));
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMMENT));
+
+        checkUserPermission(comment, user);
+
+        commentRepository.delete(comment);
     }
 }

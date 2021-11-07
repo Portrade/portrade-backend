@@ -43,4 +43,14 @@ public class CommentController {
         CommentsResponseDto commentsResponseDto = commentService.getComments(portfolioId, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(commentsResponseDto);
     }
+
+    @Operation(summary = "댓글 삭제", description = "특정 포트폴리오의 댓글을 삭제한다.")
+    @DeleteMapping("/{portfolioId}/{commentId}")
+    public ResponseEntity<Void> deleteCommentApi(
+            @Parameter(description = "댓글을 삭제할 포트폴리오 ID") @PathVariable("portfolioId") Long portfolioId,
+            @Parameter(description = "삭제할 댓글 ID") @PathVariable("commentId") Long commentId,
+            @Parameter(hidden = true) @CurrentUser User user) {
+        commentService.deleteComment(portfolioId, commentId, user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }

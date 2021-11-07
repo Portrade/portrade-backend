@@ -27,7 +27,7 @@ public class CommentResponseDto {
     public static CommentResponseDto of(Comment comment) {
         return CommentResponseDto.builder()
                 .id(comment.getId())
-                .creator(comment.getUser().getUsername())
+                .creator(comment.getCreator().getUsername())
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .lastModifiedDate(comment.getLastModifiedDate())

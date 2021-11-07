@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@ToString(exclude = {"user", "portfolio"})
+@ToString(exclude = {"creator", "portfolio"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "comment")
 public class Comment extends BaseTimeEntity {
@@ -23,7 +23,7 @@ public class Comment extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private User creator;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "portfolio_id")
@@ -36,9 +36,9 @@ public class Comment extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
     @Builder
-    public Comment(Long id, User user, Portfolio portfolio, String content) {
+    public Comment(Long id, User creator, Portfolio portfolio, String content) {
         this.id = id;
-        this.user = user;
+        this.creator = creator;
         this.portfolio = portfolio;
         this.content = content;
     }

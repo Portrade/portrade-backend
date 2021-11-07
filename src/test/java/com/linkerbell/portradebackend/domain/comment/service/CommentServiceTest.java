@@ -92,15 +92,15 @@ class CommentServiceTest {
         // given
         Comment comment1 = Comment.builder()
                 .content("댓글 내용1")
-                .user(user)
+                .creator(user)
                 .build();
         Comment comment2 = Comment.builder()
                 .content("댓글 내용2")
-                .user(user)
+                .creator(user)
                 .build();
         Comment comment3 = Comment.builder()
                 .content("댓글 내용3")
-                .user(user)
+                .creator(user)
                 .build();
         List<Comment> comments = new ArrayList<>(List.of(comment1, comment2, comment3));
         Page<Comment> commentPage = new PageImpl<>(comments);
@@ -116,5 +116,27 @@ class CommentServiceTest {
         // then
         assertEquals(foundCommentsResponseDto.getPage().getTotalPage(), 1);
         assertEquals(foundCommentsResponseDto.getPage().getTotalElement(), 3);
+    }
+
+    @DisplayName("댓글 삭제 성공")
+    @Test
+    void deleteComment() throws Exception {
+        // given
+        Comment comment = Comment.builder()
+                .content("댓글 내용")
+                .creator(user)
+                .build();
+
+        given(portfolioRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(portfolio));
+        given(commentRepository.findById(anyLong()))
+                .willReturn(Optional.ofNullable(comment));
+
+        // when
+        commentService.deleteComment(1L, 1L, user);
+
+        // then
+        verify(commentRepository, times(1))
+                .delete(any(Comment.class));
     }
 }

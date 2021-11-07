@@ -142,7 +142,7 @@ VALUES (4,  '2020-12-09T08:17:09.478882', '서울특별시 강남구 테헤란�
 
 -- 댓글
 INSERT INTO comment(comment_id, created_date, content, last_modified_date, portfolio_id, user_id)
-VALUES (1, now(), '포트폴리오 너무 멋져요!', now(), 1, '067d42d516394118bf54ad37d2f6f61e');
+VALUES (1, now(), '포트폴리오 너무 멋져요!', now(), 1, '3cbe539a33ba4550a82c63be333ac2d0');
 INSERT INTO comment(comment_id, created_date, content, last_modified_date, portfolio_id, user_id)
 VALUES (2, now(), '포트폴리오 잘 보고 갑니다!', now(), 1, 'd9b4adce82bd48fe9456cfb20d43537d');
 
