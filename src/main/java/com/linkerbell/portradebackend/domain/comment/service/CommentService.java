@@ -12,6 +12,7 @@ import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
 import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
+import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +34,10 @@ public class CommentService {
 
     @Transactional
     public CreateResponseDto createComment(CommentRequestDto commentRequestDto, Long portfolioId, User user) {
+        if (user == null) {
+            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
+        }
+
         Portfolio portfolio = portfolioRepository.findById(portfolioId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_PORTFOLIO));
 
