@@ -1,7 +1,7 @@
 package com.linkerbell.portradebackend.domain.company.controller;
 
 import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
-import com.linkerbell.portradebackend.domain.company.dto.CompanyRecruitmentResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
 import com.linkerbell.portradebackend.domain.company.dto.CreateCompanyRequestDto;
 import com.linkerbell.portradebackend.domain.company.service.CompanyService;
@@ -55,12 +55,12 @@ public class CompanyController {
 
     @Operation(summary = "기업의 모든 공고 조회", description = "기업의 모든 공고를 조회한다.")
     @GetMapping("/{companyId}/recruitments")
-    public ResponseEntity<CompanyRecruitmentResponseDto> getRecruitmentsApi(
+    public ResponseEntity<RecruitmentsResponseDto> getRecruitmentsApi(
             @Parameter(description = "조회할 기업 ID") @PathVariable Long companyId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "6") int size) {
-        CompanyRecruitmentResponseDto companyRecruitmentResponseDto = companyService.getRecruitments(page, size, companyId);
-        return ResponseEntity.status(HttpStatus.OK).body(companyRecruitmentResponseDto);
+        RecruitmentsResponseDto recruitmentsResponseDto = companyService.getRecruitments(page, size, companyId);
+        return ResponseEntity.status(HttpStatus.OK).body(recruitmentsResponseDto);
     }
 
     @Operation(summary = "기업 삭제", description = "기업을 삭제한다.")

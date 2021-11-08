@@ -1,13 +1,14 @@
 package com.linkerbell.portradebackend.domain.qna.service;
 
 import com.linkerbell.portradebackend.domain.qna.domain.Answer;
-import com.linkerbell.portradebackend.domain.qna.dto.*;
 import com.linkerbell.portradebackend.domain.qna.domain.Qna;
 import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
+import com.linkerbell.portradebackend.domain.qna.dto.*;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
@@ -54,23 +55,27 @@ public class QnaService {
 
     public QnasResponseDto getQnas(int page, int size, String keyword) {
         Pageable pageable = PageRequest.of(
-                page-1,
+                page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 
-        Page<Qna> pageQnas = null;
-        if(keyword.equals(""))
-            pageQnas = qnaRepository.findAll(pageable);
+        Page<Qna> qnaPage = null;
+        if (keyword.equals(""))
+            qnaPage = qnaRepository.findAll(pageable);
         else
-            pageQnas = qnaRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
+            qnaPage = qnaRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
 
-        List<QnaResponseDto> qnaResponseDto = pageQnas.stream()
-                .map(qna -> QnaResponseDto.toDto(qna))
+        List<QnaResponseDto> qnaResponseDtos = qnaPage.stream()
+                .map(QnaResponseDto::of)
                 .collect(Collectors.toList());
+        PageResponseDto pageResponseDto = PageResponseDto.builder()
+                .totalPage(qnaPage.getTotalPages())
+                .totalElement(qnaPage.getTotalElements())
+                .build();
 
         return QnasResponseDto.builder()
-                .qnas(qnaResponseDto)
-                .maxPage(pageQnas.getTotalPages())
+                .page(pageResponseDto)
+                .qnas(qnaResponseDtos)
                 .build();
     }
 
@@ -79,7 +84,7 @@ public class QnaService {
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA));
 
         if (!qna.isPublic()) {
-            if(Objects.isNull(user) || !user.equals(qna.getUser()) && !user.isAdmin()) {
+            if (Objects.isNull(user) || !user.equals(qna.getUser()) && !user.isAdmin()) {
                 throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
             }
         }
@@ -112,7 +117,7 @@ public class QnaService {
     public void deleteQna(Long qnaId, User user) {
         Qna qna = qnaRepository.findById(qnaId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA));
-        if(user.equals(qna.getUser()) || user.isAdmin())
+        if (user.equals(qna.getUser()) || user.isAdmin())
             qnaRepository.delete(qna);
         else
             throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);

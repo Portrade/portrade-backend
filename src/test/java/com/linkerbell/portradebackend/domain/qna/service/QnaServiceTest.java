@@ -29,7 +29,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -113,7 +114,7 @@ class QnaServiceTest {
         //when
         //then
         assertThrows(NonExistentException.class,
-                () -> qnaService.createAnswer(qnaId,any(ReplyQnaRequestDto.class), admin));
+                () -> qnaService.createAnswer(qnaId, any(ReplyQnaRequestDto.class), admin));
     }
 
     @Test
@@ -177,13 +178,13 @@ class QnaServiceTest {
         QnasResponseDto qnasResponseDto = qnaService.getQnas(1, 3, "");
 
         //then
-        assertEquals(qnasResponseDto.getMaxPage(), 1);
+        assertEquals(qnasResponseDto.getPage().getTotalPage(), 1);
         assertEquals(qnasResponseDto.getQnas().size(), 3);
     }
 
     @Test
     @DisplayName("1:1 문의 상세 조회 실패 - 존재하지 않는 ID")
-    void getQna_nonexistentId(){
+    void getQna_nonexistentId() {
         //given
         Long qnaId = 1L;
         given(qnaRepository.findById(qnaId)).willReturn(Optional.empty());
@@ -197,7 +198,7 @@ class QnaServiceTest {
 
     @Test
     @DisplayName("1:1 문의 상세 조회 실패 - 비공개 글 조회, user 없음")
-    void getQna_nouser(){
+    void getQna_nouser() {
         //given
         Long qnaId = 1L;
         given(qnaRepository.findById(qnaId)).willReturn(Optional.of(question));
@@ -211,7 +212,7 @@ class QnaServiceTest {
 
     @Test
     @DisplayName("1:1 문의 상세 조회 실패 - 비공개 글 조회, 권한 없음")
-    public void getQna_unauthorized(){
+    public void getQna_unauthorized() {
         //given
         User user2 = User.builder()
                 .id(UUID.randomUUID())
@@ -234,7 +235,7 @@ class QnaServiceTest {
 
     @Test
     @DisplayName("1:1 문의 상세 조회 성공 - 비공개 글 조회, 관리 계정")
-    public void getQna_admin(){
+    public void getQna_admin() {
         //given
         User user1 = User.builder()
                 .id(UUID.randomUUID())
@@ -291,7 +292,7 @@ class QnaServiceTest {
 
     @Test
     @DisplayName("1:1 문의 상세 조회 성공 - 비공개 글 조회, 주인 계정")
-    public void getQna_user(){
+    public void getQna_user() {
         //given
         User user1 = User.builder()
                 .id(UUID.randomUUID())
@@ -348,7 +349,7 @@ class QnaServiceTest {
 
     @Test
     @DisplayName("1:1 문의 삭제 실패 - 존재 하지 않는 게시글 ID")
-    public void deleteQna_nonexistentId(){
+    public void deleteQna_nonexistentId() {
         //given
         Long qnaId = 1230L;
         given(qnaRepository.findById(qnaId)).willReturn(Optional.empty());
@@ -362,7 +363,7 @@ class QnaServiceTest {
 
     @Test
     @DisplayName("1:1 문의 삭제 실패 - 권한 없는 유저")
-    public void test(){
+    public void test() {
         //given
         Long qnaId = 1L;
         User user1 = User.builder()
@@ -376,13 +377,13 @@ class QnaServiceTest {
         //when
         //then
         assertThrows(UnAuthorizedException.class, () -> {
-           qnaService.deleteQna(qnaId, user1);
+            qnaService.deleteQna(qnaId, user1);
         });
     }
 
     @Test
     @DisplayName("1:1 문의 삭제 성공")
-    public void deleteQna_user(){
+    public void deleteQna_user() {
         //given
         Long qnaId = 1L;
         given(qnaRepository.findById(qnaId)).willReturn(Optional.of(question));

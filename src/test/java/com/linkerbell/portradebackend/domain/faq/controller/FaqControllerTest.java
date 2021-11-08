@@ -112,7 +112,7 @@ class FaqControllerTest {
                 .andExpect(jsonPath("$.faqs[2].id").value(1L))
                 .andExpect(jsonPath("$.faqs[2].title").value("포트폴리오 업로드는 어떻게 하나요?"))
                 .andExpect(jsonPath("$.faqs[2].content").value("포트레이트는 간편하게 포트폴리오를 업로드할 수 있어요."))
-                .andExpect(jsonPath("$.maxPage").value(1));
+                .andExpect(jsonPath("$.page.totalPage").value(1));
     }
 
     @Test

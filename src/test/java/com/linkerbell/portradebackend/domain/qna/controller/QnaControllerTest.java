@@ -183,7 +183,7 @@ class QnaControllerTest {
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.maxPage").value("1"))
+                .andExpect(jsonPath("$.page.totalPage").value("1"))
                 .andExpect(jsonPath("$.qnas.size()").value("4"))
                 .andExpect(jsonPath("$.qnas[0].id").value(4L))
                 .andExpect(jsonPath("$.qnas[1].id").value(3L))

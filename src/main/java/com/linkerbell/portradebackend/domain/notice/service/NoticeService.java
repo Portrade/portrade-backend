@@ -8,6 +8,7 @@ import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.notice.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import lombok.RequiredArgsConstructor;
@@ -48,18 +49,22 @@ public class NoticeService {
                 Sort.by(Sort.Direction.DESC, "id"));
         Page<Notice> noticePage = null;
 
-        if(keyword.equals(""))
+        if (keyword.equals(""))
             noticePage = noticeRepository.findAll(pageable);
         else
             noticePage = noticeRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
 
-        List<NoticeResponseDto> notices = noticePage.stream()
+        List<NoticeResponseDto> noticeResponseDtos = noticePage.stream()
                 .map(NoticeResponseDto::of)
                 .collect(Collectors.toList());
+        PageResponseDto pageResponseDto = PageResponseDto.builder()
+                .totalPage(noticePage.getTotalPages())
+                .totalElement(noticePage.getTotalElements())
+                .build();
 
         return NoticesResponseDto.builder()
-                .maxPage(noticePage.getTotalPages())
-                .notices(notices)
+                .page(pageResponseDto)
+                .notices(noticeResponseDtos)
                 .build();
     }
 

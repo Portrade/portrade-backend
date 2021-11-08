@@ -99,7 +99,7 @@ class NoticeServiceTest {
         NoticesResponseDto foundNoticesResponseDto = noticeService.getNotices(1, 3, "");
 
         // then
-        assertEquals(foundNoticesResponseDto.getMaxPage(), 1);
+        assertEquals(foundNoticesResponseDto.getPage().getTotalPage(), 1);
         assertEquals(foundNoticesResponseDto.getNotices().size(), 3);
     }
 

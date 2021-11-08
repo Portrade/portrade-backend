@@ -187,7 +187,7 @@ class CompanyControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.recruitments.size()").value("1"))
-                .andExpect(jsonPath("$.maxPage").value("1"));
+                .andExpect(jsonPath("$.page.totalPage").value("1"));
     }
 
     @Test

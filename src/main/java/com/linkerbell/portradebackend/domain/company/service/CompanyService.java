@@ -7,6 +7,7 @@ import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
@@ -63,24 +64,28 @@ public class CompanyService {
         return new IdResponseDto(companyId);
     }
 
-    public CompanyRecruitmentResponseDto getRecruitments(int page, int size, Long companyId) {
+    public RecruitmentsResponseDto getRecruitments(int page, int size, Long companyId) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
+        Page<Recruitment> recruitmentPage = recruitmentRepository.findAllByCompany_Id(pageable, companyId);
 
-        Page<Recruitment> recruitmentsPage = recruitmentRepository.findAllByCompany_Id(pageable, companyId);
-        List<RecruitmentResponseDto> recruitments = recruitmentsPage.stream()
+        List<RecruitmentResponseDto> recruitmentResponseDtos = recruitmentPage.stream()
                 .map(recruitment -> RecruitmentResponseDto.builder()
                         .id(recruitment.getId())
                         .logo(recruitment.getLogo())
                         .title(recruitment.getTitle())
                         .build())
                 .collect(Collectors.toList());
+        PageResponseDto pageResponseDto = PageResponseDto.builder()
+                .totalPage(recruitmentPage.getTotalPages())
+                .totalElement(recruitmentPage.getTotalElements())
+                .build();
 
-        return CompanyRecruitmentResponseDto.builder()
-                .recruitments(recruitments)
-                .maxPage(recruitmentsPage.getTotalPages())
+        return RecruitmentsResponseDto.builder()
+                .page(pageResponseDto)
+                .recruitments(recruitmentResponseDtos)
                 .build();
     }
 

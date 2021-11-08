@@ -7,6 +7,7 @@ import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.repository.FaqRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import lombok.RequiredArgsConstructor;
@@ -39,15 +40,19 @@ public class FaqService {
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
+        Page<Faq> faqPage = faqRepository.findAll(pageable);
 
-        Page<Faq> pageFaqs = faqRepository.findAll(pageable);
-        List<FaqResponseDto> faqs = pageFaqs.stream()
-                .map(faq -> FaqResponseDto.of(faq))
+        List<FaqResponseDto> faqResponseDtos = faqPage.stream()
+                .map(FaqResponseDto::of)
                 .collect(Collectors.toList());
+        PageResponseDto pageResponseDto = PageResponseDto.builder()
+                .totalPage(faqPage.getTotalPages())
+                .totalElement(faqPage.getTotalElements())
+                .build();
 
         return FaqsResponseDto.builder()
-                .faqs(faqs)
-                .maxPage(pageFaqs.getTotalPages())
+                .page(pageResponseDto)
+                .faqs(faqResponseDtos)
                 .build();
     }
 

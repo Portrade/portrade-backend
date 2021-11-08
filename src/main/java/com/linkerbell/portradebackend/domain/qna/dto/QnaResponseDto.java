@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 
 @Getter
 public class QnaResponseDto {
+
     private final Long id;
     private final String title;
     private final LocalDateTime createdDate;
@@ -19,7 +20,7 @@ public class QnaResponseDto {
         this.createdDate = createdDate;
     }
 
-    public static QnaResponseDto toDto(Qna qna) {
+    public static QnaResponseDto of(Qna qna) {
         return QnaResponseDto.builder()
                 .id(qna.getId())
                 .title(qna.getTitle())
