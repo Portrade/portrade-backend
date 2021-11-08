@@ -7,7 +7,7 @@ import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
@@ -34,14 +34,14 @@ public class QnaService {
     private final QnaRepository qnaRepository;
 
     @Transactional
-    public CreateResponseDto createQuestion(CreateQnaRequestDto requestDto, User user) {
+    public IdResponseDto createQuestion(CreateQnaRequestDto requestDto, User user) {
         Question qna = requestDto.toEntity(user, Status.UNANSWERED);
         qnaRepository.save(qna);
-        return new CreateResponseDto(qna.getId());
+        return new IdResponseDto(qna.getId());
     }
 
     @Transactional
-    public CreateResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
+    public IdResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
         Question foundQna = qnaRepository.findByIdAndDType(qnaId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA_ID));
 
@@ -49,7 +49,7 @@ public class QnaService {
         qnaRepository.save(answer);
         foundQna.changeStatus(Status.ANSWERED);
 
-        return new CreateResponseDto(answer.getId());
+        return new IdResponseDto(answer.getId());
     }
 
     public QnasResponseDto getQnas(int page, int size, String keyword) {

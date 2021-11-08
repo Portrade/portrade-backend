@@ -9,7 +9,7 @@ import com.linkerbell.portradebackend.domain.portfolio.dto.CreatePortfolioReques
 import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioDetailResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
@@ -40,7 +40,7 @@ public class PortfolioService {
     }
 
     @Transactional
-    public CreateResponseDto createPortfolio(CreatePortfolioRequestDto createPortfolioRequestDto, User user) {
+    public IdResponseDto createPortfolio(CreatePortfolioRequestDto createPortfolioRequestDto, User user) {
         Portfolio portfolio = Portfolio.builder()
                 .creator(user)
                 .title(createPortfolioRequestDto.getTitle())
@@ -57,7 +57,7 @@ public class PortfolioService {
             fileService.createFile(PortfolioContentFile.class, portfolio, contentFile);
         }
 
-        return new CreateResponseDto(portfolio.getId());
+        return new IdResponseDto(portfolio.getId());
     }
 
     @Transactional

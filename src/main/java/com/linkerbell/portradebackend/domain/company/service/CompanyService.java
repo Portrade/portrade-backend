@@ -6,7 +6,7 @@ import com.linkerbell.portradebackend.domain.company.repository.CompanyRepositor
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
@@ -31,7 +31,7 @@ public class CompanyService {
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public CreateResponseDto createCompany(CreateCompanyRequestDto companyRequestDto, User user) {
+    public IdResponseDto createCompany(CreateCompanyRequestDto companyRequestDto, User user) {
         //이미 존재하는지 확인 - 일단 기업명과 ceo 가 동일하면 이미 존재하는 기업으로 간주했습니다.
         Optional<Company> savedCompany = companyRepository.findByNameAndCeo(companyRequestDto.getName(), companyRequestDto.getCeo());
         if (savedCompany.isPresent())
@@ -39,7 +39,7 @@ public class CompanyService {
 
         Company company = companyRequestDto.toEntity(user);
         companyRepository.save(company);
-        return new CreateResponseDto(company.getId());
+        return new IdResponseDto(company.getId());
     }
 
     public CompanyDetailResponseDto getCompany(Long companyId) {

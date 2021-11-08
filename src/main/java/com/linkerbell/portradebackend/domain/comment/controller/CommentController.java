@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.comment.dto.CommentsResponseDto;
 import com.linkerbell.portradebackend.domain.comment.service.CommentService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,12 +26,12 @@ public class CommentController {
 
     @Operation(summary = "댓글 등록", description = "특정 포트폴리오에 댓글을 등록한다.")
     @PostMapping("/{portfolioId}")
-    public ResponseEntity<CreateResponseDto> createCommentApi(
+    public ResponseEntity<IdResponseDto> createCommentApi(
             @Parameter(description = "댓글 등록할 포트폴리오 ID") @PathVariable("portfolioId") Long portfolioId,
             @RequestBody @Valid CommentRequestDto commentRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        CreateResponseDto createdComment = commentService.createComment(commentRequestDto, portfolioId, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdComment);
+        IdResponseDto idResponseDto = commentService.createComment(commentRequestDto, portfolioId, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
     @Operation(summary = "댓글 목록 조회", description = "특정 포트폴리오의 댓글 목록을 조회한다.")

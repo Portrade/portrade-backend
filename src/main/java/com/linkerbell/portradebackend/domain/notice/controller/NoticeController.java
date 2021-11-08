@@ -6,7 +6,7 @@ import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.notice.service.NoticeService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -27,11 +27,11 @@ public class NoticeController {
 
     @Operation(summary = "공지사항 등록", description = "공지사항을 작성한다.")
     @PostMapping
-    public ResponseEntity<CreateResponseDto> createNoticeApi(
+    public ResponseEntity<IdResponseDto> createNoticeApi(
             @RequestBody @Valid NoticeRequestDto noticeRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        CreateResponseDto createResponseDto = noticeService.createNotice(noticeRequestDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createResponseDto);
+        IdResponseDto idResponseDto = noticeService.createNotice(noticeRequestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
     @Operation(summary = "공지사항 목록 조회", description = "공지사항 목록을 조회한다.")

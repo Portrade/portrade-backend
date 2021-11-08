@@ -63,7 +63,7 @@ public class MyPageController {
     @Operation(summary = "특정 사용자의 포트폴리오 목록 조회")
     @GetMapping("/{userId}/portfolios")
     public ResponseEntity<UserPortfoliosResponseDto> getUserPortfoliosApi(
-            @Parameter(description = "사용자 id") @PathVariable("userId") String userId,
+            @Parameter(description = "사용자 ID") @PathVariable("userId") String userId,
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
             @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "6") int size){
         UserPortfoliosResponseDto portfolioResponseDto = myPageService.getUserPortfolios(userId, page, size);
@@ -73,7 +73,7 @@ public class MyPageController {
     @Operation(summary = "특정 사용자의 프로필 조회")
     @GetMapping("/{userId}/profile")
     public ResponseEntity<ProfileResponeDto> getUserProfileApi(
-            @Parameter(description = "사용자 id") @PathVariable("userId") String userId) {
+            @Parameter(description = "사용자 ID") @PathVariable("userId") String userId) {
         ProfileResponeDto profileResponeDto = myPageService.getUserProfile(userId);
         return ResponseEntity.status(HttpStatus.OK).body(profileResponeDto);
     }

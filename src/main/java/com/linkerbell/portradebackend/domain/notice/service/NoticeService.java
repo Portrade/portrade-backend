@@ -7,7 +7,7 @@ import com.linkerbell.portradebackend.domain.notice.dto.NoticeResponseDto;
 import com.linkerbell.portradebackend.domain.notice.dto.NoticesResponseDto;
 import com.linkerbell.portradebackend.domain.notice.repository.NoticeRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ public class NoticeService {
     private final NoticeRepository noticeRepository;
 
     @Transactional
-    public CreateResponseDto createNotice(NoticeRequestDto noticeRequestDto, User user) {
+    public IdResponseDto createNotice(NoticeRequestDto noticeRequestDto, User user) {
         Notice notice = Notice.builder()
                 .user(user)
                 .title(noticeRequestDto.getTitle())
@@ -38,7 +38,7 @@ public class NoticeService {
                 .build();
         noticeRepository.save(notice);
 
-        return new CreateResponseDto(notice.getId());
+        return new IdResponseDto(notice.getId());
     }
 
     public NoticesResponseDto getNotices(int page, int size, String keyword) {

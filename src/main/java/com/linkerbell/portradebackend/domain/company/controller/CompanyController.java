@@ -7,7 +7,7 @@ import com.linkerbell.portradebackend.domain.company.dto.CreateCompanyRequestDto
 import com.linkerbell.portradebackend.domain.company.service.CompanyService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,11 +28,11 @@ public class CompanyController {
 
     @Operation(summary = "기업 등록", description = "기업 정보를 등록한다.")
     @PostMapping
-    public ResponseEntity<CreateResponseDto> createCompanyApi(
+    public ResponseEntity<IdResponseDto> createCompanyApi(
             @RequestBody @Valid CreateCompanyRequestDto companyRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        CreateResponseDto createResponseDto = companyService.createCompany(companyRequestDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createResponseDto);
+        IdResponseDto idResponseDto = companyService.createCompany(companyRequestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
     @Operation(summary = "기업 상세 조회", description = "기업 정보를 상세 조회한다.")
