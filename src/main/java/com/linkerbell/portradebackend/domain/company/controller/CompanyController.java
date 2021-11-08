@@ -45,12 +45,12 @@ public class CompanyController {
 
     @Operation(summary = "기업 수정", description = "기업 정보 수정한다.")
     @PutMapping("/{companyId}")
-    public ResponseEntity<Void> editCompanyApi(
+    public ResponseEntity<IdResponseDto> editCompanyApi(
             @Parameter(description = "수정할 기업 ID") @PathVariable Long companyId,
             @RequestBody CompanyRequestDto companyRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        companyService.updateCompany(companyRequestDto, companyId, user);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        IdResponseDto idResponseDto = companyService.updateCompany(companyRequestDto, companyId, user);
+        return ResponseEntity.status(HttpStatus.OK).body(idResponseDto);
     }
 
     @Operation(summary = "기업의 모든 공고 조회", description = "기업의 모든 공고를 조회한다.")

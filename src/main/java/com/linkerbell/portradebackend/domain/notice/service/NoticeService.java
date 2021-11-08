@@ -94,11 +94,13 @@ public class NoticeService {
     }
 
     @Transactional
-    public void updateNotice(Long noticeId, NoticeRequestDto noticeRequestDto) {
+    public IdResponseDto updateNotice(Long noticeId, NoticeRequestDto noticeRequestDto) {
         Notice notice = noticeRepository.findById(noticeId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_NOTICE));
 
         notice.update(noticeRequestDto.getTitle(), noticeRequestDto.getContent());
+
+        return new IdResponseDto(noticeId);
     }
 
     @Transactional

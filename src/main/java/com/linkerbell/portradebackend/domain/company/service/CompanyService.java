@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CompanyService {
 
     private final CompanyRepository companyRepository;
@@ -50,7 +51,7 @@ public class CompanyService {
     }
 
     @Transactional
-    public void updateCompany(CompanyRequestDto companyRequestDto, Long companyId, User user) {
+    public IdResponseDto updateCompany(CompanyRequestDto companyRequestDto, Long companyId, User user) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
         if (!user.equals(company.getUser()))
@@ -58,6 +59,8 @@ public class CompanyService {
 
         company.updateCompany(companyRequestDto);
         companyRepository.save(company);
+
+        return new IdResponseDto(companyId);
     }
 
     public CompanyRecruitmentResponseDto getRecruitments(int page, int size, Long companyId) {

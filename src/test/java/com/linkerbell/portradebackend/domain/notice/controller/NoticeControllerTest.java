@@ -221,7 +221,8 @@ class NoticeControllerTest {
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
-        result.andExpect(status().isNoContent());
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("3"));
     }
 
     @DisplayName("공지사항 수정 API 실패 - 유효하지 않은 요청 값")

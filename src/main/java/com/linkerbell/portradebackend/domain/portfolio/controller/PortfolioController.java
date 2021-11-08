@@ -55,7 +55,7 @@ public class PortfolioController {
 
 //    @Operation(summary = "포트폴리오 수정", description = "포트폴리오를 수정한다.")
 //    @PutMapping("/{portfolioId}")
-//    public ResponseEntity<Void> editPortfolioApi(
+//    public ResponseEntity<IdResponseDto> editPortfolioApi(
 //            @Parameter(description = "수정할 포트폴리오 ID") @PathVariable Long portfolioId,
 //            @RequestBody @Valid PortfolioRequestDto PortfolioRequestDto) {
 //        portfolioService.updatePortfolio(portfolioId, PortfolioRequestDto);

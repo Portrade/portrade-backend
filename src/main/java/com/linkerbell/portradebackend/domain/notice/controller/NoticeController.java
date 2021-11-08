@@ -53,11 +53,11 @@ public class NoticeController {
 
     @Operation(summary = "공지사항 수정", description = "공지사항을 수정한다.")
     @PutMapping("/{noticeId}")
-    public ResponseEntity<Void> editNoticeApi(
+    public ResponseEntity<IdResponseDto> editNoticeApi(
             @Parameter(description = "수정할 공지사항 ID") @PathVariable Long noticeId,
             @RequestBody @Valid NoticeRequestDto noticeRequestDto) {
-        noticeService.updateNotice(noticeId, noticeRequestDto);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        IdResponseDto idResponseDto = noticeService.updateNotice(noticeId, noticeRequestDto);
+        return ResponseEntity.status(HttpStatus.OK).body(idResponseDto);
     }
 
     @Operation(summary = "공지사항 삭제", description = "공지사항을 삭제한다.")
