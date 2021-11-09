@@ -29,18 +29,18 @@ public class CreatePortfolioRequestDto {
     private boolean isPublic;
 
     @NotNull(message = "NULL_PORTFOLIO_MAINIMAGE")
-    private MultipartFile mainImage;
+    private MultipartFile mainImageFile;
 
     @NotNull(message = "NULL_PORTFOLIO_CONTENTFILES")
     private List<MultipartFile> contentFiles;
 
     @Builder
-    public CreatePortfolioRequestDto(String title, String description, String category, boolean isPublic, MultipartFile mainImage, List<MultipartFile> contentFiles) {
+    public CreatePortfolioRequestDto(String title, String description, String category, boolean isPublic, MultipartFile mainImageFile, List<MultipartFile> contentFiles) {
         this.title = title;
         this.description = description;
         this.category = category;
         this.isPublic = isPublic;
-        this.mainImage = mainImage;
+        this.mainImageFile = mainImageFile;
         this.contentFiles = contentFiles;
     }
 }

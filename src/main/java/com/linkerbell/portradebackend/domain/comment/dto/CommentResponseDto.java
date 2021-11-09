@@ -15,7 +15,7 @@ public class CommentResponseDto {
     private final LocalDateTime createdDate;
 
     @Builder
-    public CommentResponseDto(Long id, String creator, String content, LocalDateTime createdDate) {
+    private CommentResponseDto(Long id, String creator, String content, LocalDateTime createdDate) {
         this.id = id;
         this.creator = creator;
         this.content = content;

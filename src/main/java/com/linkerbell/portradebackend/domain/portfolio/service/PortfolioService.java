@@ -1,23 +1,20 @@
 package com.linkerbell.portradebackend.domain.portfolio.service;
 
-import com.linkerbell.portradebackend.domain.file.domain.PortfolioContentFile;
-import com.linkerbell.portradebackend.domain.file.domain.PortfolioMainImage;
-import com.linkerbell.portradebackend.domain.file.dto.FileResponseDto;
-import com.linkerbell.portradebackend.domain.file.service.FileService;
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.portfolio.dto.CreatePortfolioRequestDto;
 import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioDetailResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
+import com.linkerbell.portradebackend.global.util.S3Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Objects;
@@ -29,7 +26,7 @@ import java.util.stream.Collectors;
 public class PortfolioService {
 
     private final PortfolioRepository portfolioRepository;
-    private final FileService fileService;
+    private final S3Util s3Util;
 
     private void checkUserPermission(Portfolio portfolio, User user) {
         if (Objects.isNull(user)) {
@@ -41,21 +38,22 @@ public class PortfolioService {
 
     @Transactional
     public IdResponseDto createPortfolio(CreatePortfolioRequestDto createPortfolioRequestDto, User user) {
+        File mainImageFile = s3Util.upload(createPortfolioRequestDto.getMainImageFile());
+        List<File> contentFiles = createPortfolioRequestDto.getContentFiles()
+                .stream()
+                .map(s3Util::upload)
+                .collect(Collectors.toList());
+
         Portfolio portfolio = Portfolio.builder()
                 .creator(user)
                 .title(createPortfolioRequestDto.getTitle())
                 .description(createPortfolioRequestDto.getDescription())
                 .category(createPortfolioRequestDto.getCategory())
                 .isPublic(createPortfolioRequestDto.isPublic())
+                .mainImageFile(mainImageFile)
+                .contentFiles(contentFiles)
                 .build();
         portfolioRepository.save(portfolio);
-
-        if (Objects.nonNull(createPortfolioRequestDto.getMainImage())) {
-            fileService.createFile(PortfolioMainImage.class, portfolio, createPortfolioRequestDto.getMainImage());
-        }
-        for (MultipartFile contentFile : createPortfolioRequestDto.getContentFiles()) {
-            fileService.createFile(PortfolioContentFile.class, portfolio, contentFile);
-        }
 
         return new IdResponseDto(portfolio.getId());
     }
@@ -71,29 +69,7 @@ public class PortfolioService {
 
         portfolio.addViewCount();
 
-        FileResponseDto mainImage = Objects.isNull(portfolio.getMainImage())
-                ? null
-                : FileResponseDto.of(portfolio.getMainImage());
-        List<FileResponseDto> contentFiles = portfolio.getContentFiles()
-                .stream()
-                .map(FileResponseDto::of)
-                .collect(Collectors.toList());
-
-        return PortfolioDetailResponseDto.builder()
-                .id(portfolio.getId())
-                .creator(portfolio.getCreator().getUsername())
-                .title(portfolio.getTitle())
-                .description(portfolio.getDescription())
-                .category(portfolio.getCategory())
-                .isPublic(portfolio.isPublic())
-                .viewCount(portfolio.getViewCount())
-                .likeCount(portfolio.getLikeCount())
-                .commentCount(portfolio.getCommentCount())
-                .mainImage(mainImage)
-                .contentFiles(contentFiles)
-                .createdDate(portfolio.getCreatedDate())
-                .lastModifiedDate(portfolio.getLastModifiedDate())
-                .build();
+        return PortfolioDetailResponseDto.of(portfolio);
     }
 
     @Transactional

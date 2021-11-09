@@ -54,7 +54,7 @@ class PortfolioControllerTest {
     @WithMockPortradeUser
     void createPortfolioApi() throws Exception {
         // given
-        MockMultipartFile mainImage = new MockMultipartFile("mainImage",
+        MockMultipartFile mainImageFile = new MockMultipartFile("mainImageFile",
                 "files/image1.png",
                 MediaType.MULTIPART_FORM_DATA_VALUE,
                 new FileInputStream("src/test/resources/files/image1.png"));
@@ -69,7 +69,7 @@ class PortfolioControllerTest {
 
         // when
         ResultActions result = mvc.perform(multipart(PREFIX_URI)
-                .file(mainImage)
+                .file(mainImageFile)
                 .file(contentFile1)
                 .file(contentFile2)
                 .param("title", "포트폴리오 제목")
@@ -109,7 +109,7 @@ class PortfolioControllerTest {
     @WithMockPortradeUser
     void createPortfolioApi_invalidRequest() throws Exception {
         // given
-        MockMultipartFile mainImage = new MockMultipartFile("mainImage",
+        MockMultipartFile mainImageFile = new MockMultipartFile("mainImageFile",
                 "files/image1.png",
                 MediaType.MULTIPART_FORM_DATA_VALUE,
                 new FileInputStream("src/test/resources/files/image1.png"));
@@ -120,7 +120,7 @@ class PortfolioControllerTest {
 
         // when
         ResultActions result = mvc.perform(multipart(PREFIX_URI)
-                .file(mainImage)
+                .file(mainImageFile)
                 .file(contentFile)
                 .param("title", "포트폴리오 제목")
                 .param("category", "art")
@@ -149,7 +149,7 @@ class PortfolioControllerTest {
                 .andExpect(jsonPath("$.viewCount").value(16))
 //                .andExpect(jsonPath("$.likeCount").value(0))
 //                .andExpect(jsonPath("$.commentCount").value(0))
-                .andExpect(jsonPath("$.mainImage.url").value("main_url"))
+                .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
                 .andExpect(jsonPath("$.contentFiles.size()").value(2))
                 .andExpect(jsonPath("$.contentFiles[0].url").value("content_url"));
     }
@@ -173,7 +173,7 @@ class PortfolioControllerTest {
                 .andExpect(jsonPath("$.viewCount").value(13))
 //                .andExpect(jsonPath("$.likeCount").value(0))
 //                .andExpect(jsonPath("$.commentCount").value(0))
-                .andExpect(jsonPath("$.mainImage.url").value("main_url"))
+                .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
                 .andExpect(jsonPath("$.contentFiles.size()").value(2))
                 .andExpect(jsonPath("$.contentFiles[0].url").value("content_url"));
     }

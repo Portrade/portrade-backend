@@ -9,7 +9,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.*;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
+import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.exception.custom.FileHandlingException;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.util.S3Util;
@@ -84,20 +84,19 @@ class MyPageServiceTest {
                 "image/png",
                 "mainImage".getBytes());
 
-        UploadResponseDto uploadResponseDto = UploadResponseDto.builder()
-                .originalFileName(file.getOriginalFilename())
-                .newFileName("newFilename")
+        File uploadedProfileImage = File.builder()
+                .fileName("newFilename")
                 .url("url")
                 .build();
 
-        given(s3Util.upload(file)).willReturn(uploadResponseDto);
+        given(s3Util.upload(file)).willReturn(uploadedProfileImage);
 
         //when
         ProfileImageResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
 
         //then
-        assertEquals(uploadResponseDto.getNewFileName(), profileImageResponseDto.getFileName());
-        assertEquals(uploadResponseDto.getUrl(), profileImageResponseDto.getUrl());
+        assertEquals(uploadedProfileImage.getFileName(), profileImageResponseDto.getFileName());
+        assertEquals(uploadedProfileImage.getUrl(), profileImageResponseDto.getUrl());
 
         verify(userRepository, times(1)).save(any(User.class));
     }

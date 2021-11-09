@@ -71,58 +71,38 @@ VALUES (4, 'QUESTION', '2021-01-21T08:17:09.478881', '업로드 문의', '이력
         '12341234', 'UNANSWERED', '1:1 문의합니다.', null, '067d42d516394118bf54ad37d2f6f61e');
 
 -- 포트폴리오
-INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date, title,
-                       view_count)
+INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date,
+                       extension, file_name, url, title, view_count)
 VALUES (1, '2021-10-08T12:01:16.189500', 'programming', '3cbe539a33ba4550a82c63be333ac2d0', '포트폴리오 설명1', true,
-        '2021-10-08T12:01:16.174499300', '포트폴리오 제목1', 15);
-INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date, title,
-                       view_count)
+        '2021-10-08T12:01:16.174499300', 'png', 'mainImage_1.png', 'main_url', '포트폴리오 제목1', 15);
+INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date,
+                       extension, file_name, url, title, view_count)
 VALUES (2, '2021-10-08T12:01:16.189500', 'art', '067d42d516394118bf54ad37d2f6f61e', '포트폴리오 설명2', false,
-        '2021-10-08T12:01:16.174499300', '포트폴리오 제목2', 5);
-INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date, title,
-                       view_count)
+        '2021-10-08T12:01:16.174499300', 'png', 'mainImage_2.png', 'main_url', '포트폴리오 제목2', 5);
+INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date,
+                       extension, file_name, url, title, view_count)
 VALUES (3, '2021-10-08T12:01:16.189500', 'programming', '3cbe539a33ba4550a82c63be333ac2d0', '포트폴리오 설명', false,
-        '2021-10-08T12:01:16.174499300', '포트폴리오 제목', 12);
-
--- 포트폴리오 메인 이미지
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_main, dtype)
-VALUES (1, '2021-10-08T12:01:16.590780300', 'png', 'mainImage_1633662076206.png', '2021-10-08T12:01:16.586778700',
-        'mainImage.png', 'main_url', 1, 'PORTFOLIO_MAIN_IMAGE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_main, dtype)
-VALUES (4, '2021-10-08T12:01:16.590780300', 'png', 'mainImage_1633662076206.png', '2021-10-08T12:01:16.586778700',
-        'mainImage.png', 'main_url', 2, 'PORTFOLIO_MAIN_IMAGE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_main, dtype)
-VALUES (7, '2021-10-08T12:01:16.590780300', 'png', 'mainImage_1633662076206.png', '2021-10-08T12:01:16.586778700',
-        'mainImage.png', 'main_url', 3, 'PORTFOLIO_MAIN_IMAGE');
+        '2021-10-08T12:01:16.174499300', 'png', 'mainImage_3.png', 'main_url', '포트폴리오 제목3', 12);
 
 -- 포트폴리오 컨텐츠 파일
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (2, '2021-10-08T12:01:16.635798', 'png', 'content1_1633662076593.png', '2021-10-08T12:01:16.632797600',
-        'content1.png', 'content_url', 1, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (3, '2021-10-08T12:01:16.635798', 'png', 'content2_1633662072133.png', '2021-10-08T12:01:16.632797600',
-        'content2.png', 'content_url', 1, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (5, '2021-10-08T12:01:16.635798', 'png', 'content1_1633662076593.png', '2021-10-08T12:01:16.632797600',
-        'content1.png', 'content_url', 2, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (6, '2021-10-08T12:01:16.635798', 'png', 'content2_1633662072133.png', '2021-10-08T12:01:16.632797600',
-        'content2.png', 'content_url', 2, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (8, '2021-10-08T12:01:16.635798', 'png', 'content1_1633662076593.png', '2021-10-08T12:01:16.632797600',
-        'content1.png', 'content_url', 3, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (9, '2021-10-08T12:01:16.635798', 'png', 'content2_1633662072133.png', '2021-10-08T12:01:16.632797600',
-        'content2.png', 'content_url', 3, 'PORTFOLIO_CONTENT_FILE');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (1, 'png', 'contentFile1.png', 'content_url1');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (1, 'png', 'contentFile2.png', 'content_url2');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (1, 'png', 'contentFile3.png', 'content_url3');
+
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (2, 'png', 'contentFile1.png', 'content_url1');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (2, 'png', 'contentFile2.png', 'content_url2');
+
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (3, 'png', 'contentFile1.png', 'content_url1');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (3, 'png', 'contentFile2.png', 'content_url2');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (3, 'png', 'contentFile3.png', 'content_url3');
 
 -- 포트폴리오 좋아요
 INSERT INTO likes(likes_id, portfolio_id, user_id, created_date)

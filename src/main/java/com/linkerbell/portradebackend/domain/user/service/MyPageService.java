@@ -6,6 +6,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.*;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
+import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
@@ -36,14 +37,14 @@ public class MyPageService {
 
     @Transactional
     public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) throws IOException {
-        UploadResponseDto uploadResponseDto = s3Util.upload(file);
+        File uploadedProfileImage = s3Util.upload(file);
 
-        user.getProfile().updateProfileUrl(uploadResponseDto.getUrl());
+        user.getProfile().updateProfileUrl(uploadedProfileImage.getUrl());
         userRepository.save(user);
 
         return ProfileImageResponseDto.builder()
-                .fileName(uploadResponseDto.getNewFileName())
-                .url(uploadResponseDto.getUrl())
+                .fileName(uploadedProfileImage.getFileName())
+                .url(uploadedProfileImage.getUrl())
                 .build();
     }
 
