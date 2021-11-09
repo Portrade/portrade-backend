@@ -183,7 +183,7 @@ class MyPageControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.maxPage").value("1"))
                 .andExpect(jsonPath("$.portfolios.size()").value("2"))
-                .andExpect(jsonPath("$.portfolios[0].title").value("포트폴리오 제목"))
+                .andExpect(jsonPath("$.portfolios[0].title").value("포트폴리오 제목3"))
                 .andExpect(jsonPath("$.portfolios[0].createdDate").value("2021-10-08T12:01:16.1895"))
                 .andExpect(jsonPath("$.portfolios[1].title").value("포트폴리오 제목1"))
                 .andExpect(jsonPath("$.portfolios[1].createdDate").value("2021-10-08T12:01:16.1895"));

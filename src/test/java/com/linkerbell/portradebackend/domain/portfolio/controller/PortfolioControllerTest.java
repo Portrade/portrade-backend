@@ -150,8 +150,8 @@ class PortfolioControllerTest {
 //                .andExpect(jsonPath("$.likeCount").value(0))
 //                .andExpect(jsonPath("$.commentCount").value(0))
                 .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
-                .andExpect(jsonPath("$.contentFiles.size()").value(2))
-                .andExpect(jsonPath("$.contentFiles[0].url").value("content_url"));
+                .andExpect(jsonPath("$.contentFiles.size()").value(3))
+                .andExpect(jsonPath("$.contentFiles[0].url").value("content_url1"));
     }
 
     @DisplayName("포트폴리오 상세 조회 API 성공 - 비공개 게시물 작성자가 조회 시도")
@@ -166,7 +166,7 @@ class PortfolioControllerTest {
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(3))
                 .andExpect(jsonPath("$.creator").value("user1"))
-                .andExpect(jsonPath("$.title").value("포트폴리오 제목"))
+                .andExpect(jsonPath("$.title").value("포트폴리오 제목3"))
                 .andExpect(jsonPath("$.description").value("포트폴리오 설명"))
                 .andExpect(jsonPath("$.category").value("programming"))
                 .andExpect(jsonPath("$.isPublic").value(false))
@@ -174,8 +174,8 @@ class PortfolioControllerTest {
 //                .andExpect(jsonPath("$.likeCount").value(0))
 //                .andExpect(jsonPath("$.commentCount").value(0))
                 .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
-                .andExpect(jsonPath("$.contentFiles.size()").value(2))
-                .andExpect(jsonPath("$.contentFiles[0].url").value("content_url"));
+                .andExpect(jsonPath("$.contentFiles.size()").value(3))
+                .andExpect(jsonPath("$.contentFiles[0].url").value("content_url1"));
     }
 
     @DisplayName("포트폴리오 상세 조회 API 실패 - 비공개 게시물 비로그인 유저 조회 시도")
