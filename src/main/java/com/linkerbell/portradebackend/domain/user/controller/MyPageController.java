@@ -71,9 +71,9 @@ public class MyPageController {
 
     @Operation(summary = "특정 사용자의 프로필 조회")
     @GetMapping("/{userId}/profile")
-    public ResponseEntity<ProfileResponeDto> getUserProfileApi(
+    public ResponseEntity<ProfileResponseDto> getUserProfileApi(
             @Parameter(description = "사용자 ID") @PathVariable("userId") String userId) {
-        ProfileResponeDto profileResponeDto = myPageService.getUserProfile(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(profileResponeDto);
+        ProfileResponseDto profileResponseDto = myPageService.getUserProfile(userId);
+        return ResponseEntity.status(HttpStatus.OK).body(profileResponseDto);
     }
 }

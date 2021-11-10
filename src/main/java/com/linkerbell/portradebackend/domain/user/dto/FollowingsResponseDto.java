@@ -1,20 +1,20 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
-import lombok.AccessLevel;
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
 public class FollowingsResponseDto {
-    private final List<ProfileResponeDto> followings;
-    private final int maxPage;
+
+    private final PageResponseDto page;
+    private final List<ProfileResponseDto> followings;
 
     @Builder
-    public FollowingsResponseDto(List<ProfileResponeDto> followings, int maxPage) {
+    public FollowingsResponseDto(PageResponseDto page, List<ProfileResponseDto> followings) {
+        this.page = page;
         this.followings = followings;
-        this.maxPage = maxPage;
     }
 }

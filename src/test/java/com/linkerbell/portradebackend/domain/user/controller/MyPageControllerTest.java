@@ -22,8 +22,10 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
+
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,8 +53,8 @@ class MyPageControllerTest {
                 .build();
     }
 
-    @Test
     @DisplayName("프로필 사진 업로드 API 실패 - 권한 없음")
+    @Test
     void uploadProfileImageApi_unAuthorizedUser() throws Exception {
         //given
         MockMultipartFile mockFile = new MockMultipartFile(
@@ -81,9 +83,9 @@ class MyPageControllerTest {
         result.andExpect(status().isUnauthorized());
     }
 
+    @DisplayName("프로필 사진 업로드 API 성공")
     @Test
     @WithMockPortradeUser
-    @DisplayName("프로필 사진 업로드 API 성공")
     void uploadProfileImageApi() throws Exception {
         //given
         MockMultipartFile mockFile = new MockMultipartFile(
@@ -112,9 +114,9 @@ class MyPageControllerTest {
         result.andExpect(status().isCreated());
     }
 
+    @DisplayName("나의 인사이트 조회 API 성공")
     @Test
     @WithMockPortradeUser
-    @DisplayName("나의 인사이트 조회 API 성공")
     void getMyInsightApi() throws Exception {
         //given
         //when
@@ -130,9 +132,9 @@ class MyPageControllerTest {
                 .andExpect(jsonPath("$.followings").value("1"));
     }
 
+    @DisplayName("프로필 편집 API 성공")
     @Test
     @WithMockPortradeUser
-    @DisplayName("프로필 편집 API 성공")
     void updateProfileApi() throws Exception {
         //given
         ProfileRequestDto profileRequestDto = ProfileRequestDto
@@ -153,9 +155,9 @@ class MyPageControllerTest {
 
     }
 
+    @DisplayName("구직 상태 편집 API 성공")
     @Test
     @WithMockPortradeUser
-    @DisplayName("구직 상태 편집 API 성공")
     void updateProfileJobApi() throws Exception {
         //given
         JobRequestDto jobRequestDto = new JobRequestDto("naver");
@@ -171,8 +173,8 @@ class MyPageControllerTest {
 
     }
 
-    @Test
     @DisplayName("특정 사용자의 포트폴리오 목록 조회 API 성공")
+    @Test
     void getUserPortfoliosApi() throws Exception {
         //given
         //when
@@ -189,8 +191,8 @@ class MyPageControllerTest {
                 .andExpect(jsonPath("$.portfolios[1].createdDate").value("2021-10-08T12:01:16.1895"));
     }
 
-    @Test
     @DisplayName("특정 사용자의 포트폴리오 목록 조회 API 성공 - 빈 페이지네이션")
+    @Test
     void getUserPortfoliosApi_empty() throws Exception {
         //given
         //when
@@ -203,8 +205,8 @@ class MyPageControllerTest {
                 .andExpect(jsonPath("$.portfolios.size()").value("0"));
     }
 
-    @Test
     @DisplayName("특정 사용자의 프로필 조회 API 성공")
+    @Test
     void getUserProfileApi() throws Exception {
         //given
         //when

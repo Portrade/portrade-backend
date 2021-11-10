@@ -65,11 +65,11 @@ public class MyPageService {
                 .build();
     }
 
-    public ProfileResponeDto getUserProfile(String userId) {
+    public ProfileResponseDto getUserProfile(String userId) {
         User user = userRepository.findByUsername(userId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
-        return ProfileResponeDto.builder()
-                .id(user.getId())
+        return ProfileResponseDto.builder()
+                .id(user.getUsername())
                 .name(user.getName())
                 .profileUrl(user.getUserProfileUrl())
                 .job(user.getUserJob())
