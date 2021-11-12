@@ -33,7 +33,7 @@ public class MyPageController {
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponseDto);
     }
 
-    @Operation(summary = "나의 인사이트")
+    @Operation(summary = "나의 인사이트 조회")
     @GetMapping("/me/insight")
     public ResponseEntity<InsightResponseDto> getMyInsightApi(
             @Parameter(hidden = true) @CurrentUser User user) {

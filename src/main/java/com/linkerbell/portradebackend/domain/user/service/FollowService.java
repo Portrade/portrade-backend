@@ -47,7 +47,6 @@ public class FollowService {
         }
 
         Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(follower, following);
-
         if (result.isPresent()) {
             followRepository.delete(result.get());
             return false;

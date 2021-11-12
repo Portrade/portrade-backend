@@ -97,8 +97,7 @@ class FollowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
 
         //then
-        result.andExpect(status().isUnauthorized())
-                .andExpect(jsonPath("$.code").value("C001"));
+        result.andExpect(status().isUnauthorized());
     }
 
     @DisplayName("회원 팔로우/취소 API 실패 - 권한 없는 사용자")

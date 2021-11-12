@@ -141,7 +141,8 @@ class MyPageServiceTest {
         List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
         Page<Portfolio> portfoliosPage = new PageImpl<>(portfolios);
 
-        given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString())).willReturn(portfoliosPage);
+        given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString()))
+                .willReturn(portfoliosPage);
 
         //when
         UserPortfoliosResponseDto userPortfolios = myPageService.getUserPortfolios(user.getUsername(), 1, 10);
@@ -196,6 +197,7 @@ class MyPageServiceTest {
                 .college("수정대학교")
                 .isGraduated(true)
                 .build();
+
         //when
         myPageService.updateProfile(profileRequestDto, user);
 
@@ -228,7 +230,6 @@ class MyPageServiceTest {
                 .portfolio(portfolio1)
                 .content("댓글 남겨요!")
                 .build();
-
         portfolio1 = Portfolio.builder()
                 .creator(user)
                 .title("포트폴리오1")
@@ -259,20 +260,23 @@ class MyPageServiceTest {
                 .comments(new ArrayList<>())
                 .viewCount(20)
                 .build();
-
         List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
-        given(portfolioRepository.findAllByUsername(user.getUsername())).willReturn(portfolios);
-        given(followRepository.countByFollowing_Id(any())).willReturn(1L);
-        given(followRepository.countByFollower_Id(any())).willReturn(4L);
+
+        given(portfolioRepository.findAllByUsername(user.getUsername()))
+                .willReturn(portfolios);
+        given(followRepository.countByFollowing_Username(any()))
+                .willReturn(1);
+        given(followRepository.countByFollower_Username(any()))
+                .willReturn(4);
 
         //when
         InsightResponseDto myInsight = myPageService.getMyInsight(user);
 
         //then
         assertEquals(170, myInsight.getViewCount());
-        assertEquals(3, myInsight.getLikes());
-        assertEquals(1, myInsight.getComment());
-        assertEquals(1L, myInsight.getFollowers());
-        assertEquals(4L, myInsight.getFollowings());
+        assertEquals(3, myInsight.getLikeCount());
+        assertEquals(1, myInsight.getCommentCount());
+        assertEquals(4, myInsight.getFollowerCount());
+        assertEquals(1, myInsight.getFollowingCount());
     }
 }
