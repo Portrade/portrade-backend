@@ -136,7 +136,7 @@ class NoticeControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.maxPage").value("1"))
+                .andExpect(jsonPath("$.page.totalPage").value("1"))
                 .andExpect(jsonPath("$.notices.size()").value("3"))
                 .andExpect(jsonPath("$.notices[0].title").value("[공지사항 분류]공지사항 제목입니다."))
                 .andExpect(jsonPath("$.notices[1].title").value("[공지사항 분류]공지사항 제목입니다."))
@@ -155,7 +155,7 @@ class NoticeControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.maxPage").value("2"))
+                .andExpect(jsonPath("$.page.totalPage").value("2"))
                 .andExpect(jsonPath("$.notices.size()").value("2"))
                 .andExpect(jsonPath("$.notices[0].title").value("[공지사항 분류]공지사항 제목입니다."))
                 .andExpect(jsonPath("$.notices[1].title").value("[공지사항 분류]공지사항 제목입니다."))
@@ -172,7 +172,7 @@ class NoticeControllerTest {
 
         // then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.maxPage").value("1"))
+                .andExpect(jsonPath("$.page.totalPage").value("1"))
                 .andExpect(jsonPath("$.notices.size()").value("0"));
     }
 
@@ -221,7 +221,8 @@ class NoticeControllerTest {
                 .content(objectMapper.writeValueAsString(noticeRequestDto)));
 
         // then
-        result.andExpect(status().isNoContent());
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("3"));
     }
 
     @DisplayName("공지사항 수정 API 실패 - 유효하지 않은 요청 값")

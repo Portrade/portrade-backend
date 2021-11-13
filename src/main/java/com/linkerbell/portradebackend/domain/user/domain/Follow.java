@@ -4,11 +4,10 @@ import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 @Entity
 @Getter
-@ToString(of = {"id"})
+@ToString(exclude = {"following", "follower"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "follow")
 public class Follow extends BaseTimeEntity {
@@ -33,11 +32,16 @@ public class Follow extends BaseTimeEntity {
         this.follower = follower;
     }
 
-    public UUID getFollowingId() {
-        return following.getId();
-    }
     public String getFollowingName() {
         return following.getName();
+    }
+
+    public String getFollowingUsername() {
+        return following.getUsername();
+    }
+
+    public String getFollowerUsername() {
+        return follower.getUsername();
     }
 
     public Profile getFollowingProfile() {
@@ -45,16 +49,13 @@ public class Follow extends BaseTimeEntity {
     }
 
     public String getFollowingProfileUrl() {
-        return getFollowingProfile().getProfileUrl();
+        return getFollowingProfile().getProfileImageFile().getUrl();
     }
 
     public String getFollowingJob() {
         return getFollowingProfile().getJob();
     }
 
-    public UUID getFollowerId() {
-        return follower.getId();
-    }
     public String getFollowerName() {
         return follower.getName();
     }
@@ -64,7 +65,7 @@ public class Follow extends BaseTimeEntity {
     }
 
     public String getFollowerProfileUrl() {
-        return getFollowerProfile().getProfileUrl();
+        return getFollowerProfile().getProfileImageFile().getUrl();
     }
 
     public String getFollowerJob() {

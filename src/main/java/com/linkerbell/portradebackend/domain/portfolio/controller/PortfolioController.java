@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioDetailRespon
 import com.linkerbell.portradebackend.domain.portfolio.service.PortfolioService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +26,11 @@ public class PortfolioController {
 
     @Operation(summary = "포트폴리오 등록", description = "포트폴리오를 등록한다.")
     @PostMapping
-    public ResponseEntity<CreateResponseDto> createPortfolioApi(
+    public ResponseEntity<IdResponseDto> createPortfolioApi(
             @ModelAttribute @Valid CreatePortfolioRequestDto createPortfolioRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        CreateResponseDto createResponseDto = portfolioService.createPortfolio(createPortfolioRequestDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createResponseDto);
+        IdResponseDto idResponseDto = portfolioService.createPortfolio(createPortfolioRequestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
 //    @Operation(summary = "포트폴리오 목록 조회", description = "포트폴리오 목록을 조회한다.")
@@ -55,7 +55,7 @@ public class PortfolioController {
 
 //    @Operation(summary = "포트폴리오 수정", description = "포트폴리오를 수정한다.")
 //    @PutMapping("/{portfolioId}")
-//    public ResponseEntity<Void> editPortfolioApi(
+//    public ResponseEntity<IdResponseDto> editPortfolioApi(
 //            @Parameter(description = "수정할 포트폴리오 ID") @PathVariable Long portfolioId,
 //            @RequestBody @Valid PortfolioRequestDto PortfolioRequestDto) {
 //        portfolioService.updatePortfolio(portfolioId, PortfolioRequestDto);

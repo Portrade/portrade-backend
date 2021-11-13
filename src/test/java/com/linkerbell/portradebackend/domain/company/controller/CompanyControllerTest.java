@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -174,7 +173,8 @@ class CompanyControllerTest {
                 .content(objectMapper.writeValueAsString(companyRequestDto)));
 
         //then
-        result.andExpect(status().isNoContent());
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("4"));
     }
 
     @Test
@@ -187,9 +187,8 @@ class CompanyControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.recruitments.size()").value("1"))
-                .andExpect(jsonPath("$.maxPage").value("1"));
+                .andExpect(jsonPath("$.page.totalPage").value("1"));
     }
-
 
     @Test
     @WithMockPortradeUser

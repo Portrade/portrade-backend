@@ -1,11 +1,10 @@
 package com.linkerbell.portradebackend.domain.portfolio.domain;
 
 import com.linkerbell.portradebackend.domain.comment.domain.Comment;
-import com.linkerbell.portradebackend.domain.file.domain.PortfolioContentFile;
-import com.linkerbell.portradebackend.domain.file.domain.PortfolioMainImage;
 import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
+import com.linkerbell.portradebackend.global.common.File;
 import lombok.*;
 
 import javax.persistence.*;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@ToString(exclude = {"creator", "mainImage", "contentFiles", "likes", "comments"})
+@ToString(exclude = {"creator", "likes", "comments"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "portfolio")
 public class Portfolio extends BaseTimeEntity {
@@ -47,11 +46,12 @@ public class Portfolio extends BaseTimeEntity {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
-    @OneToOne(mappedBy = "portfolio", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private PortfolioMainImage mainImage;
+    @Embedded
+    private File mainImageFile;
 
-    @OneToMany(mappedBy = "portfolio", cascade = CascadeType.ALL)
-    private List<PortfolioContentFile> contentFiles = new ArrayList<>();
+    @ElementCollection
+    @CollectionTable(name = "portfolio_content_files", joinColumns = @JoinColumn(name = "portfolio_id"))
+    private List<File> contentFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "portfolio")
     private List<Likes> likes = new ArrayList<>();
@@ -60,7 +60,7 @@ public class Portfolio extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Portfolio(Long id, User creator, String title, String description, String category, boolean isPublic, int viewCount, LocalDateTime lastModifiedDate, PortfolioMainImage mainImage, List<PortfolioContentFile> contentFiles, List<Likes> likes, List<Comment> comments) {
+    public Portfolio(Long id, User creator, String title, String description, String category, boolean isPublic, int viewCount, LocalDateTime lastModifiedDate, File mainImageFile, List<File> contentFiles, List<Likes> likes, List<Comment> comments) {
         this.id = id;
         this.creator = creator;
         this.title = title;
@@ -69,7 +69,7 @@ public class Portfolio extends BaseTimeEntity {
         this.isPublic = isPublic;
         this.viewCount = viewCount;
         this.lastModifiedDate = lastModifiedDate;
-        this.mainImage = mainImage;
+        this.mainImageFile = mainImageFile;
         this.contentFiles = contentFiles;
         this.likes = likes;
         this.comments = comments;

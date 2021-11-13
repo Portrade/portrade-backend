@@ -8,7 +8,7 @@ import com.linkerbell.portradebackend.domain.comment.repository.CommentRepositor
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
@@ -43,7 +43,7 @@ public class CommentService {
     }
 
     @Transactional
-    public CreateResponseDto createComment(CommentRequestDto commentRequestDto, Long portfolioId, User user) {
+    public IdResponseDto createComment(CommentRequestDto commentRequestDto, Long portfolioId, User user) {
         if (user == null) {
             throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
         }
@@ -58,7 +58,7 @@ public class CommentService {
                 .build();
         commentRepository.save(comment);
 
-        return new CreateResponseDto(comment.getId());
+        return new IdResponseDto(comment.getId());
     }
 
     public CommentsResponseDto getComments(Long portfolioId, int page, int size) {

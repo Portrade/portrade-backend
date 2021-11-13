@@ -1,24 +1,30 @@
 -- 사용자
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('3cbe539a33ba4550a82c63be333ac2d0', '2019-09-28T08:17:09.478881', '19801104', '2021-09-28T08:17:09.360772',
-        '김가입', '{bcrypt}$2a$10$WXG5HiVH1nhKDkUvfd.WE.LXFqAx48dzG9jrkD17MTVLWoTIH9grO', '가나대학교', false, null, 'user1',
-        'programmer', '취업준비중');
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('067d42d516394118bf54ad37d2f6f61e', '2019-11-12T08:17:09.478881', '19960212', '2021-09-28T10:10:44.727651',
-        '사나', '{bcrypt}$2a$10$JcLQoqreG3LBlrMGFzl3RuwSPgNmDAyah3g2ppaZARA.XbLTlaiZK', '서울대학교', false, null, 'user2',
-        'designer', 'jyp');
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('d9b4adce82bd48fe9456cfb20d43537d', '2016-09-28T08:24:20.281872', '19771112', '2021-09-28T08:24:20.170979',
-        '김관리', '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '가나대학교', true, null, 'admin1',
-        'programmer', 'portrade');
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('db3e7741982a40d5919767ac9a0bb94a', '2021-10-08T08:24:20.281872', '19801104', '2021-09-28T08:24:20.170979',
-        '김유저', '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '가나대학교', true, null, 'user3',
-        'programmer', 'naver');
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('3cbe539a33ba4550a82c63be333ac2d0', 'user1', '김가입',
+        '{bcrypt}$2a$10$WXG5HiVH1nhKDkUvfd.WE.LXFqAx48dzG9jrkD17MTVLWoTIH9grO', '19801104', '가나대학교', false,
+        'www.image.com', 'profile_image.png', 'png', '취업준비중', 'programmer', '2019-09-28T08:17:09.478881',
+        '2021-09-28T08:17:09.360772');
+
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('067d42d516394118bf54ad37d2f6f61e', 'user2', '사나',
+        '{bcrypt}$2a$10$JcLQoqreG3LBlrMGFzl3RuwSPgNmDAyah3g2ppaZARA.XbLTlaiZK', '19960212', '서울대학교', false,
+        'www.image.com', 'profile_image.png', 'png', 'jyp', 'designer', '2019-11-12T08:17:09.478881',
+        '2021-09-28T10:10:44.727651');
+
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('d9b4adce82bd48fe9456cfb20d43537d', 'admin1', '김관리',
+        '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '19771112', '가나대학교', true,
+        'www.image.com', 'profile_image.png', 'png', 'portrade', 'programmer', '2016-09-28T08:24:20.281872',
+        '2021-09-28T08:24:20.170979');
+
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('db3e7741982a40d5919767ac9a0bb94a', 'user3', '김유저',
+        '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '19801104', '가나대학교', true, null,
+        'profile_image.png', 'png', 'naver', 'programmer', '2021-10-08T08:24:20.281872', '2021-09-28T08:24:20.170979');
 
 -- 사용자 권한
 INSERT INTO user_roles(user_id, roles)
@@ -71,58 +77,38 @@ VALUES (4, 'QUESTION', '2021-01-21T08:17:09.478881', '업로드 문의', '이력
         '12341234', 'UNANSWERED', '1:1 문의합니다.', null, '067d42d516394118bf54ad37d2f6f61e');
 
 -- 포트폴리오
-INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date, title,
-                       view_count)
+INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date,
+                       extension, file_name, url, title, view_count)
 VALUES (1, '2021-10-08T12:01:16.189500', 'programming', '3cbe539a33ba4550a82c63be333ac2d0', '포트폴리오 설명1', true,
-        '2021-10-08T12:01:16.174499300', '포트폴리오 제목1', 15);
-INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date, title,
-                       view_count)
+        '2021-10-08T12:01:16.174499300', 'png', 'mainImage_1.png', 'main_url', '포트폴리오 제목1', 15);
+INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date,
+                       extension, file_name, url, title, view_count)
 VALUES (2, '2021-10-08T12:01:16.189500', 'art', '067d42d516394118bf54ad37d2f6f61e', '포트폴리오 설명2', false,
-        '2021-10-08T12:01:16.174499300', '포트폴리오 제목2', 5);
-INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date, title,
-                       view_count)
+        '2021-10-08T12:01:16.174499300', 'png', 'mainImage_2.png', 'main_url', '포트폴리오 제목2', 5);
+INSERT INTO portfolio (portfolio_id, created_date, category, user_id, description, is_public, last_modified_date,
+                       extension, file_name, url, title, view_count)
 VALUES (3, '2021-10-08T12:01:16.189500', 'programming', '3cbe539a33ba4550a82c63be333ac2d0', '포트폴리오 설명', false,
-        '2021-10-08T12:01:16.174499300', '포트폴리오 제목', 12);
-
--- 포트폴리오 메인 이미지
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_main, dtype)
-VALUES (1, '2021-10-08T12:01:16.590780300', 'png', 'mainImage_1633662076206.png', '2021-10-08T12:01:16.586778700',
-        'mainImage.png', 'main_url', 1, 'PORTFOLIO_MAIN_IMAGE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_main, dtype)
-VALUES (4, '2021-10-08T12:01:16.590780300', 'png', 'mainImage_1633662076206.png', '2021-10-08T12:01:16.586778700',
-        'mainImage.png', 'main_url', 2, 'PORTFOLIO_MAIN_IMAGE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_main, dtype)
-VALUES (7, '2021-10-08T12:01:16.590780300', 'png', 'mainImage_1633662076206.png', '2021-10-08T12:01:16.586778700',
-        'mainImage.png', 'main_url', 3, 'PORTFOLIO_MAIN_IMAGE');
+        '2021-10-08T12:01:16.174499300', 'png', 'mainImage_3.png', 'main_url', '포트폴리오 제목3', 12);
 
 -- 포트폴리오 컨텐츠 파일
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (2, '2021-10-08T12:01:16.635798', 'png', 'content1_1633662076593.png', '2021-10-08T12:01:16.632797600',
-        'content1.png', 'content_url', 1, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (3, '2021-10-08T12:01:16.635798', 'png', 'content2_1633662072133.png', '2021-10-08T12:01:16.632797600',
-        'content2.png', 'content_url', 1, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (5, '2021-10-08T12:01:16.635798', 'png', 'content1_1633662076593.png', '2021-10-08T12:01:16.632797600',
-        'content1.png', 'content_url', 2, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (6, '2021-10-08T12:01:16.635798', 'png', 'content2_1633662072133.png', '2021-10-08T12:01:16.632797600',
-        'content2.png', 'content_url', 2, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (8, '2021-10-08T12:01:16.635798', 'png', 'content1_1633662076593.png', '2021-10-08T12:01:16.632797600',
-        'content1.png', 'content_url', 3, 'PORTFOLIO_CONTENT_FILE');
-INSERT INTO file (file_id, created_date, extension, file_name, last_modified_date, original_file_name, url,
-                  portfolio_id_content, dtype)
-VALUES (9, '2021-10-08T12:01:16.635798', 'png', 'content2_1633662072133.png', '2021-10-08T12:01:16.632797600',
-        'content2.png', 'content_url', 3, 'PORTFOLIO_CONTENT_FILE');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (1, 'png', 'contentFile1.png', 'content_url1');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (1, 'png', 'contentFile2.png', 'content_url2');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (1, 'png', 'contentFile3.png', 'content_url3');
+
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (2, 'png', 'contentFile1.png', 'content_url1');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (2, 'png', 'contentFile2.png', 'content_url2');
+
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (3, 'png', 'contentFile1.png', 'content_url1');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (3, 'png', 'contentFile2.png', 'content_url2');
+INSERT INTO portfolio_content_files (portfolio_id, extension, file_name, url)
+VALUES (3, 'png', 'contentFile3.png', 'content_url3');
 
 -- 포트폴리오 좋아요
 INSERT INTO likes(likes_id, portfolio_id, user_id, created_date)

@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -7,12 +8,13 @@ import java.util.List;
 
 @Getter
 public class FollowersResponseDto {
-    private final List<ProfileResponeDto> followers;
-    private final int maxPage;
+
+    private final PageResponseDto page;
+    private final List<ProfileResponseDto> followers;
 
     @Builder
-    public FollowersResponseDto(List<ProfileResponeDto> followers, int maxPage) {
+    public FollowersResponseDto(PageResponseDto page, List<ProfileResponseDto> followers) {
+        this.page = page;
         this.followers = followers;
-        this.maxPage = maxPage;
     }
 }

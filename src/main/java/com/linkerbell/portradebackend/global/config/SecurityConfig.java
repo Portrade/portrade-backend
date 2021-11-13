@@ -60,7 +60,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
                 .antMatchers(PREFIX_URL + "/users/me/insight").authenticated()
                 .antMatchers(PREFIX_URL + "/users/me/profile/**").authenticated()
-                .antMatchers(PREFIX_URL + "/users/{userId}/follow/{following-Id}").authenticated()
+                .antMatchers(PREFIX_URL + "/users/{userId}/follows/{followingId}").authenticated()
 
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/notices").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/notices/**").hasRole("ADMIN")

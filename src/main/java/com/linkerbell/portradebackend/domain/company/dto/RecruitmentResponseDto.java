@@ -5,6 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class RecruitmentResponseDto {
+
     private final Long id;
     private final String logo;
     private final String title;

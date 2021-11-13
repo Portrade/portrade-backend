@@ -19,7 +19,8 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -29,12 +30,11 @@ import static org.mockito.Mockito.verify;
 @ExtendWith(MockitoExtension.class)
 class FaqServiceTest {
 
+    User user;
     @InjectMocks
     private FaqService faqService;
     @Mock
     private FaqRepository faqRepository;
-
-    User user;
 
     @BeforeEach
     void setUp() {
@@ -87,7 +87,7 @@ class FaqServiceTest {
                 .content("faq 세번쨰 글 입니다.")
                 .build();
 
-        List<Faq> faqs = new ArrayList<>(Arrays.asList(faq1 ,faq2, faq3));
+        List<Faq> faqs = new ArrayList<>(Arrays.asList(faq1, faq2, faq3));
         Page<Faq> faqPage = new PageImpl<>(faqs);
 
         given(faqRepository.findAll(any(Pageable.class)))
@@ -97,7 +97,7 @@ class FaqServiceTest {
         FaqsResponseDto foundFaqsResponseDto = faqService.getFaqs(1, 3);
 
         //then
-        assertEquals(foundFaqsResponseDto.getMaxPage(), 1);
+        assertEquals(foundFaqsResponseDto.getPage().getTotalPage(), 1);
         assertEquals(foundFaqsResponseDto.getFaqs().size(), 3);
     }
 

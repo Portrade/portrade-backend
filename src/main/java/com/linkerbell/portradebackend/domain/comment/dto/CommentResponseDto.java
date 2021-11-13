@@ -11,13 +11,15 @@ public class CommentResponseDto {
 
     private final Long id;
     private final String creator;
+    private final String profileImageUrl;
     private final String content;
     private final LocalDateTime createdDate;
 
     @Builder
-    public CommentResponseDto(Long id, String creator, String content, LocalDateTime createdDate) {
+    public CommentResponseDto(Long id, String creator, String profileImageUrl, String content, LocalDateTime createdDate) {
         this.id = id;
         this.creator = creator;
+        this.profileImageUrl = profileImageUrl;
         this.content = content;
         this.createdDate = createdDate;
     }
@@ -26,6 +28,7 @@ public class CommentResponseDto {
         return CommentResponseDto.builder()
                 .id(comment.getId())
                 .creator(comment.getCreator().getUsername())
+                .profileImageUrl(comment.getCreator().getUserProfileUrl())
                 .content(comment.getContent())
                 .createdDate(comment.getCreatedDate())
                 .build();

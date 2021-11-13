@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.faq.dto.FaqsResponseDto;
 import com.linkerbell.portradebackend.domain.faq.service.FaqService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
-import com.linkerbell.portradebackend.global.common.dto.CreateResponseDto;
+import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,11 +26,11 @@ public class FaqController {
 
     @Operation(summary = "자주 묻는 질문 등록", description = "자주 묻는 질문을 등록한다.")
     @PostMapping
-    public ResponseEntity<CreateResponseDto> createFaqApi(
+    public ResponseEntity<IdResponseDto> createFaqApi(
             @RequestBody @Valid CreateFaqRequestDto createFaqRequestDto,
             @Parameter(hidden = true) @CurrentUser User user) {
-        CreateResponseDto createdFaq = faqService.createFaq(createFaqRequestDto, user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdFaq);
+        IdResponseDto idResponseDto = faqService.createFaq(createFaqRequestDto, user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
     @Operation(summary = "자주 묻는 질문 목록 조회", description = "자주 묻는 질문 목록을 조회한다.")
@@ -45,7 +45,7 @@ public class FaqController {
     @Operation(summary = "자주 묻는 질문 삭제", description = "자주 묻는 질문을 삭제한다.")
     @DeleteMapping("/{faqId}")
     public ResponseEntity<Void> deleteFaq(
-            @Parameter(description = "삭제할 게시글 id") @PathVariable("faqId") Long faqId) {
+            @Parameter(description = "삭제할 게시글 ID") @PathVariable("faqId") Long faqId) {
         faqService.deleteFaq(faqId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

@@ -7,7 +7,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
+import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.FileHandlingException;
 import lombok.NoArgsConstructor;
@@ -47,7 +47,7 @@ public class S3Util {
                 .build();
     }
 
-    public UploadResponseDto upload(MultipartFile file) {
+    public File upload(MultipartFile file) {
         String fileName = extractFileName(file);
         String name = extractName(fileName);
         String extension = extractExtension(fileName);
@@ -58,10 +58,9 @@ public class S3Util {
                     .withCannedAcl(CannedAccessControlList.PublicRead));
             String url = s3Client.getUrl(bucket, newFileName).toString();
 
-            return UploadResponseDto.builder()
+            return File.builder()
                     .url(url)
-                    .newFileName(newFileName)
-                    .originalFileName(fileName)
+                    .fileName(newFileName)
                     .extension(extension)
                     .build();
         } catch (IOException e) {

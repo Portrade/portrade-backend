@@ -21,13 +21,12 @@ class FollowRepositoryTest {
 
     @Autowired
     private FollowRepository followRepository;
-
     @Autowired
     private UserRepository userRepository;
 
-    User user1;
-    User user2;
-    Follow follow;
+    private User user1;
+    private User user2;
+    private Follow follow;
 
     @BeforeEach
     void setUp() {
@@ -38,7 +37,6 @@ class FollowRepositoryTest {
                 .birthDate("19900903")
                 .wantedJob("programmer")
                 .build();
-
         User users2 = User.builder()
                 .username("users2")
                 .password("1234Aa@@")
@@ -46,7 +44,6 @@ class FollowRepositoryTest {
                 .birthDate("19900903")
                 .wantedJob("designer")
                 .build();
-
         user1 = userRepository.save(users1);
         user2 = userRepository.save(users2);
 
@@ -54,13 +51,12 @@ class FollowRepositoryTest {
                 .follower(user1)
                 .following(user2)
                 .build();
-
         followRepository.save(follow);
     }
 
-    @Test
     @DisplayName("팔로워/팔로윙 조회 성공")
-    void findByFollowerIdAndFollowingId(){
+    @Test
+    void findByFollowerIdAndFollowingId() {
         //given
         //when
         Follow follow = followRepository.findByFollowerIdAndFollowingId(user1.getUsername(), user2.getUsername()).get();
@@ -72,59 +68,61 @@ class FollowRepositoryTest {
         assertEquals("유저1", follow.getFollower().getName());
     }
 
-    @Test
     @DisplayName("주어진 팔로워 id 가진 follow 갯수 조회 성공")
-    void countByFollowerId(){
+    @Test
+    void countByFollowerId() {
         //given
         //when
-        Long count = followRepository.countByFollowing_Id(user2.getId());
+        int count = followRepository.countByFollowing_Username(user2.getUsername());
 
         //then
         assertEquals(1, count);
     }
 
-    @Test
     @DisplayName("주어진 팔로잉 id 가진 follow 갯수 조회 성공")
-    public void countByFollowingId(){
+    @Test
+    public void countByFollowingId() {
         //given
         //when
-        Long count = followRepository.countByFollower_Id(user1.getId());
+        int count = followRepository.countByFollower_Username(user1.getUsername());
 
         //then
         assertEquals(1, count);
     }
 
-    @Test
     @DisplayName("주어진 팔로우 이름 가진 follow 조회 성공")
-    public void findAllByFollowerUsername(){
+    @Test
+    public void findAllByFollowerUsername() {
         //given
         Pageable pageable = PageRequest.of(
                 0,
                 10,
                 Sort.by(Sort.Direction.DESC, "id"));
+
         //when
-        Page<Follow> follow = followRepository.findAllByFollower_Username(pageable, user1.getUsername());
+        Page<Follow> followPage = followRepository.findAllByFollower_Username(pageable, user1.getUsername());
 
         //then
-        assertEquals(1, follow.getTotalElements());
-        List<Follow> followers = follow.getContent();
+        assertEquals(1, followPage.getTotalElements());
+        List<Follow> followers = followPage.getContent();
         assertEquals(user1.getName(), followers.get(0).getFollowerName());
     }
 
-    @Test
     @DisplayName("주어진 팔로잉 이름 가진 follow 조회 성공")
-    public void findAllByFollowingUsername(){
+    @Test
+    public void findAllByFollowingUsername() {
         //given
         Pageable pageable = PageRequest.of(
                 0,
                 10,
                 Sort.by(Sort.Direction.DESC, "id"));
+
         //when
-        Page<Follow> follow = followRepository.findAllByFollowing_Username(pageable, user2.getUsername());
+        Page<Follow> followPage = followRepository.findAllByFollowing_Username(pageable, user2.getUsername());
 
         //then
-        assertEquals(1, follow.getTotalElements());
-        List<Follow> followings = follow.getContent();
+        assertEquals(1, followPage.getTotalElements());
+        List<Follow> followings = followPage.getContent();
         assertEquals(user2.getName(), followings.get(0).getFollowingName());
     }
 }

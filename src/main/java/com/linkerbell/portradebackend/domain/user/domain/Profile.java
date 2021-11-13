@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.user.domain;
 
+import com.linkerbell.portradebackend.global.common.File;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Embedded;
 
 @Getter
 @Embeddable
@@ -18,21 +20,17 @@ public class Profile {
     @Column(name = "is_graduated")
     private boolean isGraduated;
 
-    @Column(name = "profile_url")
-    private String profileUrl;
+    @Embedded
+    private File profileImageFile;
 
     private String job;
 
     @Builder
-    public Profile(String college, boolean isGraduated, String profileUrl, String job) {
+    public Profile(String college, boolean isGraduated, File profileImageFile, String job) {
         this.college = college;
         this.isGraduated = isGraduated;
-        this.profileUrl = profileUrl;
+        this.profileImageFile = profileImageFile;
         this.job = job;
-    }
-
-    public void updateProfileUrl(String profileUrl) {
-        this.profileUrl = profileUrl;
     }
 
     public void updateProfileJob(String job) {
@@ -42,5 +40,9 @@ public class Profile {
     public void updateProfile(String college, boolean isGraduated) {
         this.college = college;
         this.isGraduated = isGraduated;
+    }
+
+    public void updateProfileImageFile(File profileImageFile) {
+        this.profileImageFile = profileImageFile;
     }
 }

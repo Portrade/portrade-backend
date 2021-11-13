@@ -1,7 +1,5 @@
 package com.linkerbell.portradebackend.domain.user.dto;
 
-import com.linkerbell.portradebackend.domain.user.domain.Profile;
-import com.linkerbell.portradebackend.domain.user.domain.User;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -36,22 +34,5 @@ public class ProfileRequestDto {
         this.wantedJob = wantedJob;
         this.college = college;
         this.isGraduated = isGraduated;
-    }
-
-    public User toEntity(User user) {
-        return User.builder()
-                .id(user.getId())
-                .username(user.getUsername())
-                .password(user.getPassword())
-                .name(name)
-                .birthDate(birthDate)
-                .wantedJob(wantedJob)
-                .profile(Profile.builder()
-                        .college(college)
-                        .isGraduated(isGraduated)
-                        .profileUrl(user.getUserProfileUrl())
-                        .job(user.getUserJob())
-                        .build())
-                .build();
     }
 }

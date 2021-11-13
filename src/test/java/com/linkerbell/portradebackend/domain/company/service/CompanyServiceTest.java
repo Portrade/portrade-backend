@@ -6,8 +6,8 @@ import com.linkerbell.portradebackend.domain.company.repository.CompanyRepositor
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
+import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,7 +23,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -175,7 +176,7 @@ class CompanyServiceTest {
 
         //when
         //then
-        assertThrows(UnAuthorizedException.class, () -> companyService.updateCompany(companyRequestDto,1L, diffUser));
+        assertThrows(UnAuthorizedException.class, () -> companyService.updateCompany(companyRequestDto, 1L, diffUser));
     }
 
     @Test
@@ -197,7 +198,7 @@ class CompanyServiceTest {
         given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
 
         //when
-        companyService.updateCompany(companyRequestDto,1L, user);
+        companyService.updateCompany(companyRequestDto, 1L, user);
 
         //then
         verify(companyRepository, times(1)).findById(anyLong());
@@ -249,7 +250,7 @@ class CompanyServiceTest {
                 .workType("정규직")
                 .build();
 
-        List<Recruitment> companys = new ArrayList<>(List.of(recruitment1,recruitment2,recruitment3));
+        List<Recruitment> companys = new ArrayList<>(List.of(recruitment1, recruitment2, recruitment3));
         Page page = new PageImpl(companys);
 
         Pageable pageable = PageRequest.of(
@@ -261,10 +262,10 @@ class CompanyServiceTest {
         given(recruitmentRepository.findAllByCompany_Id(eq(pageable), anyLong())).willReturn(page);
 
         //when
-        CompanyRecruitmentResponseDto companyResponseDto = companyService.getRecruitments(1, 10, 1L);
+        RecruitmentsResponseDto companyResponseDto = companyService.getRecruitments(1, 10, 1L);
 
         //then
-        assertEquals(companyResponseDto.getMaxPage(), 1);
+        assertEquals(companyResponseDto.getPage().getTotalPage(), 1);
 
         List<RecruitmentResponseDto> recruitments = companyResponseDto.getRecruitments();
         assertEquals(recruitments.get(0).getId(), 1L);

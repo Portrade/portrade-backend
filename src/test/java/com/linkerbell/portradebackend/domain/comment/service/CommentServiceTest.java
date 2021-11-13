@@ -6,7 +6,9 @@ import com.linkerbell.portradebackend.domain.comment.dto.CommentsResponseDto;
 import com.linkerbell.portradebackend.domain.comment.repository.CommentRepository;
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
+import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
+import com.linkerbell.portradebackend.global.common.File;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -51,8 +53,15 @@ class CommentServiceTest {
                 .name("회원1")
                 .birthDate("20030327")
                 .wantedJob("marketing")
+                .profile(Profile.builder()
+                        .job("취업준비중")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
+                        .build())
                 .build();
-
         portfolio = Portfolio.builder()
                 .id(1L)
                 .creator(user)

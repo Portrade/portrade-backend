@@ -9,7 +9,7 @@ import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.*;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
-import com.linkerbell.portradebackend.global.common.dto.UploadResponseDto;
+import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.exception.custom.FileHandlingException;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.util.S3Util;
@@ -25,7 +25,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.mock.web.MockMultipartFile;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,12 +43,8 @@ class MyPageServiceTest {
 
     @InjectMocks
     private MyPageService myPageService;
-
     @Mock
     private S3Util s3Util;
-    @Mock
-    private EntityManager entityManager;
-
     @Mock
     private UserRepository userRepository;
     @Mock
@@ -68,8 +63,12 @@ class MyPageServiceTest {
                 .birthDate("12341010")
                 .wantedJob("marketing")
                 .profile(Profile.builder()
-                        .college("college1")
-                        .isGraduated(false)
+                        .job("취업준비중")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
                         .build())
                 .build();
     }
@@ -83,21 +82,21 @@ class MyPageServiceTest {
                 "mainImage",
                 "image/png",
                 "mainImage".getBytes());
-
-        UploadResponseDto uploadResponseDto = UploadResponseDto.builder()
-                .originalFileName(file.getOriginalFilename())
-                .newFileName("newFilename")
+        File uploadedProfileImage = File.builder()
+                .fileName("newFilename")
                 .url("url")
                 .build();
 
-        given(s3Util.upload(file)).willReturn(uploadResponseDto);
+        given(s3Util.upload(file))
+                .willReturn(uploadedProfileImage);
 
         //when
-        ProfileImageResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
+        ProfileResponseDto profileResponseDto = myPageService.uploadProfileImage(user, file);
 
         //then
-        assertEquals(uploadResponseDto.getNewFileName(), profileImageResponseDto.getFileName());
-        assertEquals(uploadResponseDto.getUrl(), profileImageResponseDto.getUrl());
+        assertEquals(user.getUsername(), profileResponseDto.getId());
+        assertEquals(user.getName(), profileResponseDto.getName());
+        assertEquals(uploadedProfileImage.getUrl(), profileResponseDto.getProfileImageUrl());
 
         verify(userRepository, times(1)).save(any(User.class));
     }
@@ -112,7 +111,8 @@ class MyPageServiceTest {
                 "image/png",
                 "mainImage".getBytes());
 
-        given(s3Util.upload(file)).willThrow(FileHandlingException.class);
+        given(s3Util.upload(file))
+                .willThrow(FileHandlingException.class);
 
         //when
         //then
@@ -120,8 +120,8 @@ class MyPageServiceTest {
                 () -> myPageService.uploadProfileImage(user, file));
     }
 
-    @Test
     @DisplayName("포트폴리오 조회 성공")
+    @Test
     void getUserPortfolios() {
         //given
         Portfolio portfolio1 = Portfolio.builder()
@@ -131,7 +131,6 @@ class MyPageServiceTest {
                 .category("security")
                 .isPublic(true)
                 .build();
-
         Portfolio portfolio2 = Portfolio.builder()
                 .creator(user)
                 .title("포트폴리오2")
@@ -139,7 +138,6 @@ class MyPageServiceTest {
                 .category("security")
                 .isPublic(true)
                 .build();
-
         Portfolio portfolio3 = Portfolio.builder()
                 .creator(user)
                 .title("포트폴리오3")
@@ -147,17 +145,18 @@ class MyPageServiceTest {
                 .category("security")
                 .isPublic(true)
                 .build();
-
         List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
         Page<Portfolio> portfoliosPage = new PageImpl<>(portfolios);
-        given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString())).willReturn(portfoliosPage);
+
+        given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString()))
+                .willReturn(portfoliosPage);
 
         //when
         UserPortfoliosResponseDto userPortfolios = myPageService.getUserPortfolios(user.getUsername(), 1, 10);
 
         //then
         assertEquals(3, userPortfolios.getPortfolios().size());
-        assertEquals(1, userPortfolios.getMaxPage());
+        assertEquals(1, userPortfolios.getPage().getTotalPage());
         List<UserPortfolioResponseDto> portfoliosResponseDto = userPortfolios.getPortfolios();
         assertEquals(portfolio1.getTitle(), portfoliosResponseDto.get(0).getTitle());
         assertEquals(portfolio1.getCreatedDate(), portfoliosResponseDto.get(0).getCreatedDate());
@@ -167,8 +166,8 @@ class MyPageServiceTest {
         assertEquals(portfolio3.getCreatedDate(), portfoliosResponseDto.get(2).getCreatedDate());
     }
 
-    @Test
     @DisplayName("프로필 조회 실패 - 존재하지 않는 Username")
+    @Test
     void getUserProfile_nonexistentUsername() {
         //given
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.empty());
@@ -179,23 +178,23 @@ class MyPageServiceTest {
                 myPageService.getUserProfile(user.getUsername()));
     }
 
-    @Test
     @DisplayName("프로필 조회 성공")
+    @Test
     void getUserProfile() {
         //given
         given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
 
         //when
-        ProfileResponeDto userProfileDto = myPageService.getUserProfile(user.getUsername());
+        ProfileResponseDto userProfileDto = myPageService.getUserProfile(user.getUsername());
 
         //then
         assertEquals(user.getName(), userProfileDto.getName());
-        assertEquals(user.getUserProfileUrl(), userProfileDto.getProfileUrl());
+        assertEquals(user.getUserProfileUrl(), userProfileDto.getProfileImageUrl());
         assertEquals(user.getUserJob(), userProfileDto.getJob());
     }
 
-    @Test
     @DisplayName("프로필 수정 성공")
+    @Test
     void updateProfile() {
         //given
         ProfileRequestDto profileRequestDto = ProfileRequestDto.builder()
@@ -205,6 +204,7 @@ class MyPageServiceTest {
                 .college("수정대학교")
                 .isGraduated(true)
                 .build();
+
         //when
         myPageService.updateProfile(profileRequestDto, user);
 
@@ -212,8 +212,8 @@ class MyPageServiceTest {
         verify(userRepository, times(1)).save(any(User.class));
     }
 
-    @Test
     @DisplayName("나의 인사이트 조회 성공")
+    @Test
     void getMyInsight() {
         //given
         Portfolio portfolio1 = null;
@@ -224,23 +224,19 @@ class MyPageServiceTest {
                 .user(user)
                 .portfolio(portfolio1)
                 .build();
-
         Likes likes2 = Likes.builder()
                 .user(user)
                 .portfolio(portfolio2)
                 .build();
-
         Likes likes3 = Likes.builder()
                 .user(user)
                 .portfolio(portfolio3)
                 .build();
-
         Comment comment = Comment.builder()
                 .creator(user)
                 .portfolio(portfolio1)
                 .content("댓글 남겨요!")
                 .build();
-
         portfolio1 = Portfolio.builder()
                 .creator(user)
                 .title("포트폴리오1")
@@ -251,7 +247,6 @@ class MyPageServiceTest {
                 .likes(new ArrayList<>(List.of(likes1)))
                 .comments(new ArrayList<>(List.of(comment)))
                 .build();
-
         portfolio2 = Portfolio.builder()
                 .creator(user)
                 .title("포트폴리오2")
@@ -262,7 +257,6 @@ class MyPageServiceTest {
                 .comments(new ArrayList<>())
                 .viewCount(50)
                 .build();
-
         portfolio3 = Portfolio.builder()
                 .creator(user)
                 .title("포트폴리오3")
@@ -273,21 +267,23 @@ class MyPageServiceTest {
                 .comments(new ArrayList<>())
                 .viewCount(20)
                 .build();
-
         List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
-        given(portfolioRepository.findAllByUsername(user.getUsername())).willReturn(portfolios);
-        given(followRepository.countByFollowing_Id(any())).willReturn(1L);
-        given(followRepository.countByFollower_Id(any())).willReturn(4L);
 
+        given(portfolioRepository.findAllByUsername(user.getUsername()))
+                .willReturn(portfolios);
+        given(followRepository.countByFollowing_Username(any()))
+                .willReturn(1);
+        given(followRepository.countByFollower_Username(any()))
+                .willReturn(4);
 
         //when
         InsightResponseDto myInsight = myPageService.getMyInsight(user);
 
         //then
         assertEquals(170, myInsight.getViewCount());
-        assertEquals(3, myInsight.getLikes());
-        assertEquals(1, myInsight.getComment());
-        assertEquals(1L, myInsight.getFollowers());
-        assertEquals(4L, myInsight.getFollowings());
+        assertEquals(3, myInsight.getLikeCount());
+        assertEquals(1, myInsight.getCommentCount());
+        assertEquals(4, myInsight.getFollowerCount());
+        assertEquals(1, myInsight.getFollowingCount());
     }
 }
