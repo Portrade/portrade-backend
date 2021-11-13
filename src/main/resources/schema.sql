@@ -1,17 +1,20 @@
 create table user
 (
     user_id            BINARY(16) not null PRIMARY KEY,
-    created_date       timestamp,
     birth_date         varchar(255) not null,
-    last_modified_date timestamp,
     name               varchar(255) not null,
+    username           varchar(255) not null,
     password           varchar(255) not null,
     college            varchar(255),
     is_graduated       boolean,
-    profile_url        varchar(255),
-    username           varchar(255) not null,
     wanted_job         varchar(255) not null,
-    job                varchar(255)
+    job                varchar(255),
+    created_date       timestamp,
+    last_modified_date timestamp,
+
+    url                varchar(255),
+    file_name          varchar(255),
+    extension          varchar(255)
 );
 
 create table comment

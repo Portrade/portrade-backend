@@ -7,6 +7,7 @@ import com.linkerbell.portradebackend.domain.user.dto.*;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.File;
+import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.util.S3Util;
@@ -19,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,15 +34,17 @@ public class MyPageService {
     private final S3Util s3Util;
 
     @Transactional
-    public ProfileImageResponseDto uploadProfileImage(User user, MultipartFile file) throws IOException {
+    public ProfileResponseDto uploadProfileImage(User user, MultipartFile file) {
         File uploadedProfileImage = s3Util.upload(file);
 
-        user.getProfile().updateProfileUrl(uploadedProfileImage.getUrl());
+        user.getProfile().updateProfileImageFile(uploadedProfileImage);
         userRepository.save(user);
 
-        return ProfileImageResponseDto.builder()
-                .fileName(uploadedProfileImage.getFileName())
-                .url(uploadedProfileImage.getUrl())
+        return ProfileResponseDto.builder()
+                .id(user.getUsername())
+                .name(user.getName())
+                .profileImageUrl(user.getUserProfileUrl())
+                .job(user.getUserJob())
                 .build();
     }
 
@@ -51,16 +53,20 @@ public class MyPageService {
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
+        Page<Portfolio> portfolioPage = portfolioRepository.findAllByUsername(pageable, userId);
 
-        Page<Portfolio> portfolios = portfolioRepository.findAllByUsername(pageable, userId);
-        List<UserPortfolioResponseDto> userPortfolioResponseDtos = portfolios
+        List<UserPortfolioResponseDto> userPortfolioResponseDtos = portfolioPage
                 .stream()
                 .map(portfolio -> new UserPortfolioResponseDto(portfolio.getId(), portfolio.getTitle(), portfolio.getCreatedDate()))
                 .collect(Collectors.toList());
+        PageResponseDto pageResponseDto = PageResponseDto.builder()
+                .totalPage(portfolioPage.getTotalPages())
+                .totalElement(portfolioPage.getTotalElements())
+                .build();
 
         return UserPortfoliosResponseDto.builder()
                 .portfolios(userPortfolioResponseDtos)
-                .maxPage(portfolios.getTotalPages())
+                .page(pageResponseDto)
                 .build();
     }
 
@@ -70,30 +76,33 @@ public class MyPageService {
         return ProfileResponseDto.builder()
                 .id(user.getUsername())
                 .name(user.getName())
-                .profileUrl(user.getUserProfileUrl())
+                .profileImageUrl(user.getUserProfileUrl())
                 .job(user.getUserJob())
                 .build();
     }
 
     @Transactional
     public void updateProfile(ProfileRequestDto profileRequestDto, User user) {
-        User updateUser = profileRequestDto.toEntity(user);
-        userRepository.save(updateUser);
+        user.updateProfile(profileRequestDto.getName(),
+                profileRequestDto.getBirthDate(),
+                profileRequestDto.getCollege(),
+                profileRequestDto.getWantedJob(),
+                profileRequestDto.isGraduated());
+        userRepository.save(user);
     }
 
     public InsightResponseDto getMyInsight(User user) {
         int viewCount = 0;
         int likeCount = 0;
         int commentCount = 0;
+        int followingCount = followRepository.countByFollowing_Username(user.getUsername());
+        int followerCount = followRepository.countByFollower_Username(user.getUsername());
         List<Portfolio> portfolios = portfolioRepository.findAllByUsername(user.getUsername());
         for (Portfolio portfolio : portfolios) {
             viewCount += portfolio.getViewCount();
             likeCount += portfolio.getLikeCount();
             commentCount += portfolio.getCommentCount();
         }
-
-        int followingCount = followRepository.countByFollowing_Username(user.getUsername());
-        int followerCount = followRepository.countByFollower_Username(user.getUsername());
 
         return InsightResponseDto.builder()
                 .viewCount(viewCount)

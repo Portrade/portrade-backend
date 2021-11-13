@@ -8,14 +8,14 @@ public class ProfileResponseDto {
 
     private final String id;
     private final String name;
-    private final String profileUrl;
+    private final String profileImageUrl;
     private final String job;
 
     @Builder
-    public ProfileResponseDto(String id, String name, String profileUrl, String job) {
+    public ProfileResponseDto(String id, String name, String profileImageUrl, String job) {
         this.id = id;
         this.name = name;
-        this.profileUrl = profileUrl;
+        this.profileImageUrl = profileImageUrl;
         this.job = job;
     }
 }

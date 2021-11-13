@@ -26,10 +26,10 @@ public class MyPageController {
 
     @Operation(summary = "프로필 사진 업로드")
     @PutMapping("/me/profile/image")
-    public ResponseEntity<ProfileImageResponseDto> uploadProfileImageApi(
+    public ResponseEntity<ProfileResponseDto> uploadProfileImageApi(
             @RequestBody MultipartFile file,
-            @Parameter(hidden = true) @CurrentUser User user) throws IOException {
-        ProfileImageResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
+            @Parameter(hidden = true) @CurrentUser User user)  {
+        ProfileResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
         return ResponseEntity.status(HttpStatus.CREATED).body(profileImageResponseDto);
     }
 

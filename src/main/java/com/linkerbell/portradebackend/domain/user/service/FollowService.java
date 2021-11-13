@@ -74,7 +74,7 @@ public class FollowService {
                 .map(follow -> ProfileResponseDto.builder()
                         .id(follow.getFollowerUsername())
                         .name(follow.getFollowerName())
-                        .profileUrl(follow.getFollowerProfileUrl())
+                        .profileImageUrl(follow.getFollowerProfileUrl())
                         .job(follow.getFollowerJob())
                         .build())
                 .collect(Collectors.toList());
@@ -103,7 +103,7 @@ public class FollowService {
                 .map(follow -> ProfileResponseDto.builder()
                         .id(follow.getFollowingUsername())
                         .name(follow.getFollowingName())
-                        .profileUrl(follow.getFollowingProfileUrl())
+                        .profileImageUrl(follow.getFollowingProfileUrl())
                         .job(follow.getFollowingJob())
                         .build())
                 .collect(Collectors.toList());

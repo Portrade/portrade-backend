@@ -1,24 +1,30 @@
 -- 사용자
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('3cbe539a33ba4550a82c63be333ac2d0', '2019-09-28T08:17:09.478881', '19801104', '2021-09-28T08:17:09.360772',
-        '김가입', '{bcrypt}$2a$10$WXG5HiVH1nhKDkUvfd.WE.LXFqAx48dzG9jrkD17MTVLWoTIH9grO', '가나대학교', false, null, 'user1',
-        'programmer', '취업준비중');
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('067d42d516394118bf54ad37d2f6f61e', '2019-11-12T08:17:09.478881', '19960212', '2021-09-28T10:10:44.727651',
-        '사나', '{bcrypt}$2a$10$JcLQoqreG3LBlrMGFzl3RuwSPgNmDAyah3g2ppaZARA.XbLTlaiZK', '서울대학교', false, null, 'user2',
-        'designer', 'jyp');
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('d9b4adce82bd48fe9456cfb20d43537d', '2016-09-28T08:24:20.281872', '19771112', '2021-09-28T08:24:20.170979',
-        '김관리', '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '가나대학교', true, null, 'admin1',
-        'programmer', 'portrade');
-INSERT INTO user(user_id, created_date, birth_date, last_modified_date, name, password, college, is_graduated,
-                 profile_url, username, wanted_job, job)
-VALUES ('db3e7741982a40d5919767ac9a0bb94a', '2021-10-08T08:24:20.281872', '19801104', '2021-09-28T08:24:20.170979',
-        '김유저', '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '가나대학교', true, null, 'user3',
-        'programmer', 'naver');
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('3cbe539a33ba4550a82c63be333ac2d0', 'user1', '김가입',
+        '{bcrypt}$2a$10$WXG5HiVH1nhKDkUvfd.WE.LXFqAx48dzG9jrkD17MTVLWoTIH9grO', '19801104', '가나대학교', false,
+        'www.image.com', 'profile_image.png', 'png', '취업준비중', 'programmer', '2019-09-28T08:17:09.478881',
+        '2021-09-28T08:17:09.360772');
+
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('067d42d516394118bf54ad37d2f6f61e', 'user2', '사나',
+        '{bcrypt}$2a$10$JcLQoqreG3LBlrMGFzl3RuwSPgNmDAyah3g2ppaZARA.XbLTlaiZK', '19960212', '서울대학교', false,
+        'www.image.com', 'profile_image.png', 'png', 'jyp', 'designer', '2019-11-12T08:17:09.478881',
+        '2021-09-28T10:10:44.727651');
+
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('d9b4adce82bd48fe9456cfb20d43537d', 'admin1', '김관리',
+        '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '19771112', '가나대학교', true,
+        'www.image.com', 'profile_image.png', 'png', 'portrade', 'programmer', '2016-09-28T08:24:20.281872',
+        '2021-09-28T08:24:20.170979');
+
+INSERT INTO user(user_id, username, name, password, birth_date, college, is_graduated, url, file_name, extension, job,
+                 wanted_job, created_date, last_modified_date)
+VALUES ('db3e7741982a40d5919767ac9a0bb94a', 'user3', '김유저',
+        '{bcrypt}$2a$10$x.0xNhjwVgXW0Fj/NZ7sH.ybsNFq.pEM/T5YukPz.Pdn34Njxlr1m', '19801104', '가나대학교', true, null,
+        'profile_image.png', 'png', 'naver', 'programmer', '2021-10-08T08:24:20.281872', '2021-09-28T08:24:20.170979');
 
 -- 사용자 권한
 INSERT INTO user_roles(user_id, roles)

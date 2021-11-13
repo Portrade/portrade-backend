@@ -49,7 +49,7 @@ public class Follow extends BaseTimeEntity {
     }
 
     public String getFollowingProfileUrl() {
-        return getFollowingProfile().getProfileUrl();
+        return getFollowingProfile().getProfileImageFile().getUrl();
     }
 
     public String getFollowingJob() {
@@ -65,7 +65,7 @@ public class Follow extends BaseTimeEntity {
     }
 
     public String getFollowerProfileUrl() {
-        return getFollowerProfile().getProfileUrl();
+        return getFollowerProfile().getProfileImageFile().getUrl();
     }
 
     public String getFollowerJob() {

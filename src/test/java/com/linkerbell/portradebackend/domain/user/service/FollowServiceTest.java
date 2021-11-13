@@ -8,6 +8,7 @@ import com.linkerbell.portradebackend.domain.user.dto.FollowingsResponseDto;
 import com.linkerbell.portradebackend.domain.user.dto.ProfileResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
+import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
@@ -54,10 +55,13 @@ class FollowServiceTest {
                 .name("팔로워1")
                 .birthDate("19900903")
                 .wantedJob("programmer")
-                .profile(Profile
-                        .builder()
+                .profile(Profile.builder()
                         .job("취업준비중")
-                        .profileUrl("https://1")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
                         .build())
                 .build();
         following = User.builder()
@@ -66,10 +70,13 @@ class FollowServiceTest {
                 .name("팔로잉1")
                 .birthDate("19900903")
                 .wantedJob("programmer")
-                .profile(Profile
-                        .builder()
+                .profile(Profile.builder()
                         .job("취업준비중")
-                        .profileUrl("https://2")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
                         .build())
                 .build();
     }
@@ -153,10 +160,13 @@ class FollowServiceTest {
                 .name("팔로워2")
                 .birthDate("19900903")
                 .wantedJob("programmer")
-                .profile(Profile
-                        .builder()
+                .profile(Profile.builder()
                         .job("취업준비중")
-                        .profileUrl("https://")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
                         .build())
                 .build();
         Follow follow1 = Follow.builder()
@@ -184,10 +194,10 @@ class FollowServiceTest {
         List<ProfileResponseDto> followers = followersResponseDto.getFollowers();
         assertEquals(follower.getName(), followers.get(0).getName());
         assertEquals(follower.getUserJob(), followers.get(0).getJob());
-        assertEquals(follower.getUserProfileUrl(), followers.get(0).getProfileUrl());
+        assertEquals(follower.getUserProfileUrl(), followers.get(0).getProfileImageUrl());
         assertEquals(follower2.getName(), followers.get(1).getName());
         assertEquals(follower2.getUserJob(), followers.get(1).getJob());
-        assertEquals(follower2.getUserProfileUrl(), followers.get(1).getProfileUrl());
+        assertEquals(follower2.getUserProfileUrl(), followers.get(1).getProfileImageUrl());
     }
 
     @DisplayName("팔로잉 목록 조회 - 성공")
@@ -199,10 +209,13 @@ class FollowServiceTest {
                 .name("팔로워2")
                 .birthDate("19900903")
                 .wantedJob("programmer")
-                .profile(Profile
-                        .builder()
+                .profile(Profile.builder()
                         .job("취업준비중")
-                        .profileUrl("https://")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
                         .build())
                 .build();
         Follow follow1 = Follow.builder()
@@ -229,9 +242,9 @@ class FollowServiceTest {
         List<ProfileResponseDto> followings = followingsResponseDto.getFollowings();
         assertEquals(following.getName(), followings.get(0).getName());
         assertEquals(following.getUserJob(), followings.get(0).getJob());
-        assertEquals(following.getUserProfileUrl(), followings.get(0).getProfileUrl());
+        assertEquals(following.getUserProfileUrl(), followings.get(0).getProfileImageUrl());
         assertEquals(following2.getName(), followings.get(1).getName());
         assertEquals(following2.getUserJob(), followings.get(1).getJob());
-        assertEquals(following2.getUserProfileUrl(), followings.get(1).getProfileUrl());
+        assertEquals(following2.getUserProfileUrl(), followings.get(1).getProfileImageUrl());
     }
 }

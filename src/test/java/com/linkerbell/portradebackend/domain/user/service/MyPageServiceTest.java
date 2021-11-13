@@ -63,8 +63,12 @@ class MyPageServiceTest {
                 .birthDate("12341010")
                 .wantedJob("marketing")
                 .profile(Profile.builder()
-                        .college("college1")
-                        .isGraduated(false)
+                        .job("취업준비중")
+                        .profileImageFile(File.builder()
+                                .fileName("profileImage.png")
+                                .extension("png")
+                                .url("profile.com")
+                                .build())
                         .build())
                 .build();
     }
@@ -83,14 +87,16 @@ class MyPageServiceTest {
                 .url("url")
                 .build();
 
-        given(s3Util.upload(file)).willReturn(uploadedProfileImage);
+        given(s3Util.upload(file))
+                .willReturn(uploadedProfileImage);
 
         //when
-        ProfileImageResponseDto profileImageResponseDto = myPageService.uploadProfileImage(user, file);
+        ProfileResponseDto profileResponseDto = myPageService.uploadProfileImage(user, file);
 
         //then
-        assertEquals(uploadedProfileImage.getFileName(), profileImageResponseDto.getFileName());
-        assertEquals(uploadedProfileImage.getUrl(), profileImageResponseDto.getUrl());
+        assertEquals(user.getUsername(), profileResponseDto.getId());
+        assertEquals(user.getName(), profileResponseDto.getName());
+        assertEquals(uploadedProfileImage.getUrl(), profileResponseDto.getProfileImageUrl());
 
         verify(userRepository, times(1)).save(any(User.class));
     }
@@ -105,7 +111,8 @@ class MyPageServiceTest {
                 "image/png",
                 "mainImage".getBytes());
 
-        given(s3Util.upload(file)).willThrow(FileHandlingException.class);
+        given(s3Util.upload(file))
+                .willThrow(FileHandlingException.class);
 
         //when
         //then
@@ -149,7 +156,7 @@ class MyPageServiceTest {
 
         //then
         assertEquals(3, userPortfolios.getPortfolios().size());
-        assertEquals(1, userPortfolios.getMaxPage());
+        assertEquals(1, userPortfolios.getPage().getTotalPage());
         List<UserPortfolioResponseDto> portfoliosResponseDto = userPortfolios.getPortfolios();
         assertEquals(portfolio1.getTitle(), portfoliosResponseDto.get(0).getTitle());
         assertEquals(portfolio1.getCreatedDate(), portfoliosResponseDto.get(0).getCreatedDate());
@@ -182,7 +189,7 @@ class MyPageServiceTest {
 
         //then
         assertEquals(user.getName(), userProfileDto.getName());
-        assertEquals(user.getUserProfileUrl(), userProfileDto.getProfileUrl());
+        assertEquals(user.getUserProfileUrl(), userProfileDto.getProfileImageUrl());
         assertEquals(user.getUserJob(), userProfileDto.getJob());
     }
 

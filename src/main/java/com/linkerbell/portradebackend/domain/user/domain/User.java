@@ -1,6 +1,5 @@
 package com.linkerbell.portradebackend.domain.user.domain;
 
-import com.linkerbell.portradebackend.domain.user.dto.ProfileRequestDto;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -47,7 +46,6 @@ public class User extends BaseTimeEntity {
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate = LocalDateTime.now();
 
-    @Setter
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -65,34 +63,6 @@ public class User extends BaseTimeEntity {
         this.roles.add(Role.ROLE_USER);
     }
 
-    public void addRole(Role role) {
-        roles.add(role);
-    }
-
-    public void deleteRole(Role role) {
-        roles.remove(role);
-    }
-
-    public boolean isAdmin() {
-        return roles.contains(Role.ROLE_ADMIN);
-    }
-
-    public String getUserProfileUrl() {
-        return profile.getProfileUrl();
-    }
-
-    public String getUserJob() {
-        return profile.getJob();
-    }
-
-    public boolean isUserGraduated() {
-        return profile.isGraduated();
-    }
-
-    public String getUserCollege() {
-        return profile.getCollege();
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,11 +76,31 @@ public class User extends BaseTimeEntity {
         return Objects.hash(id);
     }
 
-    public void updateUserProfile(ProfileRequestDto profileRequestDto) {
-        this.name = profileRequestDto.getName();
-        this.birthDate = profileRequestDto.getBirthDate();
-        this.wantedJob = profileRequestDto.getWantedJob();
-        profile.updateProfile(profileRequestDto.getCollege(), profileRequestDto.isGraduated());
+    public void addRole(Role role) {
+        roles.add(role);
+    }
+
+    public void deleteRole(Role role) {
+        roles.remove(role);
+    }
+
+    public boolean isAdmin() {
+        return roles.contains(Role.ROLE_ADMIN);
+    }
+
+    public String getUserProfileUrl() {
+        return profile.getProfileImageFile().getUrl();
+    }
+
+    public String getUserJob() {
+        return profile.getJob();
+    }
+
+    public void updateProfile(String name, String birthDate, String wantedJob, String college, boolean isGraduated) {
+        this.name = name;
+        this.birthDate = birthDate;
+        this.wantedJob = wantedJob;
+        profile.updateProfile(college, isGraduated);
     }
 
     public void updateJob(String job) {
