@@ -38,8 +38,9 @@ public class NoticeController {
     @GetMapping
     public ResponseEntity<NoticesResponseDto> getNoticesApi(
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
-            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
-        NoticesResponseDto noticesResponseDto = noticeService.getNotices(page, size, "");
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size,
+            @Parameter(description = "검색할 키워드") @RequestParam(value = "keyword", defaultValue = "") String keyword) {
+        NoticesResponseDto noticesResponseDto = noticeService.getNotices(page, size, keyword);
         return ResponseEntity.status(HttpStatus.OK).body(noticesResponseDto);
     }
 

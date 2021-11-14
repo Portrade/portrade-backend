@@ -47,12 +47,7 @@ public class NoticeService {
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<Notice> noticePage = null;
-
-        if (keyword.equals(""))
-            noticePage = noticeRepository.findAll(pageable);
-        else
-            noticePage = noticeRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
+        Page<Notice> noticePage = noticeRepository.findAllByTitleContainingOrContentContainingIgnoreCase(pageable, keyword, keyword);
 
         List<NoticeResponseDto> noticeResponseDtos = noticePage.stream()
                 .map(NoticeResponseDto::of)
