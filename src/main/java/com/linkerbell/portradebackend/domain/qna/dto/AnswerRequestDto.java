@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReplyQnaRequestDto {
+public class AnswerRequestDto {
     @NotNull(message = "NULL_QNA_TITLE")
     @Size(min = 1, max = 20, message = "INVALID_QNA_TITLE")
     private String title;
@@ -26,7 +26,7 @@ public class ReplyQnaRequestDto {
     private boolean secret;
 
     @Builder
-    public ReplyQnaRequestDto(String title, String content, boolean secret) {
+    public AnswerRequestDto(String title, String content, boolean secret) {
         this.title = title;
         this.content = content;
         this.secret = secret;

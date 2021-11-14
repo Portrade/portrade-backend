@@ -4,10 +4,10 @@ import com.linkerbell.portradebackend.domain.qna.domain.Answer;
 import com.linkerbell.portradebackend.domain.qna.domain.Qna;
 import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
-import com.linkerbell.portradebackend.domain.qna.dto.CreateQnaRequestDto;
+import com.linkerbell.portradebackend.domain.qna.dto.QuestionRequestDto;
 import com.linkerbell.portradebackend.domain.qna.dto.QnaDetailResponseDto;
 import com.linkerbell.portradebackend.domain.qna.dto.QnasResponseDto;
-import com.linkerbell.portradebackend.domain.qna.dto.ReplyQnaRequestDto;
+import com.linkerbell.portradebackend.domain.qna.dto.AnswerRequestDto;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Role;
 import com.linkerbell.portradebackend.domain.user.domain.User;
@@ -87,7 +87,7 @@ class QnaServiceTest {
     @Test
     void createQna() {
         //given
-        CreateQnaRequestDto createRequestDto = CreateQnaRequestDto.builder()
+        QuestionRequestDto createRequestDto = QuestionRequestDto.builder()
                 .title("1대1문의글제목")
                 .name("user1")
                 .email("user1@gmail.com")
@@ -114,14 +114,14 @@ class QnaServiceTest {
         //when
         //then
         assertThrows(NonExistentException.class,
-                () -> qnaService.createAnswer(qnaId, any(ReplyQnaRequestDto.class), admin));
+                () -> qnaService.createAnswer(qnaId, any(AnswerRequestDto.class), admin));
     }
 
     @Test
     @DisplayName("1:1 문의 답변 생성 성공 - ANSWERED 로 상태 변경")
     void createReplyQna() {
         //given
-        ReplyQnaRequestDto replyQnaRequestDto = ReplyQnaRequestDto.builder()
+        AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
                 .title("1대1 문의 답변글!!")
                 .content("1대1 문의 답변글 입니다.")
                 .secret(false)
@@ -131,7 +131,7 @@ class QnaServiceTest {
         given(qnaRepository.findByIdAndDType(qnaId))
                 .willReturn(Optional.of(question));
         //when
-        qnaService.createAnswer(qnaId, replyQnaRequestDto, admin);
+        qnaService.createAnswer(qnaId, answerRequestDto, admin);
 
         //then
         assertEquals(question.getStatus(), Status.ANSWERED);
@@ -175,7 +175,7 @@ class QnaServiceTest {
         given(qnaRepository.findAll(any(Pageable.class))).willReturn(page);
 
         //when
-        QnasResponseDto qnasResponseDto = qnaService.getQnas(1, 3, "");
+        QnasResponseDto qnasResponseDto = qnaService.getQnas(1, 3, "", "all");
 
         //then
         assertEquals(qnasResponseDto.getPage().getTotalPage(), 1);

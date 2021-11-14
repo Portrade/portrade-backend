@@ -1,8 +1,8 @@
 package com.linkerbell.portradebackend.domain.qna.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.linkerbell.portradebackend.domain.qna.dto.CreateQnaRequestDto;
-import com.linkerbell.portradebackend.domain.qna.dto.ReplyQnaRequestDto;
+import com.linkerbell.portradebackend.domain.qna.dto.QuestionRequestDto;
+import com.linkerbell.portradebackend.domain.qna.dto.AnswerRequestDto;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ class QnaControllerTest {
     @DisplayName("1:1 문의 등록 API 실패 - 로그인 안함")
     public void saveQnaApi_anonymous() throws Exception {
         //given
-        CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
+        QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
                 .category("업로드")
                 .name("김질문")
                 .email("user1@gmail.com")
@@ -70,7 +70,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(objectMapper.writeValueAsString(createQnaRequestDto))
+                .content(objectMapper.writeValueAsString(questionRequestDto))
         );
 
         //then
@@ -82,7 +82,7 @@ class QnaControllerTest {
     @DisplayName("1:1 문의 등록 API 성공 - 로그인 한 유저")
     public void saveQnaApi() throws Exception {
         //given
-        CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
+        QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
                 .category("업로드")
                 .name("김질문")
                 .email("user1@gmail.com")
@@ -96,7 +96,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(objectMapper.writeValueAsString(createQnaRequestDto))
+                .content(objectMapper.writeValueAsString(questionRequestDto))
         );
 
         //then
@@ -109,7 +109,7 @@ class QnaControllerTest {
     @DisplayName("1:1 문의 등록 API 성공 - 어드민 계정")
     public void saveQnaApi_admin() throws Exception {
         //given
-        CreateQnaRequestDto createQnaRequestDto = CreateQnaRequestDto.builder()
+        QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
                 .category("업로드")
                 .name("김질문")
                 .email("admin1@gmail.com")
@@ -123,7 +123,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(objectMapper.writeValueAsString(createQnaRequestDto))
+                .content(objectMapper.writeValueAsString(questionRequestDto))
         );
 
         //then
@@ -136,7 +136,7 @@ class QnaControllerTest {
     @DisplayName("1:1 문의 답변 글 작성 API 실패 - 유저가 작성")
     public void replyQnaApi_user() throws Exception {
         //given
-        ReplyQnaRequestDto replyQnaRequestDto = ReplyQnaRequestDto.builder()
+        AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
                 .title("1:1 답변글")
                 .content("1:1 답변글 남깁니다.")
                 .secret(false)
@@ -146,7 +146,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI + "/1/answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(objectMapper.writeValueAsString(replyQnaRequestDto)));
+                .content(objectMapper.writeValueAsString(answerRequestDto)));
 
         //then
         result.andExpect(status().isForbidden());
@@ -157,7 +157,7 @@ class QnaControllerTest {
     @DisplayName("1:1 문의 답변 글 작성 API 성공 - 관리자가 작성")
     public void replyQnaApi_admin() throws Exception {
         //given
-        ReplyQnaRequestDto replyQnaRequestDto = ReplyQnaRequestDto.builder()
+        AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
                 .title("1:1 답변글")
                 .content("1:1 답변글 남깁니다.")
                 .secret(false)
@@ -167,7 +167,7 @@ class QnaControllerTest {
         ResultActions result = mvc.perform(post(PREFIX_URI + "/1/answer")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding("UTF-8")
-                .content(objectMapper.writeValueAsString(replyQnaRequestDto)));
+                .content(objectMapper.writeValueAsString(answerRequestDto)));
 
         //then
         result.andExpect(status().isCreated())
