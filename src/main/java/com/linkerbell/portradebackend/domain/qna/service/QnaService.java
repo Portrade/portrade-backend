@@ -6,6 +6,7 @@ import com.linkerbell.portradebackend.domain.qna.domain.Question;
 import com.linkerbell.portradebackend.domain.qna.domain.Status;
 import com.linkerbell.portradebackend.domain.qna.dto.*;
 import com.linkerbell.portradebackend.domain.qna.repository.QnaRepository;
+import com.linkerbell.portradebackend.domain.qna.repository.QuestionRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
@@ -33,16 +34,28 @@ import java.util.stream.Collectors;
 public class QnaService {
 
     private final QnaRepository qnaRepository;
+    private final QuestionRepository questionRepository;
 
     @Transactional
-    public IdResponseDto createQuestion(CreateQnaRequestDto requestDto, User user) {
-        Question qna = requestDto.toEntity(user, Status.UNANSWERED);
+    public IdResponseDto createQuestion(QuestionRequestDto requestDto, User user) {
+        Question qna = Question.builder()
+                .category(requestDto.getCategory())
+                .name(requestDto.getName())
+                .phoneNumber(requestDto.getPhoneNumber())
+                .email(requestDto.getEmail())
+                .title(requestDto.getTitle())
+                .content(requestDto.getContent())
+                .isPublic(requestDto.getIsPublic())
+                .user(user)
+                .status(Status.UNANSWERED)
+                .build();
         qnaRepository.save(qna);
+
         return new IdResponseDto(qna.getId());
     }
 
     @Transactional
-    public IdResponseDto createAnswer(Long qnaId, ReplyQnaRequestDto requestDto, User user) {
+    public IdResponseDto createAnswer(Long qnaId, AnswerRequestDto requestDto, User user) {
         Question foundQna = qnaRepository.findByIdAndDType(qnaId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_QNA_ID));
 
@@ -53,17 +66,24 @@ public class QnaService {
         return new IdResponseDto(answer.getId());
     }
 
-    public QnasResponseDto getQnas(int page, int size, String keyword) {
+    public QnasResponseDto getQnas(int page, int size, String keyword, String type) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
 
         Page<Qna> qnaPage = null;
-        if (keyword.equals(""))
-            qnaPage = qnaRepository.findAll(pageable);
-        else
-            qnaPage = qnaRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
+        switch (type) {
+            case "answered":
+                qnaPage = questionRepository.findAllByTitleContainingAndContentContainingIgnoreCaseAndStatusEquals(pageable, keyword, keyword, Status.ANSWERED);
+                break;
+            case "unanswered":
+                qnaPage = questionRepository.findAllByTitleContainingAndContentContainingIgnoreCaseAndStatusEquals(pageable, keyword, keyword, Status.UNANSWERED);
+                break;
+            default:
+                qnaPage = qnaRepository.findAllByTitleContainingAndContentContainingIgnoreCase(pageable, keyword, keyword);
+                break;
+        }
 
         List<QnaResponseDto> qnaResponseDtos = qnaPage.stream()
                 .map(QnaResponseDto::of)
@@ -92,12 +112,12 @@ public class QnaService {
         Optional<Qna> nextQnaOptional = qnaRepository.findTopByIdIsGreaterThanOrderByIdAsc(qnaId);
         Optional<Qna> prevQnaOptional = qnaRepository.findTopByIdIsLessThanOrderByIdDesc(qnaId);
 
-        QnaNextDetailResponseDto nextQnaResponseDto = nextQnaOptional.isPresent()
-                ? QnaNextDetailResponseDto.of(nextQnaOptional.get())
+        QnaResponseDto nextQnaResponseDto = nextQnaOptional.isPresent()
+                ? QnaResponseDto.of(nextQnaOptional.get())
                 : null;
 
-        QnaNextDetailResponseDto prevQnaResponseDto = prevQnaOptional.isPresent()
-                ? QnaNextDetailResponseDto.of(prevQnaOptional.get())
+        QnaResponseDto prevQnaResponseDto = prevQnaOptional.isPresent()
+                ? QnaResponseDto.of(prevQnaOptional.get())
                 : null;
 
         return QnaDetailResponseDto.builder()
@@ -105,7 +125,7 @@ public class QnaService {
                 .creator(qna.getCreatorName())
                 .title(qna.getTitle())
                 .content(qna.getContent())
-                .secret(qna.isPublic())
+                .isPublic(qna.isPublic())
                 .createdDate(qna.getCreatedDate())
                 .lastModifiedDate(qna.getLastModifiedDate())
                 .next(nextQnaResponseDto)

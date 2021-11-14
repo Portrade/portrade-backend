@@ -13,5 +13,5 @@ public interface NoticeRepository extends JpaRepository<Notice, Long> {
 
     Optional<Notice> findTopByIdIsLessThanOrderByIdDesc(Long id);
 
-    Page<Notice> findAllByTitleContainingAndContentContainingIgnoreCase(Pageable pageable, String title, String content);
+    Page<Notice> findAllByTitleContainingOrContentContainingIgnoreCase(Pageable pageable, String title, String content);
 }

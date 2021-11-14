@@ -13,7 +13,7 @@ import javax.persistence.Enumerated;
 @ToString
 @DiscriminatorValue("QUESTION")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Question extends Qna{
+public class Question extends Qna {
 
     private String name;
 

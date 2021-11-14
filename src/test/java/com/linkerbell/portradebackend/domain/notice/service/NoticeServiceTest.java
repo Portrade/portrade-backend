@@ -25,8 +25,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -92,11 +91,11 @@ class NoticeServiceTest {
         List<Notice> notices = new ArrayList<>(Arrays.asList(notice1, notice2, notice3));
         Page<Notice> noticePage = new PageImpl<>(notices);
 
-        given(noticeRepository.findAll(any(Pageable.class)))
+        given(noticeRepository.findAllByTitleContainingOrContentContainingIgnoreCase(any(Pageable.class), anyString(), anyString()))
                 .willReturn(noticePage);
 
         // when
-        NoticesResponseDto foundNoticesResponseDto = noticeService.getNotices(1, 3, "");
+        NoticesResponseDto foundNoticesResponseDto = noticeService.getNotices(1, 3, "Hi");
 
         // then
         assertEquals(foundNoticesResponseDto.getPage().getTotalPage(), 1);

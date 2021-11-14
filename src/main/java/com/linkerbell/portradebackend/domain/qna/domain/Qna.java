@@ -40,7 +40,7 @@ public abstract class Qna extends BaseTimeEntity {
     private boolean isPublic;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate = LocalDateTime.now();
+    private LocalDateTime lastModifiedDate;
 
     protected Qna(Long id, User user, String title, String content, boolean isPublic) {
         this.id = id;
