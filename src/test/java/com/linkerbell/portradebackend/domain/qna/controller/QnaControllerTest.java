@@ -1,8 +1,8 @@
 package com.linkerbell.portradebackend.domain.qna.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.linkerbell.portradebackend.domain.qna.dto.QuestionRequestDto;
 import com.linkerbell.portradebackend.domain.qna.dto.AnswerRequestDto;
+import com.linkerbell.portradebackend.domain.qna.dto.QuestionRequestDto;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,9 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,8 +50,8 @@ class QnaControllerTest {
                 .build();
     }
 
-    @Test
     @DisplayName("1:1 문의 등록 API 실패 - 로그인 안함")
+    @Test
     public void saveQnaApi_anonymous() throws Exception {
         //given
         QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
@@ -77,9 +75,9 @@ class QnaControllerTest {
         result.andExpect(status().isUnauthorized());
     }
 
+    @DisplayName("1:1 문의 등록 API 성공 - 로그인 한 유저")
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 등록 API 성공 - 로그인 한 유저")
     public void saveQnaApi() throws Exception {
         //given
         QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
@@ -104,9 +102,9 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
+    @DisplayName("1:1 문의 등록 API 성공 - 어드민 계정")
     @Test
     @WithMockPortradeAdmin
-    @DisplayName("1:1 문의 등록 API 성공 - 어드민 계정")
     public void saveQnaApi_admin() throws Exception {
         //given
         QuestionRequestDto questionRequestDto = QuestionRequestDto.builder()
@@ -131,9 +129,9 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
+    @DisplayName("1:1 문의 답변 글 작성 API 실패 - 유저가 작성")
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 답변 글 작성 API 실패 - 유저가 작성")
     public void replyQnaApi_user() throws Exception {
         //given
         AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
@@ -152,9 +150,9 @@ class QnaControllerTest {
         result.andExpect(status().isForbidden());
     }
 
+    @DisplayName("1:1 문의 답변 글 작성 API 성공 - 관리자가 작성")
     @Test
     @WithMockPortradeAdmin
-    @DisplayName("1:1 문의 답변 글 작성 API 성공 - 관리자가 작성")
     public void replyQnaApi_admin() throws Exception {
         //given
         AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
@@ -174,8 +172,8 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.id").isNotEmpty());
     }
 
-    @Test
     @DisplayName("1:1 문의 글 목록 조회 API 성공")
+    @Test
     public void getQnasApi() throws Exception {
         //given
         //when
@@ -195,9 +193,8 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.qnas[3].title").value("1:1 문의합니다."));
     }
 
-
-    @Test
     @DisplayName("1:1 문의 글 상세 조회 API 실패 - 조회 게시글 없는 경우")
+    @Test
     public void getQnaDetailApi_nonexistentId() throws Exception {
         //given
         //when
@@ -209,8 +206,8 @@ class QnaControllerTest {
     }
 
 
-    @Test
     @DisplayName("1:1 문의 글 상세 조회 API 실패 - 로그인 안한 유저가 비공개 글 상세 조회")
+    @Test
     public void getQnaDetailApi_anonymous() throws Exception {
         //given
         //when
@@ -221,9 +218,9 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.code").value("C002"));
     }
 
+    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 권한 없는 유저가 비공개 글 상세 조회")
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 권한 없는 유저가 비공개 글 상세 조회")
     public void getQnaDetailApi_noauthentication() throws Exception {
         //given
         //when
@@ -234,9 +231,9 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.code").value("C002"));
     }
 
+    @DisplayName("1:1 문의 글 상세 조회 API 성공 - 글쓴이가 비공개 글 상세 조회")
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 글 상세 조회 API 성공 - 글쓴이가 비공개 글 상세 조회")
     public void getQnaDetailApi_user() throws Exception {
         //given
         //when
@@ -246,9 +243,9 @@ class QnaControllerTest {
         result.andExpect(status().isOk());
     }
 
+    @DisplayName("1:1 문의 글 상세 조회 API 성공 - 관리자가 비공개 글 상세 조회")
     @Test
     @WithMockPortradeAdmin
-    @DisplayName("1:1 문의 글 상세 조회 API 성공 - 관리자가 비공개 글 상세 조회")
     public void getQnaDetailApi_admin() throws Exception {
         //given
         //when
@@ -259,15 +256,14 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.creator").value("김가입"))
                 .andExpect(jsonPath("$.title").value("1:1 문의합니다."))
                 .andExpect(jsonPath("$.content").value("이력서 업로드 문의합니다."))
-                .andExpect(jsonPath("$.secret").value(false))
-                .andExpect(jsonPath("$.next.creator").value("사나"))
+                .andExpect(jsonPath("$.isPublic").value(false))
                 .andExpect(jsonPath("$.next.title").value("1:1 문의합니다."))
                 .andExpect(jsonPath("$.prev").doesNotExist());
     }
 
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
     public void deleteQnaApi_noauthentication() throws Exception {
         //given
         //when
@@ -278,9 +274,9 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.code").value("C002"));
     }
 
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 비로그인")
     @Test
-    @DisplayName("1:1 문의 글 삭제 API 실패 - 로그인 안한 사용자가 삭제")
-    public void deleteQnaApi_anonymous() throws Exception {
+    public void deleteQnaApi_notLoggedIn() throws Exception {
         //given
         //when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
@@ -289,10 +285,10 @@ class QnaControllerTest {
         result.andExpect(status().is4xxClientError());
     }
 
+    @DisplayName("1:1 문의 글 삭제 API 성공 - 글쓴이가 삭제")
     @Test
     @WithMockPortradeUser
-    @DisplayName("1:1 문의 글 삭제 API 실패 - 글쓴이가 삭제")
-    public void deleteQnaApi_user() throws Exception {
+    public void deleteQnaApi_creator() throws Exception {
         //given
         //when
         ResultActions result = mvc.perform(delete(PREFIX_URI + "/1"));
@@ -301,9 +297,9 @@ class QnaControllerTest {
         result.andExpect(status().isNoContent());
     }
 
+    @DisplayName("1:1 문의 글 삭제 API 성공 - 관리자가 삭제")
     @Test
     @WithMockPortradeAdmin
-    @DisplayName("1:1 문의 글 삭제 API 실패 - 관리자가 삭제")
     public void deleteQnaApi_admin() throws Exception {
         //given
         //when

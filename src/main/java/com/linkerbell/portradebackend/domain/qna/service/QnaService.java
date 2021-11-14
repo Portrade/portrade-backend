@@ -112,12 +112,12 @@ public class QnaService {
         Optional<Qna> nextQnaOptional = qnaRepository.findTopByIdIsGreaterThanOrderByIdAsc(qnaId);
         Optional<Qna> prevQnaOptional = qnaRepository.findTopByIdIsLessThanOrderByIdDesc(qnaId);
 
-        QnaNextDetailResponseDto nextQnaResponseDto = nextQnaOptional.isPresent()
-                ? QnaNextDetailResponseDto.of(nextQnaOptional.get())
+        QnaResponseDto nextQnaResponseDto = nextQnaOptional.isPresent()
+                ? QnaResponseDto.of(nextQnaOptional.get())
                 : null;
 
-        QnaNextDetailResponseDto prevQnaResponseDto = prevQnaOptional.isPresent()
-                ? QnaNextDetailResponseDto.of(prevQnaOptional.get())
+        QnaResponseDto prevQnaResponseDto = prevQnaOptional.isPresent()
+                ? QnaResponseDto.of(prevQnaOptional.get())
                 : null;
 
         return QnaDetailResponseDto.builder()

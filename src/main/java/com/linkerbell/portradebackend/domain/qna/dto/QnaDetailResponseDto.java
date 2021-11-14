@@ -16,11 +16,11 @@ public class QnaDetailResponseDto {
     private final LocalDateTime createdDate;
     private final LocalDateTime lastModifiedDate;
 
-    private final QnaNextDetailResponseDto next;
-    private final QnaNextDetailResponseDto prev;
+    private final QnaResponseDto next;
+    private final QnaResponseDto prev;
 
     @Builder
-    public QnaDetailResponseDto(Long id, String creator, String title, String content, Boolean isPublic, LocalDateTime createdDate, LocalDateTime lastModifiedDate, QnaNextDetailResponseDto next, QnaNextDetailResponseDto prev) {
+    public QnaDetailResponseDto(Long id, String creator, String title, String content, Boolean isPublic, LocalDateTime createdDate, LocalDateTime lastModifiedDate, QnaResponseDto next, QnaResponseDto prev) {
         this.id = id;
         this.creator = creator;
         this.title = title;
