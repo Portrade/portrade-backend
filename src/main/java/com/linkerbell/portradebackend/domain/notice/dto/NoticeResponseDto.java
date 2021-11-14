@@ -16,7 +16,7 @@ public class NoticeResponseDto {
     private final LocalDateTime createdDate;
 
     @Builder
-    public NoticeResponseDto(Long id, String creator, String title, int viewCount, LocalDateTime createdDate) {
+    private NoticeResponseDto(Long id, String creator, String title, int viewCount, LocalDateTime createdDate) {
         this.id = id;
         this.creator = creator;
         this.title = title;

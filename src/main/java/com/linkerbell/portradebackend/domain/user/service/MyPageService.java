@@ -1,9 +1,14 @@
 package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
+import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioResponseDto;
+import com.linkerbell.portradebackend.domain.portfolio.dto.PortfoliosResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.*;
+import com.linkerbell.portradebackend.domain.user.dto.InsightResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.JobRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.ProfileRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.ProfileResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.File;
@@ -48,24 +53,30 @@ public class MyPageService {
                 .build();
     }
 
-    public UserPortfoliosResponseDto getUserPortfolios(String userId, int page, int size) {
+    public PortfoliosResponseDto getUserPortfolios(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<Portfolio> portfolioPage = portfolioRepository.findAllByUsername(pageable, userId);
+        Page<Portfolio> portfolioPage = portfolioRepository.findAllByCreator_Username(pageable, userId);
 
-        List<UserPortfolioResponseDto> userPortfolioResponseDtos = portfolioPage
-                .stream()
-                .map(portfolio -> new UserPortfolioResponseDto(portfolio.getId(), portfolio.getTitle(), portfolio.getCreatedDate()))
+        List<PortfolioResponseDto> portfolioResponseDtos = portfolioPage.stream()
+                .map(portfolio -> PortfolioResponseDto.builder()
+                        .id(portfolio.getId())
+                        .creator(portfolio.getCreator().getUsername())
+                        .title(portfolio.getTitle())
+                        .mainImageUrl(portfolio.getMainImageFile().getUrl())
+                        .createdDate(portfolio.getCreatedDate())
+                        .lastModifiedDate(portfolio.getLastModifiedDate())
+                        .build())
                 .collect(Collectors.toList());
         PageResponseDto pageResponseDto = PageResponseDto.builder()
                 .totalPage(portfolioPage.getTotalPages())
                 .totalElement(portfolioPage.getTotalElements())
                 .build();
 
-        return UserPortfoliosResponseDto.builder()
-                .portfolios(userPortfolioResponseDtos)
+        return PortfoliosResponseDto.builder()
+                .portfolios(portfolioResponseDtos)
                 .page(pageResponseDto)
                 .build();
     }
@@ -97,7 +108,7 @@ public class MyPageService {
         int commentCount = 0;
         int followingCount = followRepository.countByFollowing_Username(user.getUsername());
         int followerCount = followRepository.countByFollower_Username(user.getUsername());
-        List<Portfolio> portfolios = portfolioRepository.findAllByUsername(user.getUsername());
+        List<Portfolio> portfolios = portfolioRepository.findAllByCreator_Username(user.getUsername());
         for (Portfolio portfolio : portfolios) {
             viewCount += portfolio.getViewCount();
             likeCount += portfolio.getLikeCount();

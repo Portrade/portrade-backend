@@ -33,7 +33,7 @@ public class Notice extends BaseTimeEntity {
     private int viewCount = 0;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate = LocalDateTime.now();
+    private LocalDateTime lastModifiedDate;
 
     @Builder
     public Notice(Long id, User user, String title, String content, int viewCount) {

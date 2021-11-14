@@ -52,7 +52,6 @@ class PortfolioServiceTest {
                 .birthDate("20030322")
                 .wantedJob("marketing")
                 .build();
-
         portfolio = Portfolio.builder()
                 .id(1L)
                 .creator(user)
@@ -97,6 +96,7 @@ class PortfolioServiceTest {
                 .fileName("contentFile")
                 .extension("png")
                 .url("content_url").build();
+
         given(s3Util.upload(any(MultipartFile.class)))
                 .willReturn(mainFile)
                 .willReturn(contentFile);

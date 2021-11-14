@@ -2,11 +2,15 @@ package com.linkerbell.portradebackend.domain.user.service;
 
 import com.linkerbell.portradebackend.domain.comment.domain.Comment;
 import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
+import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioResponseDto;
+import com.linkerbell.portradebackend.domain.portfolio.dto.PortfoliosResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
 import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.domain.user.dto.*;
+import com.linkerbell.portradebackend.domain.user.dto.InsightResponseDto;
+import com.linkerbell.portradebackend.domain.user.dto.ProfileRequestDto;
+import com.linkerbell.portradebackend.domain.user.dto.ProfileResponseDto;
 import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.File;
@@ -120,7 +124,7 @@ class MyPageServiceTest {
                 () -> myPageService.uploadProfileImage(user, file));
     }
 
-    @DisplayName("포트폴리오 조회 성공")
+    @DisplayName("특정 사용자의 포트폴리오 목록 조회 성공")
     @Test
     void getUserPortfolios() {
         //given
@@ -129,6 +133,9 @@ class MyPageServiceTest {
                 .title("포트폴리오1")
                 .description("저의 첫번째 포트폴리오입니다.")
                 .category("security")
+                .mainImageFile(File.builder()
+                        .url("www.main.com")
+                        .build())
                 .isPublic(true)
                 .build();
         Portfolio portfolio2 = Portfolio.builder()
@@ -136,6 +143,9 @@ class MyPageServiceTest {
                 .title("포트폴리오2")
                 .description("저의 두번째 포트폴리오입니다.")
                 .category("security")
+                .mainImageFile(File.builder()
+                        .url("www.main.com")
+                        .build())
                 .isPublic(true)
                 .build();
         Portfolio portfolio3 = Portfolio.builder()
@@ -143,34 +153,38 @@ class MyPageServiceTest {
                 .title("포트폴리오3")
                 .description("저의 세번째 포트폴리오입니다.")
                 .category("security")
+                .mainImageFile(File.builder()
+                        .url("www.main.com")
+                        .build())
                 .isPublic(true)
                 .build();
         List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
         Page<Portfolio> portfoliosPage = new PageImpl<>(portfolios);
 
-        given(portfolioRepository.findAllByUsername(any(Pageable.class), anyString()))
+        given(portfolioRepository.findAllByCreator_Username(any(Pageable.class), anyString()))
                 .willReturn(portfoliosPage);
 
         //when
-        UserPortfoliosResponseDto userPortfolios = myPageService.getUserPortfolios(user.getUsername(), 1, 10);
+        PortfoliosResponseDto userPortfolios = myPageService.getUserPortfolios(user.getUsername(), 1, 10);
 
         //then
         assertEquals(3, userPortfolios.getPortfolios().size());
         assertEquals(1, userPortfolios.getPage().getTotalPage());
-        List<UserPortfolioResponseDto> portfoliosResponseDto = userPortfolios.getPortfolios();
-        assertEquals(portfolio1.getTitle(), portfoliosResponseDto.get(0).getTitle());
-        assertEquals(portfolio1.getCreatedDate(), portfoliosResponseDto.get(0).getCreatedDate());
-        assertEquals(portfolio2.getTitle(), portfoliosResponseDto.get(1).getTitle());
-        assertEquals(portfolio2.getCreatedDate(), portfoliosResponseDto.get(1).getCreatedDate());
-        assertEquals(portfolio3.getTitle(), portfoliosResponseDto.get(2).getTitle());
-        assertEquals(portfolio3.getCreatedDate(), portfoliosResponseDto.get(2).getCreatedDate());
+        List<PortfolioResponseDto> portfolioResponseDtos = userPortfolios.getPortfolios();
+        assertEquals(portfolio1.getTitle(), portfolioResponseDtos.get(0).getTitle());
+        assertEquals(portfolio1.getCreatedDate(), portfolioResponseDtos.get(0).getCreatedDate());
+        assertEquals(portfolio2.getTitle(), portfolioResponseDtos.get(1).getTitle());
+        assertEquals(portfolio2.getCreatedDate(), portfolioResponseDtos.get(1).getCreatedDate());
+        assertEquals(portfolio3.getTitle(), portfolioResponseDtos.get(2).getTitle());
+        assertEquals(portfolio3.getCreatedDate(), portfolioResponseDtos.get(2).getCreatedDate());
     }
 
     @DisplayName("프로필 조회 실패 - 존재하지 않는 Username")
     @Test
     void getUserProfile_nonexistentUsername() {
         //given
-        given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.empty());
+        given(userRepository.findByUsername(user.getUsername()))
+                .willReturn(Optional.empty());
 
         //when
         //then
@@ -182,7 +196,8 @@ class MyPageServiceTest {
     @Test
     void getUserProfile() {
         //given
-        given(userRepository.findByUsername(user.getUsername())).willReturn(Optional.of(user));
+        given(userRepository.findByUsername(user.getUsername()))
+                .willReturn(Optional.of(user));
 
         //when
         ProfileResponseDto userProfileDto = myPageService.getUserProfile(user.getUsername());
@@ -219,7 +234,6 @@ class MyPageServiceTest {
         Portfolio portfolio1 = null;
         Portfolio portfolio2 = null;
         Portfolio portfolio3 = null;
-
         Likes likes1 = Likes.builder()
                 .user(user)
                 .portfolio(portfolio1)
@@ -269,7 +283,7 @@ class MyPageServiceTest {
                 .build();
         List<Portfolio> portfolios = new ArrayList<>(List.of(portfolio1, portfolio2, portfolio3));
 
-        given(portfolioRepository.findAllByUsername(user.getUsername()))
+        given(portfolioRepository.findAllByCreator_Username(user.getUsername()))
                 .willReturn(portfolios);
         given(followRepository.countByFollowing_Username(any()))
                 .willReturn(1);

@@ -44,7 +44,7 @@ public class Portfolio extends BaseTimeEntity {
     private int viewCount = 0;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate = LocalDateTime.now();
+    private LocalDateTime lastModifiedDate;
 
     @Embedded
     private File mainImageFile;
@@ -60,7 +60,7 @@ public class Portfolio extends BaseTimeEntity {
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Portfolio(Long id, User creator, String title, String description, String category, boolean isPublic, int viewCount, LocalDateTime lastModifiedDate, File mainImageFile, List<File> contentFiles, List<Likes> likes, List<Comment> comments) {
+    public Portfolio(Long id, User creator, String title, String description, String category, boolean isPublic, int viewCount, File mainImageFile, List<File> contentFiles, List<Likes> likes, List<Comment> comments) {
         this.id = id;
         this.creator = creator;
         this.title = title;
@@ -68,7 +68,6 @@ public class Portfolio extends BaseTimeEntity {
         this.category = category;
         this.isPublic = isPublic;
         this.viewCount = viewCount;
-        this.lastModifiedDate = lastModifiedDate;
         this.mainImageFile = mainImageFile;
         this.contentFiles = contentFiles;
         this.likes = likes;

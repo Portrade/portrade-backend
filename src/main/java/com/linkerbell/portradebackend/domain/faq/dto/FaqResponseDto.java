@@ -13,7 +13,7 @@ public class FaqResponseDto {
     private final String content;
 
     @Builder
-    public FaqResponseDto(Long id, String title, String content) {
+    private FaqResponseDto(Long id, String title, String content) {
         this.id = id;
         this.title = title;
         this.content = content;

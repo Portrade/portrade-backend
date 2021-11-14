@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.portfolio.controller;
 
 import com.linkerbell.portradebackend.domain.portfolio.dto.CreatePortfolioRequestDto;
 import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioDetailResponseDto;
+import com.linkerbell.portradebackend.domain.portfolio.dto.PortfoliosResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.service.PortfolioService;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
@@ -33,16 +34,45 @@ public class PortfolioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
-//    @Operation(summary = "포트폴리오 목록 조회", description = "포트폴리오 목록을 조회한다.")
-//    @GetMapping
-//    public ResponseEntity<PortfoliosResponseDto> getPortfoliosApi(
-//            @RequestParam(value = "page", defaultValue = "1") int page,
-//            @RequestParam(value = "size", defaultValue = "9") int size,
-//            @RequestParam(value = "type") String type,
-//            @RequestParam(value = "category", required = false) String category) {
-//        PortfoliosResponseDto portfoliosResponseDto = portfolioService.getPortfolios(page, size, type, category);
-//        return ResponseEntity.status(HttpStatus.OK).body(portfoliosResponseDto);
-//    }
+    @Operation(summary = "추천 포트폴리오 목록 조회", description = "추천 포트폴리오 목록을 조회한다.")
+    @GetMapping("/recommend")
+    public ResponseEntity<PortfoliosResponseDto> getRecommendedPortfoliosApi(
+            @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "9") int size) {
+        PortfoliosResponseDto portfoliosResponseDto = portfolioService.getRecommendedPortfolios(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(portfoliosResponseDto);
+    }
+
+    @Operation(summary = "최신 포트폴리오 목록 조회", description = "최신 포트폴리오 목록을 조회한다.")
+    @GetMapping("/recent")
+    public ResponseEntity<PortfoliosResponseDto> getRecentPortfoliosApi(
+            @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "9") int size) {
+        PortfoliosResponseDto portfoliosResponseDto = portfolioService.getRecentPortfolios(page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(portfoliosResponseDto);
+    }
+
+    @Operation(summary = "특정 분야 포트폴리오 목록 조회", description = "특정 분야의 포트폴리오 목록을 조회한다.")
+    @GetMapping("/categories/{category}")
+    public ResponseEntity<PortfoliosResponseDto> getPortfoliosBySpecificCategoryApi(
+            @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "9") int size,
+            @Parameter(description = "조회할 분야") @PathVariable String category) {
+        PortfoliosResponseDto portfoliosResponseDto = portfolioService.getPortfoliosBySpecificCategory(page, size, category);
+        return ResponseEntity.status(HttpStatus.OK).body(portfoliosResponseDto);
+    }
+
+    @Operation(summary = "포트폴리오 검색", description = "포트폴리오를 검색한다.")
+    @GetMapping
+    public ResponseEntity<PortfoliosResponseDto> getPortfoliosApi(
+            @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "9") int size,
+            @Parameter(description = "검색 키워드") @RequestParam(value = "keyword", defaultValue = "") String keyword,
+            @Parameter(description = "정렬 기준") @RequestParam(value = "sort", defaultValue = "created") String sort,
+            @Parameter(description = "정렬 방향") @RequestParam(value = "direction", defaultValue = "desc") String direction) {
+        PortfoliosResponseDto portfoliosResponseDto = portfolioService.getPortfoliosApi(page, size, keyword, sort, direction);
+        return ResponseEntity.status(HttpStatus.OK).body(portfoliosResponseDto);
+    }
 
     @Operation(summary = "포트폴리오 상세 조회", description = "포트폴리오를 상세 조회한다.")
     @GetMapping("/{portfolioId}")
