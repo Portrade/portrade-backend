@@ -15,7 +15,7 @@ public class QnaNextDetailResponseDto {
     private final LocalDateTime createdDate;
 
     @Builder
-    public QnaNextDetailResponseDto(Long id, String creator, String title, LocalDateTime createdDate) {
+    private QnaNextDetailResponseDto(Long id, String creator, String title, LocalDateTime createdDate) {
         this.id = id;
         this.creator = creator;
         this.title = title;

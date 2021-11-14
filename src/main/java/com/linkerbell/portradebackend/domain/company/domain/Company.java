@@ -52,10 +52,10 @@ public class Company extends BaseTimeEntity {
     private String foundingDate;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate = LocalDateTime.now();
+    private LocalDateTime lastModifiedDate;
 
     @Builder
-    public Company(Long id, User user, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate, LocalDateTime lastModifiedDate) {
+    public Company(Long id, User user, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
         this.id = id;
         this.user = user;
         this.name = name;
@@ -67,7 +67,6 @@ public class Company extends BaseTimeEntity {
         this.address = address;
         this.ceo = ceo;
         this.foundingDate = foundingDate;
-        this.lastModifiedDate = lastModifiedDate;
     }
 
     public void updateCompany(CompanyRequestDto companyRequestDto) {

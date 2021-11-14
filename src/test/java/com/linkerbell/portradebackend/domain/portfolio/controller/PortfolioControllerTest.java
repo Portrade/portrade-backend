@@ -131,6 +131,55 @@ class PortfolioControllerTest {
         result.andExpect(status().isBadRequest());
     }
 
+    @DisplayName("최신 포트폴리오 목록 조회 API 성공")
+    @Test
+    void getRecentPortfoliosApi() throws Exception {
+        // given
+        // when
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/recent"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.page.totalPage").value("1"))
+                .andExpect(jsonPath("$.page.totalElement").value("3"))
+                .andExpect(jsonPath("$.portfolios[0].id").value("3"))
+                .andExpect(jsonPath("$.portfolios[1].id").value("2"))
+                .andExpect(jsonPath("$.portfolios[2].id").value("1"))
+                .andDo(print());
+    }
+
+    @DisplayName("특정 분야 포트폴리오 목록 조회 API 성공")
+    @Test
+    void getPortfoliosBySpecificCategoryApi() throws Exception {
+        // given
+        // when
+        ResultActions result = mvc.perform(get(PREFIX_URI + "/categories/programming"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.page.totalPage").value("1"))
+                .andExpect(jsonPath("$.page.totalElement").value("2"))
+                .andExpect(jsonPath("$.portfolios[0].id").value("3"))
+                .andExpect(jsonPath("$.portfolios[1].id").value("1"))
+                .andDo(print());
+    }
+
+    @DisplayName("포트폴리오 검색 API 성공")
+    @Test
+    void getPortfoliosApi() throws Exception {
+        // given
+        // when
+        ResultActions result = mvc.perform(get(PREFIX_URI + "?keyword=제목&sort=dictionary&direction=desc"));
+
+        // then
+        result.andExpect(status().isOk())
+                .andExpect(jsonPath("$.page.totalPage").value("1"))
+                .andExpect(jsonPath("$.page.totalElement").value("3"))
+                .andExpect(jsonPath("$.portfolios[0].id").value("3"))
+                .andExpect(jsonPath("$.portfolios[1].id").value("2"))
+                .andDo(print());
+    }
+
     @DisplayName("포트폴리오 상세 조회 API 성공 - 공개 게시물")
     @Test
     void getPortfolioApi_publicPortfolio() throws Exception {
@@ -147,8 +196,8 @@ class PortfolioControllerTest {
                 .andExpect(jsonPath("$.category").value("programming"))
                 .andExpect(jsonPath("$.isPublic").value(true))
                 .andExpect(jsonPath("$.viewCount").value(16))
-//                .andExpect(jsonPath("$.likeCount").value(0))
-//                .andExpect(jsonPath("$.commentCount").value(0))
+                .andExpect(jsonPath("$.likeCount").value(2))
+                .andExpect(jsonPath("$.commentCount").value(2))
                 .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
                 .andExpect(jsonPath("$.contentFiles.size()").value(3))
                 .andExpect(jsonPath("$.contentFiles[0].url").value("content_url1"));
@@ -171,8 +220,8 @@ class PortfolioControllerTest {
                 .andExpect(jsonPath("$.category").value("programming"))
                 .andExpect(jsonPath("$.isPublic").value(false))
                 .andExpect(jsonPath("$.viewCount").value(13))
-//                .andExpect(jsonPath("$.likeCount").value(0))
-//                .andExpect(jsonPath("$.commentCount").value(0))
+                .andExpect(jsonPath("$.likeCount").value(0))
+                .andExpect(jsonPath("$.commentCount").value(0))
                 .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
                 .andExpect(jsonPath("$.contentFiles.size()").value(3))
                 .andExpect(jsonPath("$.contentFiles[0].url").value("content_url1"));

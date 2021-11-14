@@ -18,7 +18,7 @@ public class CompanyDetailResponseDto {
     private final String foundingDate;
 
     @Builder
-    public CompanyDetailResponseDto(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
+    private CompanyDetailResponseDto(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
         this.id = id;
         this.name = name;
         this.form = form;

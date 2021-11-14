@@ -16,7 +16,7 @@ public class ErrorResponse {
     private String code;
 
     @Builder
-    public ErrorResponse(String method, String path, String message, String code) {
+    private ErrorResponse(String method, String path, String message, String code) {
         this.method = method;
         this.path = path;
         this.message = message;

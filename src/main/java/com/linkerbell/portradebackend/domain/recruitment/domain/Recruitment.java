@@ -50,10 +50,10 @@ public class Recruitment extends BaseTimeEntity {
     private String category;
 
     @Column(name = "last_modified_date")
-    private LocalDateTime lastModifiedDate = LocalDateTime.now();
+    private LocalDateTime lastModifiedDate;
 
     @Builder
-    public Recruitment(Long id, Company company, String logo, String title, int viewCount, String career, String education, String workType, String pay, String address, String category, LocalDateTime lastModifiedDate) {
+    public Recruitment(Long id, Company company, String logo, String title, int viewCount, String career, String education, String workType, String pay, String address, String category) {
         this.id = id;
         this.company = company;
         this.logo = logo;
@@ -65,6 +65,5 @@ public class Recruitment extends BaseTimeEntity {
         this.pay = pay;
         this.address = address;
         this.category = category;
-        this.lastModifiedDate = lastModifiedDate;
     }
 }
