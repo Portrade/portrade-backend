@@ -57,7 +57,7 @@ class FollowControllerTest {
     void followApi_follow() throws Exception {
         //given
         //when
-        ResultActions result = mvc.perform(patch(PREFIX_URI + "/user1/follows/admin1")
+        ResultActions result = mvc.perform(patch(PREFIX_URI + "/admin1/follow")
                 .contentType(MediaType.APPLICATION_JSON));
 
         //then
@@ -81,7 +81,7 @@ class FollowControllerTest {
         followRepository.save(follow);
 
         //when
-        ResultActions result = mvc.perform(patch(PREFIX_URI + "/user1/follows/user2")
+        ResultActions result = mvc.perform(patch(PREFIX_URI + "/user2/follow")
                 .contentType(MediaType.APPLICATION_JSON));
 
         //then
@@ -93,25 +93,11 @@ class FollowControllerTest {
     void followApi_notLoggedIn() throws Exception {
         //given
         //when
-        ResultActions result = mvc.perform(patch(PREFIX_URI + "/user1/follows/user2")
+        ResultActions result = mvc.perform(patch(PREFIX_URI + "/user2/follow")
                 .contentType(MediaType.APPLICATION_JSON));
 
         //then
         result.andExpect(status().isUnauthorized());
-    }
-
-    @DisplayName("회원 팔로우/취소 API 실패 - 권한 없는 사용자")
-    @Test
-    @WithMockPortradeUser
-    void followApi_unAuthorizedUser() throws Exception {
-        //given
-        //when
-        ResultActions result = mvc.perform(patch(PREFIX_URI + "/user3/follows/user2")
-                .contentType(MediaType.APPLICATION_JSON));
-
-        //then
-        result.andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.code").value("C002"));
     }
 
     @DisplayName("팔로워 목록 조회 API 성공 - 빈 페이지 네이션")

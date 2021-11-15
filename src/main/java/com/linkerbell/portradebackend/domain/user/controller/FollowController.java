@@ -22,12 +22,11 @@ public class FollowController {
     private final FollowService followService;
 
     @Operation(summary = "회원 팔로우/취소")
-    @PatchMapping("/{userId}/follows/{followingId}")
+    @PatchMapping("/{userId}/follow")
     public ResponseEntity<Void> followApi(
-            @Parameter(description = "유저 ID") @PathVariable("userId") String userId,
-            @Parameter(description = "팔로잉할 유저 ID") @PathVariable("followingId") String followingId,
+            @Parameter(description = "팔로잉할 유저 ID") @PathVariable("userId") String userId,
             @Parameter(hidden = true) @CurrentUser User user) {
-        boolean isFollowed = followService.followUser(userId, followingId, user);
+        boolean isFollowed = followService.followUser(userId, user);
         if (isFollowed) {
             return ResponseEntity.status(HttpStatus.CREATED).build();
         } else {
