@@ -80,19 +80,6 @@ class FollowServiceTest {
                 .build();
     }
 
-    @DisplayName("회원 팔로우 실패 - 존재하지 않는 유저")
-    @Test
-    void followUser_nonexistentId() {
-        //given
-        given(userRepository.findByUsername(following.getUsername()))
-                .willReturn(Optional.empty());
-
-        //when
-        //then
-        assertThrows(NonExistentException.class,
-                () -> followService.followUser(following.getUsername(), follower));
-    }
-
     @DisplayName("회원 팔로우 성공")
     @Test
     void followUser_follow() {
@@ -130,6 +117,19 @@ class FollowServiceTest {
         //then
         verify(followRepository, times(1)).findByFollowerIdAndFollowingId(anyString(), anyString());
         verify(followRepository, times(1)).delete(any(Follow.class));
+    }
+
+    @DisplayName("회원 팔로우 실패 - 존재하지 않는 유저")
+    @Test
+    void followUser_nonexistentId() {
+        //given
+        given(userRepository.findByUsername(following.getUsername()))
+                .willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NonExistentException.class,
+                () -> followService.followUser(following.getUsername(), follower));
     }
 
     @DisplayName("팔로워 목록 조회 성공")

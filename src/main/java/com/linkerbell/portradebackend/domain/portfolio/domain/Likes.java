@@ -1,6 +1,5 @@
-package com.linkerbell.portradebackend.domain.user.domain;
+package com.linkerbell.portradebackend.domain.portfolio.domain;
 
-import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
@@ -9,7 +8,7 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@ToString(of = {"id"})
+@ToString(exclude = {"user", "portfolio"})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "likes")
 public class Likes extends BaseTimeEntity {

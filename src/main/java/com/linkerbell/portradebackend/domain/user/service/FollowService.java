@@ -36,10 +36,6 @@ public class FollowService {
         User followingUser = userRepository.findByUsername(following)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
 
-        if (user == null) {
-            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
-        }
-
         Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(user.getUsername(), following);
         if (result.isPresent()) {
             followRepository.delete(result.get());

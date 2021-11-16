@@ -5,7 +5,7 @@ import com.linkerbell.portradebackend.domain.portfolio.domain.Portfolio;
 import com.linkerbell.portradebackend.domain.portfolio.dto.PortfolioResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.dto.PortfoliosResponseDto;
 import com.linkerbell.portradebackend.domain.portfolio.repository.PortfolioRepository;
-import com.linkerbell.portradebackend.domain.user.domain.Likes;
+import com.linkerbell.portradebackend.domain.portfolio.domain.Likes;
 import com.linkerbell.portradebackend.domain.user.domain.Profile;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.domain.user.dto.InsightResponseDto;
