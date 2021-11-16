@@ -57,28 +57,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
+                // 사용자
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
                 .antMatchers(PREFIX_URL + "/users/me/insight").authenticated()
                 .antMatchers(PREFIX_URL + "/users/me/profile/**").authenticated()
                 .antMatchers(PREFIX_URL + "/users/{userId}/follow").authenticated()
-
+                // 공지사항
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/notices").hasRole("ADMIN")
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/notices/**").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/notices/**").hasRole("ADMIN")
-
+                // 1대1 문의
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/qnas").authenticated()
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/qnas/{qnaId}").authenticated()
                 .antMatchers(PREFIX_URL + "/qnas/{qnaId}/answer").hasRole("ADMIN")
-
+                // 자주 묻는 질문
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/faqs").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/faqs/{faqId}").hasRole("ADMIN")
-
+                // 기업
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/companies").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/companies/{companyId}").authenticated()
-
+                // 포트폴리오
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/portfolios").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
+                // 포트폴리오 좋아요
+                .antMatchers(HttpMethod.PATCH, PREFIX_URL + "/portfolios/{portfolioId}/like").authenticated()
 
                 .anyRequest().permitAll();
     }
