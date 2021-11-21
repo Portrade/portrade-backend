@@ -126,7 +126,7 @@ class MyPageControllerTest {
         //then
         result.andExpect(status().isOk())
                 .andExpect(jsonPath("$.viewCount").value("27"))
-                .andExpect(jsonPath("$.likeCount").value("2"))
+                .andExpect(jsonPath("$.likeCount").value("3"))
                 .andExpect(jsonPath("$.commentCount").value("2"))
                 .andExpect(jsonPath("$.followerCount").value("1"))
                 .andExpect(jsonPath("$.followingCount").value("1"));

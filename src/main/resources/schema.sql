@@ -9,75 +9,74 @@ create table user
     is_graduated       boolean,
     wanted_job         varchar(255) not null,
     job                varchar(255),
-    created_date       timestamp,
-    last_modified_date timestamp,
-
     url                varchar(255),
     file_name          varchar(255),
-    extension          varchar(255)
+    extension          varchar(255),
+    created_date       timestamp,
+    last_modified_date timestamp
 );
 
 create table comment
 (
     comment_id   bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date timestamp,
     content      varchar(255) not null,
     portfolio_id bigint,
-    user_id      BINARY(16)
+    user_id      BINARY(16),
+    created_date timestamp
 );
 
 create table company
 (
     company_id         bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date       timestamp,
     address            varchar(255) not null,
     ceo                varchar(255) not null,
     form               varchar(255) not null,
     founding_date      varchar(255),
     homepage           varchar(255) not null,
     industry           varchar(255) not null,
-    last_modified_date timestamp,
     member_count       varchar(255),
     name               varchar(255) not null,
     sales              varchar(255) not null,
-    user_id            BINARY(16)
+    user_id            BINARY(16),
+    created_date       timestamp,
+    last_modified_date timestamp
 );
 
 create table faq
 (
     faq_id             bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date       timestamp,
     content            varchar(255) not null,
-    last_modified_date timestamp,
     title              varchar(255) not null,
-    user_id            BINARY(16)
+    user_id            BINARY(16),
+    created_date       timestamp,
+    last_modified_date timestamp
 );
 
 create table follow
 (
     follow_id    bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date timestamp,
     follower     BINARY(16),
-    following    BINARY(16)
+    following    BINARY(16),
+    created_date timestamp
 );
 
 create table likes
 (
     likes_id     bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date timestamp,
     portfolio_id bigint,
-    user_id      BINARY(16)
+    user_id      BINARY(16),
+    created_date timestamp
 );
 
 create table notice
 (
     notice_id          bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date       timestamp,
     content            varchar(255) not null,
-    last_modified_date timestamp,
     title              varchar(255) not null,
     view_count         integer,
-    user_id            BINARY(16)
+    user_id            BINARY(16),
+    created_date       timestamp,
+    last_modified_date timestamp
 );
 
 create table portfolio
@@ -108,36 +107,36 @@ create table qna
 (
     qna_id             bigint AUTO_INCREMENT PRIMARY KEY,
     dtype              varchar(31)  not null,
-    created_date       timestamp    not null,
     content            varchar(255) not null,
     is_public          boolean,
-    last_modified_date timestamp,
     title              varchar(255) not null,
     category           varchar(255),
     email              varchar(255),
     name               varchar(255),
     phone_number       varchar(255),
     status             varchar(255),
-
     question_id        bigint,
-    user_id            BINARY(16)
+    user_id            BINARY(16),
+    created_date       timestamp    not null,
+    last_modified_date timestamp
+
 );
 
 create table recruitment
 (
     recruitment_id     bigint AUTO_INCREMENT PRIMARY KEY,
-    created_date       timestamp,
     title              varchar(255) not null,
     address            varchar(255) not null,
     career             varchar(255),
     category           varchar(255) not null,
     education          varchar(255),
-    last_modified_date timestamp,
     logo               varchar(255),
     pay                varchar(255) not null,
     view_count         integer,
     work_type          varchar(255),
-    company_id         bigint
+    company_id         bigint,
+    created_date       timestamp,
+    last_modified_date timestamp
 );
 
 create table user_company
@@ -147,11 +146,12 @@ create table user_company
     user_id         BINARY(16)
 );
 
-create table user_portfolio
+create table portfolio_save
 (
-    user_portfolio_id bigint AUTO_INCREMENT PRIMARY KEY,
+    portfolio_save_id bigint AUTO_INCREMENT PRIMARY KEY,
     portfolio_id      bigint,
-    user_id           BINARY(16)
+    user_id           BINARY(16),
+    created_date      timestamp not null
 );
 
 create table user_roles

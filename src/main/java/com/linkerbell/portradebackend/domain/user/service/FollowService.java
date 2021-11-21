@@ -11,7 +11,6 @@ import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
 import com.linkerbell.portradebackend.global.exception.custom.UnAuthenticatedException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,27 +32,18 @@ public class FollowService {
     private final FollowRepository followRepository;
 
     @Transactional
-    public boolean followUser(String follower, String following, User user) {
-        User followUser = userRepository.findByUsername(following)
-                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
-        userRepository.findByUsername(follower)
+    public boolean followUser(String following, User user) {
+        User followingUser = userRepository.findByUsername(following)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_USER));
 
-        if (user == null) {
-            throw new UnAuthenticatedException(ErrorCode.NONEXISTENT_AUTHENTICATION);
-        }
-        if (!user.getUsername().equals(follower)) {
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
-        }
-
-        Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(follower, following);
+        Optional<Follow> result = followRepository.findByFollowerIdAndFollowingId(user.getUsername(), following);
         if (result.isPresent()) {
             followRepository.delete(result.get());
             return false;
         } else {
             Follow follow = Follow.builder()
                     .follower(user)
-                    .following(followUser)
+                    .following(followingUser)
                     .build();
             followRepository.save(follow);
             return true;

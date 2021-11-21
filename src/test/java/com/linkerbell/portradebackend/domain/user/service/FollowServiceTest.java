@@ -10,7 +10,6 @@ import com.linkerbell.portradebackend.domain.user.repository.FollowRepository;
 import com.linkerbell.portradebackend.domain.user.repository.UserRepository;
 import com.linkerbell.portradebackend.global.common.File;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,45 +80,17 @@ class FollowServiceTest {
                 .build();
     }
 
-    @DisplayName("회원 팔로우 실패 - 존재하지 않는 유저")
-    @Test
-    void followUser_nonexistentId() {
-        //given
-        given(userRepository.findByUsername(following.getUsername()))
-                .willReturn(Optional.empty());
-
-        //when
-        //then
-        assertThrows(NonExistentException.class,
-                () -> followService.followUser(follower.getUsername(), following.getUsername(), follower));
-    }
-
-    @DisplayName("회원 팔로우/취소 실패 - 권한 없음")
-    @Test
-    void followUser_unauthorizedUser() {
-        //given
-        given(userRepository.findByUsername(anyString()))
-                .willReturn(Optional.of(following));
-
-        //when
-        //then
-        assertThrows(UnAuthorizedException.class,
-                () -> followService.followUser(follower.getUsername(), following.getUsername(), following));
-    }
-
     @DisplayName("회원 팔로우 성공")
     @Test
     void followUser_follow() {
         //given
         given(userRepository.findByUsername(following.getUsername()))
                 .willReturn(Optional.of(following));
-        given(userRepository.findByUsername(follower.getUsername()))
-                .willReturn(Optional.of(follower));
         given(followRepository.findByFollowerIdAndFollowingId(follower.getUsername(), following.getUsername()))
                 .willReturn(Optional.empty());
 
         //when
-        followService.followUser(follower.getUsername(), following.getUsername(), follower);
+        followService.followUser(following.getUsername(), follower);
 
         //then
         verify(followRepository, times(1)).findByFollowerIdAndFollowingId(anyString(), anyString());
@@ -137,20 +108,31 @@ class FollowServiceTest {
 
         given(userRepository.findByUsername(following.getUsername()))
                 .willReturn(Optional.of(following));
-        given(userRepository.findByUsername(follower.getUsername()))
-                .willReturn(Optional.of(follower));
         given(followRepository.findByFollowerIdAndFollowingId(follower.getUsername(), following.getUsername()))
                 .willReturn(Optional.of(follow));
 
         //when
-        followService.followUser(follower.getUsername(), following.getUsername(), follower);
+        followService.followUser(following.getUsername(), follower);
 
         //then
         verify(followRepository, times(1)).findByFollowerIdAndFollowingId(anyString(), anyString());
         verify(followRepository, times(1)).delete(any(Follow.class));
     }
 
-    @DisplayName("팔로워 목록 조회 - 성공")
+    @DisplayName("회원 팔로우 실패 - 존재하지 않는 유저")
+    @Test
+    void followUser_nonexistentId() {
+        //given
+        given(userRepository.findByUsername(following.getUsername()))
+                .willReturn(Optional.empty());
+
+        //when
+        //then
+        assertThrows(NonExistentException.class,
+                () -> followService.followUser(following.getUsername(), follower));
+    }
+
+    @DisplayName("팔로워 목록 조회 성공")
     @Test
     void getFollowers() {
         //given
@@ -200,7 +182,7 @@ class FollowServiceTest {
         assertEquals(follower2.getUserProfileUrl(), followers.get(1).getProfileImageUrl());
     }
 
-    @DisplayName("팔로잉 목록 조회 - 성공")
+    @DisplayName("팔로잉 목록 조회 성공")
     @Test
     void getFollowings() {
         User following2 = User.builder()

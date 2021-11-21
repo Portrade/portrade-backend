@@ -114,6 +114,18 @@ INSERT INTO likes(likes_id, portfolio_id, user_id, created_date)
 VALUES (2, 2, '067d42d516394118bf54ad37d2f6f61e', now());
 INSERT INTO likes(likes_id, portfolio_id, user_id, created_date)
 VALUES (3, 1, 'd9b4adce82bd48fe9456cfb20d43537d', now());
+INSERT INTO likes(likes_id, portfolio_id, user_id, created_date)
+VALUES (4, 1, '3cbe539a33ba4550a82c63be333ac2d0', now());
+
+-- 포트폴리오 저장
+INSERT INTO portfolio_save(portfolio_save_id, portfolio_id, user_id, created_date)
+VALUES (1, 1, '067d42d516394118bf54ad37d2f6f61e', now());
+INSERT INTO portfolio_save(portfolio_save_id, portfolio_id, user_id, created_date)
+VALUES (2, 2, '067d42d516394118bf54ad37d2f6f61e', now());
+INSERT INTO portfolio_save(portfolio_save_id, portfolio_id, user_id, created_date)
+VALUES (3, 1, 'd9b4adce82bd48fe9456cfb20d43537d', now());
+INSERT INTO portfolio_save(portfolio_save_id, portfolio_id, user_id, created_date)
+VALUES (4, 1, '3cbe539a33ba4550a82c63be333ac2d0', now());
 
 -- 기업
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date,

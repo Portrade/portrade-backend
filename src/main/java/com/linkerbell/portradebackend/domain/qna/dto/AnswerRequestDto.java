@@ -23,20 +23,20 @@ public class AnswerRequestDto {
     private String content;
 
     @NotNull(message = "NULL_QNA_ISPUBLIC")
-    private boolean secret;
+    private Boolean isPublic;
 
     @Builder
-    public AnswerRequestDto(String title, String content, boolean secret) {
+    public AnswerRequestDto(String title, String content, Boolean isPublic) {
         this.title = title;
         this.content = content;
-        this.secret = secret;
+        this.isPublic = isPublic;
     }
 
     public Answer toEntity(User user, Question question) {
         return Answer.builder()
                 .title(title)
                 .content(content)
-                .isPublic(secret)
+                .isPublic(isPublic)
                 .user(user)
                 .question(question)
                 .build();

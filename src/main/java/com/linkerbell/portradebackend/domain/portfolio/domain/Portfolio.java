@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.portfolio.domain;
 
 import com.linkerbell.portradebackend.domain.comment.domain.Comment;
-import com.linkerbell.portradebackend.domain.user.domain.Likes;
 import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import com.linkerbell.portradebackend.global.common.File;
