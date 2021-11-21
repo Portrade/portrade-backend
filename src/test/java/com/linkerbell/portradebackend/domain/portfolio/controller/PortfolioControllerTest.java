@@ -196,7 +196,7 @@ class PortfolioControllerTest {
                 .andExpect(jsonPath("$.category").value("programming"))
                 .andExpect(jsonPath("$.isPublic").value(true))
                 .andExpect(jsonPath("$.viewCount").value(16))
-                .andExpect(jsonPath("$.likeCount").value(2))
+                .andExpect(jsonPath("$.likeCount").value(3))
                 .andExpect(jsonPath("$.commentCount").value(2))
                 .andExpect(jsonPath("$.mainImageFile.url").value("main_url"))
                 .andExpect(jsonPath("$.contentFiles.size()").value(3))

@@ -28,5 +28,4 @@ public interface PortfolioRepository extends JpaRepository<Portfolio, Long> {
     Page<Portfolio> findAllByTitleContainingIgnoreCaseOrderByTitleAsc(Pageable pageable, String keyword);
 
     Page<Portfolio> findAllByTitleContainingIgnoreCaseOrderByTitleDesc(Pageable pageable, String keyword);
-
 }

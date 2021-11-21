@@ -137,7 +137,7 @@ class QnaControllerTest {
         AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
                 .title("1:1 답변글")
                 .content("1:1 답변글 남깁니다.")
-                .secret(false)
+                .isPublic(false)
                 .build();
 
         //when
@@ -158,7 +158,7 @@ class QnaControllerTest {
         AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
                 .title("1:1 답변글")
                 .content("1:1 답변글 남깁니다.")
-                .secret(false)
+                .isPublic(false)
                 .build();
 
         //when

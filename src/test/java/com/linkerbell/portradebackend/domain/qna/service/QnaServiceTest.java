@@ -125,7 +125,7 @@ class QnaServiceTest {
         AnswerRequestDto answerRequestDto = AnswerRequestDto.builder()
                 .title("1대1 문의 답변글!!")
                 .content("1대1 문의 답변글 입니다.")
-                .secret(false)
+                .isPublic(false)
                 .build();
 
         given(qnaRepository.findByIdAndDType(qnaId))

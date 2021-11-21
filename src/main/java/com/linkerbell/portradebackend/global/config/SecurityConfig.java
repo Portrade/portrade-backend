@@ -82,6 +82,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
                 // 포트폴리오 좋아요
                 .antMatchers(HttpMethod.PATCH, PREFIX_URL + "/portfolios/{portfolioId}/like").authenticated()
+                // 포트폴리오 저장
+                .antMatchers(HttpMethod.GET, PREFIX_URL + "/portfolios/save").authenticated()
+                .antMatchers(HttpMethod.PATCH, PREFIX_URL + "/portfolios/{portfolioId}/save").authenticated()
 
                 .anyRequest().permitAll();
     }
