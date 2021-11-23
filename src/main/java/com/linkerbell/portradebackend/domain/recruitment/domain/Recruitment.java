@@ -1,6 +1,7 @@
 package com.linkerbell.portradebackend.domain.recruitment.domain;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
+import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentRequestDto;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
@@ -65,5 +66,20 @@ public class Recruitment extends BaseTimeEntity {
         this.pay = pay;
         this.address = address;
         this.category = category;
+    }
+
+    public void update(RecruitmentRequestDto recruitmentRequestDto) {
+        logo = recruitmentRequestDto.getLogo();
+        title = recruitmentRequestDto.getTitle();
+        career = recruitmentRequestDto.getCareer();
+        education = recruitmentRequestDto.getEducation();
+        address = recruitmentRequestDto.getAddress();
+        category = recruitmentRequestDto.getCategory();
+
+        lastModifiedDate = LocalDateTime.now();
+    }
+
+    public void addViewCount() {
+        viewCount += 1;
     }
 }

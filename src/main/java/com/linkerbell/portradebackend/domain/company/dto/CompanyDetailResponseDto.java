@@ -6,6 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class CompanyDetailResponseDto {
+
     private final Long id;
     private final String name;
     private final String form;

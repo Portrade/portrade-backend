@@ -34,7 +34,6 @@ public class CompanyRepositoryTest {
         userRepository.save(user);
 
         company = Company.builder()
-                .user(user)
                 .name("기업명")
                 .form("스타트업")
                 .industry("금융 지원 서비스업")
@@ -45,7 +44,6 @@ public class CompanyRepositoryTest {
                 .ceo("김기업")
                 .foundingDate("2020-11-22T08:17:09.478881")
                 .build();
-
         companyRepository.save(company);
     }
 
@@ -70,13 +68,12 @@ public class CompanyRepositoryTest {
 
     @Test
     @DisplayName("ID 로 회사 찾기 성공")
-    void findById(){
+    void findById() {
         //given
         //when
         Company foundCompany = companyRepository.findById(this.company.getId()).get();
 
         //then
-        assertEquals(company.getUser(), foundCompany.getUser());
         assertEquals(company.getName(), foundCompany.getName());
         assertEquals(company.getForm(), foundCompany.getForm());
         assertEquals(company.getIndustry(), foundCompany.getIndustry());

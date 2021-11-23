@@ -1,17 +1,18 @@
 package com.linkerbell.portradebackend.domain.company.service;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
-import com.linkerbell.portradebackend.domain.company.dto.*;
+import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
+import com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.repository.CompanyRepository;
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
-import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;
 import com.linkerbell.portradebackend.global.exception.ErrorCode;
 import com.linkerbell.portradebackend.global.exception.custom.DuplicatedValueException;
 import com.linkerbell.portradebackend.global.exception.custom.NonExistentException;
-import com.linkerbell.portradebackend.global.exception.custom.UnAuthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -33,13 +33,12 @@ public class CompanyService {
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public IdResponseDto createCompany(CreateCompanyRequestDto companyRequestDto, User user) {
-        //이미 존재하는지 확인 - 일단 기업명과 ceo 가 동일하면 이미 존재하는 기업으로 간주했습니다.
-        Optional<Company> savedCompany = companyRepository.findByNameAndCeo(companyRequestDto.getName(), companyRequestDto.getCeo());
-        if (savedCompany.isPresent())
+    public IdResponseDto createCompany(CompanyRequestDto companyRequestDto) {
+        if (companyRepository.findByNameAndCeo(companyRequestDto.getName(), companyRequestDto.getCeo()).orElse(null) != null) {
             throw new DuplicatedValueException(ErrorCode.DUPLICATED_COMPANY);
+        }
 
-        Company company = companyRequestDto.toEntity(user);
+        Company company = companyRequestDto.toEntity();
         companyRepository.save(company);
         return new IdResponseDto(company.getId());
     }
@@ -47,16 +46,13 @@ public class CompanyService {
     public CompanyDetailResponseDto getCompany(Long companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
-        CompanyDetailResponseDto companyDetailResponseDto = CompanyDetailResponseDto.of(company);
-        return companyDetailResponseDto;
+        return CompanyDetailResponseDto.of(company);
     }
 
     @Transactional
-    public IdResponseDto updateCompany(CompanyRequestDto companyRequestDto, Long companyId, User user) {
+    public IdResponseDto updateCompany(CompanyRequestDto companyRequestDto, Long companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
-        if (!user.equals(company.getUser()))
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
         company.updateCompany(companyRequestDto);
         companyRepository.save(company);
@@ -72,11 +68,7 @@ public class CompanyService {
         Page<Recruitment> recruitmentPage = recruitmentRepository.findAllByCompany_Id(pageable, companyId);
 
         List<RecruitmentResponseDto> recruitmentResponseDtos = recruitmentPage.stream()
-                .map(recruitment -> RecruitmentResponseDto.builder()
-                        .id(recruitment.getId())
-                        .logo(recruitment.getLogo())
-                        .title(recruitment.getTitle())
-                        .build())
+                .map(RecruitmentResponseDto::of)
                 .collect(Collectors.toList());
         PageResponseDto pageResponseDto = PageResponseDto.builder()
                 .totalPage(recruitmentPage.getTotalPages())
@@ -90,11 +82,9 @@ public class CompanyService {
     }
 
     @Transactional
-    public void deleteCompany(Long companyId, User user) {
+    public void deleteCompany(Long companyId) {
         Company company = companyRepository.findById(companyId)
                 .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
-        if (!user.equals(company.getUser()))
-            throw new UnAuthorizedException(ErrorCode.NONEXISTENT_AUTHORIZATION);
 
         companyRepository.delete(company);
     }

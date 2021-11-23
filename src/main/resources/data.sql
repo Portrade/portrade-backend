@@ -129,36 +129,35 @@ VALUES (4, 1, '3cbe539a33ba4550a82c63be333ac2d0', now());
 
 -- 기업
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date,
-                    member_count, name, sales, user_id)
+                    member_count, name, sales)
 VALUES (1, '2017-01-21T08:17:09.478881', '서울특별시 금천구 가산디지털1로 2 (가산동) 1213호 (주)지니프릭스', '지니', '스타트업', '2014년 2월 8일',
-        'https://www.gnifrix.com', 'IT', now(), '124명', '지니프릭스', '12억', 'db3e7741982a40d5919767ac9a0bb94a');
+        'https://www.gnifrix.com', 'IT', now(), '124명', '지니프릭스', '12억');
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date,
-                    member_count, name, sales, user_id)
+                    member_count, name, sales)
 VALUES (2, '2019-01-21T08:17:09.478881', '서울특별시 강남구 테헤란로77길', '김헬프', '중견기업', '2000년 2월 8일', 'https://www.help-me.kr',
-        '법률/회계', now(), '1124명', '헬프미', '12억', 'db3e7741982a40d5919767ac9a0bb94a');
+        '법률/회계', now(), '1124명', '헬프미', '12억');
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date,
-                    member_count, name, sales, user_id)
+                    member_count, name, sales)
 VALUES (3, '2020-11-29T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '김이구', '중견기업', '2011년 2월 8일', 'https://www.29.co.kr',
-        '패션/디자인', now(), '24명', '29샵', '6억', 'db3e7741982a40d5919767ac9a0bb94a');
+        '패션/디자인', now(), '24명', '29shop', '6억');
 INSERT INTO company(company_id, created_date, address, ceo, form, founding_date, homepage, industry, last_modified_date,
-                    member_count, name, sales, user_id)
+                    member_count, name, sales)
 VALUES (4, '2020-11-22T08:17:09.478881', '서울 강남구 테헤란로 142, 12층', '이승건', '스타트업, 외부강사법인', '2013년 4월 23일(업력 8년)',
-        '홈페이지 주소', '금융 지원 서비스업', now(), '717명(2020년 기준)', '기업A', '1,1879억 3,079만원(2020년 기준)',
-        '3cbe539a33ba4550a82c63be333ac2d0');
+        '홈페이지 주소', '금융 지원 서비스업', now(), '717명(2020년 기준)', '기업A', '1,1879억 3,079만원(2020년 기준)');
 
 -- 기업 공고
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
                         title, pay, view_count, work_type, company_id)
 VALUES (1, '2020-12-07T08:17:09.478882', '서울특별시 강남구 테헤란로11길', 'UI/UX 디자이너', 'designer', '신입/경력', now(),
-        'http://www.aws1243.com', '29샵 UI/UX 디자이너 채용', '회사내규에 따름', '1300', '정규직', 3);
+        'http://www.aws1243.com', '29shop UI/UX 디자이너 채용', '회사내규에 따름', '1300', '정규직', 3);
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
                         title, pay, view_count, work_type, company_id)
 VALUES (2, '2020-12-08T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '웹 프로그래머', 'programmer', '신입/경력', now(),
-        'http://www.aws1243.com', '29샵 웹 프로그래머 채용', '회사내규에 따름', '1000', '정규직', 3);
+        'http://www.aws1243.com', '회사내규에 따름', '1000', 10, '정규직', 3);
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
                         title, pay, view_count, work_type, company_id)
 VALUES (3, '2020-12-09T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '백엔드 프로그래머', 'programmer', '신입/경력', now(),
-        'http://www.aws1243.com', '29샵 백엔드 프로그래머 채용', '회사내규에 따름', '100', '정규직', 3);
+        'http://www.aws1243.com', '29shop 백엔드 프로그래머 채용', '회사내규에 따름', '100', '정규직', 3);
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
                         title, pay, view_count, work_type, company_id)
 VALUES (4, '2020-12-09T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '백엔드 프로그래머', 'programmer', '신입/경력', now(),

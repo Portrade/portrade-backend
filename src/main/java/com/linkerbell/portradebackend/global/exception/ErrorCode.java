@@ -80,6 +80,19 @@ public enum ErrorCode {
     NULL_COMPANY_CEO("D107", "대표자명은 필수입니다."),
 
     /**
+     * R: Recruitment 관련
+     */
+    NONEXISTENT_RECRUITMENT("R001", "존재하지 않는 기업 공고입니다."),
+    //유효성
+    NULL_RECRUITMENT_TITLE("R100", "공고명은 필수입니다."),
+    NULL_RECRUITMENT_CAREER("R101", "경력은 필수입니다."),
+    NULL_RECRUITMENT_EDUCATION("R102", "학력은 필수입니다."),
+    NULL_RECRUITMENT_WORKTYPE("R103", "업종은 필수입니다."),
+    NULL_RECRUITMENT_PAY("R104", "매출액은 필수입니다."),
+    NULL_RECRUITMENT_ADDRESS("R105", "장소는 필수입니다."),
+    NULL_RECRUITMENT_CATEGORY("R106", "카테고리는 필수입니다."),
+
+    /**
      * P: Portfolio 관련
      */
     NONEXISTENT_PORTFOLIO("P001", "존재하지 않는 포트폴리오입니다."),

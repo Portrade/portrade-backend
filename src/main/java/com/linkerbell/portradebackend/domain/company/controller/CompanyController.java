@@ -1,12 +1,9 @@
 package com.linkerbell.portradebackend.domain.company.controller;
 
 import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
-import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
-import com.linkerbell.portradebackend.domain.company.dto.CreateCompanyRequestDto;
+import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.service.CompanyService;
-import com.linkerbell.portradebackend.domain.user.domain.User;
-import com.linkerbell.portradebackend.global.common.annotation.CurrentUser;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -29,9 +26,8 @@ public class CompanyController {
     @Operation(summary = "기업 등록", description = "기업 정보를 등록한다.")
     @PostMapping
     public ResponseEntity<IdResponseDto> createCompanyApi(
-            @RequestBody @Valid CreateCompanyRequestDto companyRequestDto,
-            @Parameter(hidden = true) @CurrentUser User user) {
-        IdResponseDto idResponseDto = companyService.createCompany(companyRequestDto, user);
+            @RequestBody @Valid CompanyRequestDto companyRequestDto) {
+        IdResponseDto idResponseDto = companyService.createCompany(companyRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
@@ -43,13 +39,12 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.OK).body(companyDetailResponseDto);
     }
 
-    @Operation(summary = "기업 수정", description = "기업 정보 수정한다.")
+    @Operation(summary = "기업 수정", description = "기업 정보를 수정한다.")
     @PutMapping("/{companyId}")
     public ResponseEntity<IdResponseDto> editCompanyApi(
             @Parameter(description = "수정할 기업 ID") @PathVariable Long companyId,
-            @RequestBody CompanyRequestDto companyRequestDto,
-            @Parameter(hidden = true) @CurrentUser User user) {
-        IdResponseDto idResponseDto = companyService.updateCompany(companyRequestDto, companyId, user);
+            @RequestBody CompanyRequestDto companyRequestDto) {
+        IdResponseDto idResponseDto = companyService.updateCompany(companyRequestDto, companyId);
         return ResponseEntity.status(HttpStatus.OK).body(idResponseDto);
     }
 
@@ -66,9 +61,8 @@ public class CompanyController {
     @Operation(summary = "기업 삭제", description = "기업을 삭제한다.")
     @DeleteMapping("/{companyId}")
     public ResponseEntity<Void> deleteCompanyApi(
-            @Parameter(description = "삭제할 기업 ID") @PathVariable Long companyId,
-            @Parameter(hidden = true) @CurrentUser User user) {
-        companyService.deleteCompany(companyId, user);
+            @Parameter(description = "삭제할 기업 ID") @PathVariable Long companyId) {
+        companyService.deleteCompany(companyId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -1,7 +1,10 @@
 package com.linkerbell.portradebackend.domain.company.service;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
-import com.linkerbell.portradebackend.domain.company.dto.*;
+import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
+import com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.repository.CompanyRepository;
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
@@ -18,7 +21,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -53,10 +55,8 @@ class CompanyServiceTest {
                 .birthDate("19900903")
                 .wantedJob("designer")
                 .build();
-
         company = Company.builder()
                 .id(1L)
-                .user(user)
                 .name("(주)기업명")
                 .form("중견기업")
                 .industry("금용 지원 서비스업")
@@ -69,34 +69,10 @@ class CompanyServiceTest {
                 .build();
     }
 
-    @Test
-    @DisplayName("기업 등록 실패 - 이미 등록된 기업")
-    void createCompany_ununiqueCompany() {
-        //given
-        CreateCompanyRequestDto companyRequestDto = CreateCompanyRequestDto.builder()
-                .name("(주)기업명")
-                .form("중견기업")
-                .industry("금용 지원 서비스업")
-                .sales("1,1000억(2019년 기준)")
-                .homepage("https://")
-                .memberCount("1234명")
-                .address("서울 금천구")
-                .ceo("김주이")
-                .foundingDate("2011년 2월 11일")
-                .build();
-
-        given(companyRepository.findByNameAndCeo(company.getName(), company.getCeo())).willReturn(Optional.of(company));
-
-        //when
-        //then
-        assertThrows(DuplicatedValueException.class,
-                () -> companyService.createCompany(companyRequestDto, user));
-    }
-
-    @Test
     @DisplayName("기업 등록 성공")
-    void createCompany() {
-        CreateCompanyRequestDto companyRequestDto = CreateCompanyRequestDto.builder()
+    @Test
+    void createCompany() throws Exception {
+        CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
                 .name("(주)기업명")
                 .form("중견기업")
                 .industry("금용 지원 서비스업")
@@ -108,20 +84,47 @@ class CompanyServiceTest {
                 .foundingDate("2011년 2월 11일")
                 .build();
 
-        given(companyRepository.findByNameAndCeo(company.getName(), company.getCeo())).willReturn(Optional.empty());
+        given(companyRepository.findByNameAndCeo(company.getName(), company.getCeo()))
+                .willReturn(Optional.empty());
 
         //when
-        companyService.createCompany(companyRequestDto, user);
+        companyService.createCompany(companyRequestDto);
 
         //then
         verify(companyRepository, times(1)).save(any(Company.class));
     }
 
+    @DisplayName("기업 등록 실패 - 이미 등록된 기업")
     @Test
-    @DisplayName("기업 정보 상세 조회 실패 - 존재하지 않는 ID")
-    void getCompany_nonexistentId() {
+    void createCompany_duplicatedCompany() throws Exception {
         //given
-        given(companyRepository.findById(anyLong())).willReturn(Optional.empty());
+        CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
+                .name("(주)기업명")
+                .form("중견기업")
+                .industry("금용 지원 서비스업")
+                .sales("1,1000억(2019년 기준)")
+                .homepage("https://")
+                .memberCount("1234명")
+                .address("서울 금천구")
+                .ceo("김주이")
+                .foundingDate("2011년 2월 11일")
+                .build();
+
+        given(companyRepository.findByNameAndCeo(company.getName(), company.getCeo()))
+                .willReturn(Optional.of(company));
+
+        //when
+        //then
+        assertThrows(DuplicatedValueException.class,
+                () -> companyService.createCompany(companyRequestDto));
+    }
+
+    @DisplayName("기업 정보 상세 조회 실패 - 존재하지 않는 ID")
+    @Test
+    void getCompany_nonexistentId() throws Exception {
+        //given
+        given(companyRepository.findById(anyLong()))
+                .willReturn(Optional.empty());
 
         //when
         //then
@@ -129,11 +132,12 @@ class CompanyServiceTest {
                 () -> companyService.getCompany(1L));
     }
 
-    @Test
     @DisplayName("기업 정보 상세 조회 성공")
-    void getCompany() {
+    @Test
+    void getCompany() throws Exception {
         //given
-        given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+        given(companyRepository.findById(anyLong()))
+                .willReturn(Optional.of(company));
 
         //when
         CompanyDetailResponseDto companyDetailResponseDto = companyService.getCompany(1L);
@@ -150,38 +154,9 @@ class CompanyServiceTest {
         assertEquals(companyDetailResponseDto.getFoundingDate(), company.getFoundingDate());
     }
 
-    @Test
-    @DisplayName("기업 수정 실패 - 권한 없음")
-    void updateCompany_unauthorizeduser() {
-        //given
-        CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
-                .name("(주)수정된기업이름")
-                .form("스타트업, 외부강사법인")
-                .industry("금융 지원 서비스업")
-                .sales("1,1879억 3,079만원(2020년 기준)")
-                .homepage("홈페이지 주소")
-                .memberCount("717명(2020년 기준)")
-                .address("서울 강남구 테헤란로 142, 12층")
-                .ceo("이승건")
-                .foundingDate("2013년 4월 23일(업력 8년)")
-                .build();
-
-        User diffUser = User.builder()
-                .id(UUID.randomUUID())
-                .username("diffUser")
-                .name("안동일")
-                .build();
-
-        given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
-
-        //when
-        //then
-        assertThrows(UnAuthorizedException.class, () -> companyService.updateCompany(companyRequestDto, 1L, diffUser));
-    }
-
-    @Test
     @DisplayName("기업 수정 성공")
-    void updateCompany() {
+    @Test
+    void updateCompany() throws Exception {
         //given
         CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
                 .name("(주)수정된기업이름")
@@ -195,18 +170,19 @@ class CompanyServiceTest {
                 .foundingDate("2013년 4월 23일(업력 8년)")
                 .build();
 
-        given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+        given(companyRepository.findById(anyLong()))
+                .willReturn(Optional.of(company));
 
         //when
-        companyService.updateCompany(companyRequestDto, 1L, user);
+        companyService.updateCompany(companyRequestDto, 1L);
 
         //then
         verify(companyRepository, times(1)).findById(anyLong());
     }
 
-    @Test
     @DisplayName("기업의 모든 공고 조회 성공")
-    void getRecruitments() {
+    @Test
+    void getRecruitments() throws Exception {
         //given
         Recruitment recruitment1 = Recruitment.builder()
                 .id(1L)
@@ -221,7 +197,6 @@ class CompanyServiceTest {
                 .viewCount(1300)
                 .workType("정규직")
                 .build();
-
         Recruitment recruitment2 = Recruitment.builder()
                 .id(2L)
                 .company(company)
@@ -235,7 +210,6 @@ class CompanyServiceTest {
                 .viewCount(1300)
                 .workType("정규직")
                 .build();
-
         Recruitment recruitment3 = Recruitment.builder()
                 .id(3L)
                 .company(company)
@@ -250,8 +224,8 @@ class CompanyServiceTest {
                 .workType("정규직")
                 .build();
 
-        List<Recruitment> companys = new ArrayList<>(List.of(recruitment1, recruitment2, recruitment3));
-        Page page = new PageImpl(companys);
+        List<Recruitment> recruitments = List.of(recruitment1, recruitment2, recruitment3);
+        Page<Recruitment> recruitmentPage = new PageImpl<>(recruitments);
 
         Pageable pageable = PageRequest.of(
                 0,
@@ -259,7 +233,8 @@ class CompanyServiceTest {
                 Sort.by(Sort.Direction.DESC, "id")
         );
 
-        given(recruitmentRepository.findAllByCompany_Id(eq(pageable), anyLong())).willReturn(page);
+        given(recruitmentRepository.findAllByCompany_Id(eq(pageable), anyLong()))
+                .willReturn(recruitmentPage);
 
         //when
         RecruitmentsResponseDto companyResponseDto = companyService.getRecruitments(1, 10, 1L);
@@ -267,44 +242,27 @@ class CompanyServiceTest {
         //then
         assertEquals(companyResponseDto.getPage().getTotalPage(), 1);
 
-        List<RecruitmentResponseDto> recruitments = companyResponseDto.getRecruitments();
-        assertEquals(recruitments.get(0).getId(), 1L);
-        assertEquals(recruitments.get(0).getLogo(), "logo1");
-        assertEquals(recruitments.get(0).getTitle(), "백엔드 직무 채용");
-        assertEquals(recruitments.get(1).getId(), 2L);
-        assertEquals(recruitments.get(1).getLogo(), "logo2");
-        assertEquals(recruitments.get(1).getTitle(), "UI/UX 디자이너 채용");
-        assertEquals(recruitments.get(2).getId(), 3L);
-        assertEquals(recruitments.get(2).getLogo(), "logo3");
-        assertEquals(recruitments.get(2).getTitle(), "프론트 직무 채용");
+        List<RecruitmentResponseDto> recruitmentResponseDtos = companyResponseDto.getRecruitments();
+        assertEquals(recruitmentResponseDtos.get(0).getId(), 1L);
+        assertEquals(recruitmentResponseDtos.get(0).getLogo(), "logo1");
+        assertEquals(recruitmentResponseDtos.get(0).getTitle(), "백엔드 직무 채용");
+        assertEquals(recruitmentResponseDtos.get(1).getId(), 2L);
+        assertEquals(recruitmentResponseDtos.get(1).getLogo(), "logo2");
+        assertEquals(recruitmentResponseDtos.get(1).getTitle(), "UI/UX 디자이너 채용");
+        assertEquals(recruitmentResponseDtos.get(2).getId(), 3L);
+        assertEquals(recruitmentResponseDtos.get(2).getLogo(), "logo3");
+        assertEquals(recruitmentResponseDtos.get(2).getTitle(), "프론트 직무 채용");
     }
 
-    @Test
-    @DisplayName("기업 삭제 실패 - 권한 없음")
-    void deleteCompany_unauthorizeduser() {
-        //given
-        User diffUser = User.builder()
-                .id(UUID.randomUUID())
-                .username("diffUser")
-                .name("안동일")
-                .build();
-
-        given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
-
-        //when
-        //then
-        assertThrows(UnAuthorizedException.class,
-                () -> companyService.deleteCompany(company.getId(), diffUser));
-    }
-
-    @Test
     @DisplayName("기업 삭제 성공")
-    void deleteCompany() {
+    @Test
+    void deleteCompany() throws Exception {
         //given
-        given(companyRepository.findById(anyLong())).willReturn(Optional.of(company));
+        given(companyRepository.findById(anyLong()))
+                .willReturn(Optional.of(company));
 
         //when
-        companyService.deleteCompany(company.getId(), user);
+        companyService.deleteCompany(company.getId());
 
         //then
         verify(companyRepository, times(1)).findById(anyLong());

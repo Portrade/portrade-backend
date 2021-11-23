@@ -2,7 +2,7 @@ package com.linkerbell.portradebackend.domain.company.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
-import com.linkerbell.portradebackend.domain.company.dto.CreateCompanyRequestDto;
+import com.linkerbell.portradebackend.global.config.WithMockPortradeAdmin;
 import com.linkerbell.portradebackend.global.config.WithMockPortradeUser;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,38 +47,12 @@ class CompanyControllerTest {
                 .build();
     }
 
-    @Test
-    @DisplayName("기업 등록 API 실패 - 비로그인")
-    void createCompanyApi_unAuthenticatedUser() throws Exception {
-        //given
-        CreateCompanyRequestDto companyRequestDto = CreateCompanyRequestDto.builder()
-                .name("(주)기업명")
-                .form("중견기업")
-                .industry("금용 지원 서비스업")
-                .sales("1,1000억(2019년 기준)")
-                .homepage("https://")
-                .memberCount("1234명")
-                .address("서울 금천구")
-                .ceo("김주이")
-                .foundingDate("2011년 2월 11일")
-                .build();
-
-        //when
-        ResultActions result = mvc.perform(post(PREFIX_URI)
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding("UTF-8")
-                .content(objectMapper.writeValueAsString(companyRequestDto)));
-
-        //then
-        result.andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    @WithMockPortradeUser
     @DisplayName("기업 등록 API 성공")
+    @Test
+    @WithMockPortradeAdmin
     void createCompanyApi() throws Exception {
         //given
-        CreateCompanyRequestDto companyRequestDto = CreateCompanyRequestDto.builder()
+        CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
                 .name("(주)기업명")
                 .form("중견기업")
                 .industry("금용 지원 서비스업")
@@ -101,8 +75,34 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.id").value("5"));
     }
 
+    @DisplayName("기업 등록 API 실패 - 비로그인")
     @Test
+    void createCompanyApi_notLoggedIn() throws Exception {
+        //given
+        CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
+                .name("(주)기업명")
+                .form("중견기업")
+                .industry("금용 지원 서비스업")
+                .sales("1,1000억(2019년 기준)")
+                .homepage("https://")
+                .memberCount("1234명")
+                .address("서울 금천구")
+                .ceo("김주이")
+                .foundingDate("2011년 2월 11일")
+                .build();
+
+        //when
+        ResultActions result = mvc.perform(post(PREFIX_URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .characterEncoding("UTF-8")
+                .content(objectMapper.writeValueAsString(companyRequestDto)));
+
+        //then
+        result.andExpect(status().isUnauthorized());
+    }
+
     @DisplayName("기업 상세 조회 API 성공")
+    @Test
     void getCompanyDetailApi() throws Exception {
         //given
         //when
@@ -122,9 +122,9 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.foundingDate").value("2014년 2월 8일"));
     }
 
+    @DisplayName("기업 수정 API 실패 - 권한없는 사용자")
     @Test
     @WithMockPortradeUser
-    @DisplayName("기업 수정 API 실패 - 권한 없는 사용자")
     void editCompanyApi_unAuthorizedUser() throws Exception {
         //given
         CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
@@ -149,9 +149,9 @@ class CompanyControllerTest {
         result.andExpect(status().isForbidden());
     }
 
-    @Test
-    @WithMockPortradeUser
     @DisplayName("기업 수정 API 성공")
+    @Test
+    @WithMockPortradeAdmin
     void editCompanyApi() throws Exception {
         //given
         CompanyRequestDto companyRequestDto = CompanyRequestDto.builder()
@@ -177,8 +177,8 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.id").value("4"));
     }
 
-    @Test
     @DisplayName("기업의 모든 공고 조회 API 성공")
+    @Test
     void getRecruitmentsApi() throws Exception {
         //given
         //when
@@ -190,9 +190,9 @@ class CompanyControllerTest {
                 .andExpect(jsonPath("$.page.totalPage").value("1"));
     }
 
+    @DisplayName("기업 삭제 API 실패 - 권한없는 사용자")
     @Test
     @WithMockPortradeUser
-    @DisplayName("기업 삭제 API 실패 - 권한 없는 사용자")
     void deleteCompanyApi_unAuthorizedUser() throws Exception {
         //given
         //when
@@ -202,9 +202,9 @@ class CompanyControllerTest {
         result.andExpect(status().isForbidden());
     }
 
-    @Test
-    @WithMockPortradeUser
     @DisplayName("기업 삭제 API 성공")
+    @Test
+    @WithMockPortradeAdmin
     void deleteCompanyApi() throws Exception {
         //given
         //when

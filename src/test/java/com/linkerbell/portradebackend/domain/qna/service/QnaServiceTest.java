@@ -358,7 +358,7 @@ class QnaServiceTest {
     }
 
     @Test
-    @DisplayName("1:1 문의 삭제 실패 - 권한 없는 유저")
+    @DisplayName("1:1 문의 삭제 실패 - 권한없는 유저")
     public void test() {
         //given
         Long qnaId = 1L;
