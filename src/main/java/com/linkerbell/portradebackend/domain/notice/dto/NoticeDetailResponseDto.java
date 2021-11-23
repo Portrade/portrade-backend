@@ -15,7 +15,6 @@ public class NoticeDetailResponseDto {
     private final int viewCount;
     private final LocalDateTime createdDate;
     private final LocalDateTime lastModifiedDate;
-
     private final NoticeResponseDto next;
     private final NoticeResponseDto prev;
 

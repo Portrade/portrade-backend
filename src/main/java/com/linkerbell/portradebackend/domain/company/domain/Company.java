@@ -1,7 +1,6 @@
 package com.linkerbell.portradebackend.domain.company.domain;
 
 import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
-import com.linkerbell.portradebackend.domain.user.domain.User;
 import com.linkerbell.portradebackend.global.common.BaseTimeEntity;
 import lombok.*;
 
@@ -19,10 +18,6 @@ public class Company extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private Long id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
 
     @Column(nullable = false)
     private String name;
@@ -55,9 +50,8 @@ public class Company extends BaseTimeEntity {
     private LocalDateTime lastModifiedDate;
 
     @Builder
-    public Company(Long id, User user, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
+    public Company(Long id, String name, String form, String industry, String sales, String homepage, String memberCount, String address, String ceo, String foundingDate) {
         this.id = id;
-        this.user = user;
         this.name = name;
         this.form = form;
         this.industry = industry;
@@ -79,5 +73,6 @@ public class Company extends BaseTimeEntity {
         this.address = companyRequestDto.getAddress();
         this.ceo = companyRequestDto.getCeo();
         this.foundingDate = companyRequestDto.getFoundingDate();
+        lastModifiedDate = LocalDateTime.now();
     }
 }

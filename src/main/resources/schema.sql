@@ -16,6 +16,12 @@ create table user
     last_modified_date timestamp
 );
 
+create table user_roles
+(
+    user_id BINARY(16) not null,
+    roles   varchar(255)
+);
+
 create table comment
 (
     comment_id   bigint AUTO_INCREMENT PRIMARY KEY,
@@ -23,23 +29,6 @@ create table comment
     portfolio_id bigint,
     user_id      BINARY(16),
     created_date timestamp
-);
-
-create table company
-(
-    company_id         bigint AUTO_INCREMENT PRIMARY KEY,
-    address            varchar(255) not null,
-    ceo                varchar(255) not null,
-    form               varchar(255) not null,
-    founding_date      varchar(255),
-    homepage           varchar(255) not null,
-    industry           varchar(255) not null,
-    member_count       varchar(255),
-    name               varchar(255) not null,
-    sales              varchar(255) not null,
-    user_id            BINARY(16),
-    created_date       timestamp,
-    last_modified_date timestamp
 );
 
 create table faq
@@ -122,6 +111,22 @@ create table qna
 
 );
 
+create table company
+(
+    company_id         bigint AUTO_INCREMENT PRIMARY KEY,
+    address            varchar(255) not null,
+    ceo                varchar(255) not null,
+    form               varchar(255) not null,
+    founding_date      varchar(255),
+    homepage           varchar(255) not null,
+    industry           varchar(255) not null,
+    member_count       varchar(255),
+    name               varchar(255) not null,
+    sales              varchar(255) not null,
+    created_date       timestamp,
+    last_modified_date timestamp
+);
+
 create table recruitment
 (
     recruitment_id     bigint AUTO_INCREMENT PRIMARY KEY,
@@ -154,8 +159,3 @@ create table portfolio_save
     created_date      timestamp not null
 );
 
-create table user_roles
-(
-    user_id BINARY(16) not null,
-    roles   varchar(255)
-);

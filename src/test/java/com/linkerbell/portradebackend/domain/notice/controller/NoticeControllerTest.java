@@ -68,7 +68,7 @@ class NoticeControllerTest {
                 .andExpect(jsonPath("$.id").value("4"));
     }
 
-    @DisplayName("공지사항 등록 API 실패 - 권한 없는 사용자")
+    @DisplayName("공지사항 등록 API 실패 - 권한없는 사용자")
     @Test
     @WithMockPortradeUser
     void writeNoticeApi_unAuthorizedUser() throws Exception {
@@ -290,7 +290,7 @@ class NoticeControllerTest {
                 .andExpect(jsonPath("$.code").value("N001"));
     }
 
-    @DisplayName("공지사항 삭제 API 실패 - 권한 없는 사용자")
+    @DisplayName("공지사항 삭제 API 실패 - 권한없는 사용자")
     @Test
     @WithMockPortradeUser
     void deleteNoticeApi_unAuthorizedUser() throws Exception {

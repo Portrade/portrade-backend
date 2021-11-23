@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.company.dto;
 
+import com.linkerbell.portradebackend.domain.company.domain.Company;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CompanyRequestDto {
+
     @NotNull(message = "NULL_COMPANY_NAME")
     private String name;
     @NotNull(message = "NULL_COMPANY_FORM")
@@ -40,5 +42,19 @@ public class CompanyRequestDto {
         this.address = address;
         this.ceo = ceo;
         this.foundingDate = foundingDate;
+    }
+
+    public Company toEntity() {
+        return Company.builder()
+                .name(name)
+                .form(form)
+                .industry(industry)
+                .sales(sales)
+                .homepage(homepage)
+                .memberCount(memberCount)
+                .address(address)
+                .ceo(ceo)
+                .foundingDate(foundingDate)
+                .build();
     }
 }

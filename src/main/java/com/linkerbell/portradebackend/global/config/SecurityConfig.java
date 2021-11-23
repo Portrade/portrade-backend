@@ -16,7 +16,6 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.cors.CorsUtils;
 
 
 @Configuration
@@ -56,7 +55,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.apply(new JwtSecurityConfig(tokenProvider));
 
         http.authorizeRequests()
-                .requestMatchers(CorsUtils::isPreFlightRequest).permitAll()
                 // 사용자
                 .antMatchers(PREFIX_URL + "/auth/logout").authenticated()
                 .antMatchers(PREFIX_URL + "/users/me/insight").authenticated()
@@ -73,9 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 자주 묻는 질문
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/faqs").hasRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/faqs/{faqId}").hasRole("ADMIN")
-                // 기업
-                .antMatchers(HttpMethod.POST, PREFIX_URL + "/companies").authenticated()
-                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/companies/{companyId}").authenticated()
                 // 포트폴리오
                 .antMatchers(HttpMethod.POST, PREFIX_URL + "/portfolios").authenticated()
                 .antMatchers(HttpMethod.PUT, PREFIX_URL + "/portfolios/{portfolioId}").authenticated()
@@ -85,6 +80,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 포트폴리오 저장
                 .antMatchers(HttpMethod.GET, PREFIX_URL + "/portfolios/save").authenticated()
                 .antMatchers(HttpMethod.PATCH, PREFIX_URL + "/portfolios/{portfolioId}/save").authenticated()
+                // 기업
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/companies").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/companies/{companyId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/companies/{companyId}").hasRole("ADMIN")
+                // 기업 공고
+                .antMatchers(HttpMethod.POST, PREFIX_URL + "/recruitments/{companyId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.PUT, PREFIX_URL + "/recruitments/{recruitmentId}").hasRole("ADMIN")
+                .antMatchers(HttpMethod.DELETE, PREFIX_URL + "/recruitments/{recruitmentId}").hasRole("ADMIN")
 
                 .anyRequest().permitAll();
     }

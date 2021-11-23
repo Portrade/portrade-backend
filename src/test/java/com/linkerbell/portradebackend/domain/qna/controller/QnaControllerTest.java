@@ -218,7 +218,7 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.code").value("C002"));
     }
 
-    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 권한 없는 유저가 비공개 글 상세 조회")
+    @DisplayName("1:1 문의 글 상세 조회 API 실패 - 권한없는 유저가 비공개 글 상세 조회")
     @Test
     @WithMockPortradeUser
     public void getQnaDetailApi_noauthentication() throws Exception {
@@ -261,7 +261,7 @@ class QnaControllerTest {
                 .andExpect(jsonPath("$.prev").doesNotExist());
     }
 
-    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한 없는 사용자가 삭제")
+    @DisplayName("1:1 문의 글 삭제 API 실패 - 권한없는 사용자가 삭제")
     @Test
     @WithMockPortradeUser
     public void deleteQnaApi_noauthentication() throws Exception {
