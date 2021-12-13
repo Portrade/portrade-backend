@@ -1,15 +1,6 @@
 # Portrade Backend
-![PR](https://img.shields.io/github/issues-pr/Portrade/portrade-backend)
-![closedIssues](https://img.shields.io/github/issues-closed-raw/Portrade/portrade-backend)
-![openedIssues](https://img.shields.io/github/issues-raw/Portrade/portrade-backend)
-
-[comment]: <> (빌드 상태)
-[comment]: <> (테스트 커버리지, 코드)
-
----
 
 <br>
-
 
 ## 🔍Overview
 
@@ -19,15 +10,17 @@ Portfolio와 Trade의 합성어로 포트폴리오를 교환하는 웹 프로젝
 
 ![main image 1](https://user-images.githubusercontent.com/52854045/143671142-d44c9482-a49b-423c-bdd9-6558ac6b531b.png)
 
+### 개발 인원
+5인(프론트엔드 3인, 백엔드 2인)
 
 ### 개발 기간
-
 2021-09-12 ~
 
 ### 개발 목표
 - 테스트 코드
-- 문서화
-- Git
+- CI/CD 환경 구축
+- RESTful API
+- GitHub 활용
 
 <br>
 
@@ -40,22 +33,17 @@ Portfolio와 Trade의 합성어로 포트폴리오를 교환하는 웹 프로젝
 - Spring Security
 - Spring Data JPA
 - Swagger
-- Lombok
 
 ### Database
 - MySQL
 - H2
-  
+
 ### DevOps
 - AWS - EC2(Deploy server)
 - AWS - LightSail(Build server)
 - AWS - S3(File upload)
 - Jenkins(CI/CD)
 - Docker
-
-### Etc
-- Notion
-- GitHub
 
 <br>
 
@@ -73,8 +61,7 @@ Portfolio와 Trade의 합성어로 포트폴리오를 교환하는 웹 프로젝
 <br>
 
 ## 🏗️**Architecture**
-![docker-spring-architecture - 2-2](https://user-images.githubusercontent.com/52854045/143671692-9c1bd426-f796-40d1-b4d1-18459f31029e.png)
-
+![docker-spring-architecture - 2-2](https://user-images.githubusercontent.com/52854045/143671229-a867b908-f57a-4aac-a4de-0fe085d4f102.png)
 
 <br>
 
