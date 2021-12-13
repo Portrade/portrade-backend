@@ -61,7 +61,7 @@ Portfolio와 Trade의 합성어로 포트폴리오를 교환하는 웹 프로젝
 <br>
 
 ## 🏗️**Architecture**
-![docker-spring-architecture - 2-2](https://user-images.githubusercontent.com/52854045/143671229-a867b908-f57a-4aac-a4de-0fe085d4f102.png)
+![docker-spring-architecture - 2-1](https://user-images.githubusercontent.com/52854045/145848821-2835885d-967a-4502-8515-d5016a62ddac.png)
 
 <br>
 
