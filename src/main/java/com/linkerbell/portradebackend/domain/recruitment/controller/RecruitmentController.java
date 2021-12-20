@@ -36,8 +36,11 @@ public class RecruitmentController {
     @GetMapping
     public ResponseEntity<RecruitmentsResponseDto> getRecruitmentsApi(
             @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
-            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size) {
-        RecruitmentsResponseDto recruitmentsResponseDto = recruitmentService.getRecruitments(page, size);
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "10") int size,
+            @Parameter(description = "지역") @RequestParam(value="area", defaultValue = "") String area,
+            @Parameter(description = "직종 ") @RequestParam(value="job", defaultValue = "") String job,
+            @Parameter(description = "제목") @RequestParam(value="title", defaultValue = "") String title) {
+        RecruitmentsResponseDto recruitmentsResponseDto = recruitmentService.getRecruitments(page, size, area, job, title);
         return ResponseEntity.status(HttpStatus.OK).body(recruitmentsResponseDto);
     }
 
