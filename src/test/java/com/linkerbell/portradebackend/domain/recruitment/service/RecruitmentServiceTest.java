@@ -187,11 +187,11 @@ class RecruitmentServiceTest {
                 Sort.by(Sort.Direction.DESC, "id")
         );
 
-        given(recruitmentRepository.findAll(eq(pageable)))
+        given(recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCareerContaining(eq(pageable),anyString(), anyString(),anyString()))
                 .willReturn(recruitmentPage);
 
         //when
-        RecruitmentsResponseDto recruitmentsResponseDto = recruitmentService.getRecruitments(1, 10);
+        RecruitmentsResponseDto recruitmentsResponseDto = recruitmentService.getRecruitments(1, 10, "", "", "");
 
         //then
         assertEquals(recruitmentsResponseDto.getPage().getTotalPage(), 1);

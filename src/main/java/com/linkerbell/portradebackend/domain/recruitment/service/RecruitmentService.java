@@ -41,12 +41,12 @@ public class RecruitmentService {
         return new IdResponseDto(recruitment.getId());
     }
 
-    public RecruitmentsResponseDto getRecruitments(int page, int size) {
+    public RecruitmentsResponseDto getRecruitments(int page, int size, String area, String job, String title) {
         Pageable pageable = PageRequest.of(
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<Recruitment> recruitmentPage = recruitmentRepository.findAll(pageable);
+        Page<Recruitment> recruitmentPage = recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCareerContaining(pageable, title, area, job);
 
         List<RecruitmentResponseDto> recruitmentResponseDtos = recruitmentPage.stream()
                 .map(RecruitmentResponseDto::of)
