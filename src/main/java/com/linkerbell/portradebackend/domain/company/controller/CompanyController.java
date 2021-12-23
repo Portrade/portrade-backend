@@ -1,5 +1,6 @@
 package com.linkerbell.portradebackend.domain.company.controller;
 
+import com.linkerbell.portradebackend.domain.company.dto.CompaniesResponseDto;
 import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
 import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
 import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
@@ -29,6 +30,16 @@ public class CompanyController {
             @RequestBody @Valid CompanyRequestDto companyRequestDto) {
         IdResponseDto idResponseDto = companyService.createCompany(companyRequestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
+    }
+
+    @Operation(summary = "기업 목록 조회", description = "기업 목록을 조회한다.")
+    @GetMapping
+    public ResponseEntity<CompaniesResponseDto> getCompaniesApi(
+            @Parameter(description = "페이지 번호") @RequestParam(value = "page", defaultValue = "1") int page,
+            @Parameter(description = "반환할 데이터 수") @RequestParam(value = "size", defaultValue = "6") int size,
+            @Parameter(description = "검색할 기업명") @RequestParam(value = "name", defaultValue = "") String name) {
+        CompaniesResponseDto companiesResponseDto = companyService.getCompanies(page, size, name);
+        return ResponseEntity.status(HttpStatus.OK).body(companiesResponseDto);
     }
 
     @Operation(summary = "기업 상세 조회", description = "기업 정보를 상세 조회한다.")

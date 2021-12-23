@@ -1,10 +1,7 @@
 package com.linkerbell.portradebackend.domain.company.service;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
-import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
-import com.linkerbell.portradebackend.domain.company.dto.CompanyRequestDto;
-import com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto;
-import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.*;
 import com.linkerbell.portradebackend.domain.company.repository.CompanyRepository;
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
@@ -41,6 +38,28 @@ public class CompanyService {
         Company company = companyRequestDto.toEntity();
         companyRepository.save(company);
         return new IdResponseDto(company.getId());
+    }
+
+    public CompaniesResponseDto getCompanies(int page, int size, String name) {
+        Pageable pageable = PageRequest.of(
+                page - 1,
+                size,
+                Sort.by(Sort.Direction.DESC, "id"));
+        Page<Company> companyPage = companyRepository.findAllByNameContainingIgnoreCase(pageable, name);
+
+        List<CompanyResponseDto> companyResponseDtos = companyPage.stream()
+                .map(CompanyResponseDto::of)
+                .collect(Collectors.toList());
+
+        PageResponseDto pageResponseDto = PageResponseDto.builder()
+                .totalPage(companyPage.getTotalPages())
+                .totalElement(companyPage.getTotalElements())
+                .build();
+
+        return CompaniesResponseDto.builder()
+                .page(pageResponseDto)
+                .companies(companyResponseDtos)
+                .build();
     }
 
     public CompanyDetailResponseDto getCompany(Long companyId) {
@@ -88,4 +107,5 @@ public class CompanyService {
 
         companyRepository.delete(company);
     }
+
 }
