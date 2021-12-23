@@ -19,7 +19,7 @@ public class RecruitmentResponseDto {
     private final LocalDateTime lastModifiedDate;
 
     @Builder
-    public RecruitmentResponseDto(Long id, String logo, String title, String companyName, String career, String education, String address, LocalDateTime lastModifiedDate) {
+    private RecruitmentResponseDto(Long id, String logo, String title, String companyName, String career, String education, String address, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.logo = logo;
         this.title = title;
