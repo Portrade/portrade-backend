@@ -31,6 +31,8 @@ public class CompanyController {
         return ResponseEntity.status(HttpStatus.CREATED).body(idResponseDto);
     }
 
+//    TODO 기업 목록 조회 id, name
+
     @Operation(summary = "기업 상세 조회", description = "기업 정보를 상세 조회한다.")
     @GetMapping("/{companyId}")
     public ResponseEntity<CompanyDetailResponseDto> getCompanyDetailApi(
