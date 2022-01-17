@@ -2,6 +2,7 @@ package com.linkerbell.portradebackend.domain.recruitment.controller;
 
 import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentDetailResponseDto;
+import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentResponseDto;
 import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentRequestDto;
 import com.linkerbell.portradebackend.domain.recruitment.service.RecruitmentService;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
