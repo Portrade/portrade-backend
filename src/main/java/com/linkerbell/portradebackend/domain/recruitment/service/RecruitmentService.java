@@ -1,11 +1,13 @@
 package com.linkerbell.portradebackend.domain.recruitment.service;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
-import com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
+import com.linkerbell.portradebackend.domain.company.dto.CompanyResponseDto;
 import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.repository.CompanyRepository;
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentDetailResponseDto;
+import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentResponseDto;
 import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentRequestDto;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
@@ -48,8 +50,8 @@ public class RecruitmentService {
                 Sort.by(Sort.Direction.DESC, "id"));
         Page<Recruitment> recruitmentPage = recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCareerContaining(pageable, title, area, job);
 
-        List<RecruitmentResponseDto> recruitmentResponseDtos = recruitmentPage.stream()
-                .map(RecruitmentResponseDto::of)
+        List<com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto> recruitmentResponseDtos = recruitmentPage.stream()
+                .map(com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto::of)
                 .collect(Collectors.toList());
         PageResponseDto pageResponseDto = PageResponseDto.builder()
                 .totalPage(recruitmentPage.getTotalPages())
@@ -69,7 +71,11 @@ public class RecruitmentService {
 
         recruitment.addViewCount();
 
-        return RecruitmentDetailResponseDto.builder()
+        Company company = companyRepository.findById(recruitment.getCompany().getId())
+                .orElseThrow(() -> new NonExistentException(ErrorCode.NONEXISTENT_COMPANY));
+
+        CompanyDetailResponseDto companyResponseDto = CompanyDetailResponseDto.of(company);
+        RecruitmentResponseDto recruitmentResponseDto = RecruitmentResponseDto.builder()
                 .id(recruitment.getId())
                 .company(recruitment.getCompany().getName())
                 .logo(recruitment.getLogo())
@@ -82,6 +88,11 @@ public class RecruitmentService {
                 .category(recruitment.getCategory())
                 .createdDate(recruitment.getCreatedDate())
                 .lastModifiedDate(recruitment.getLastModifiedDate())
+                .build();
+
+        return RecruitmentDetailResponseDto.builder()
+                .company(companyResponseDto)
+                .recruitment(recruitmentResponseDto)
                 .build();
     }
 

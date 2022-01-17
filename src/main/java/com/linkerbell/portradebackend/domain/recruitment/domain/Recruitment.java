@@ -24,6 +24,7 @@ public class Recruitment extends BaseTimeEntity {
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @Lob
     private String logo;
 
     @Column(nullable = false)
