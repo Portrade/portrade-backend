@@ -18,11 +18,12 @@ public class RecruitmentResponseDto {
     private final String pay;
     private final String address;
     private final String category;
+    private final String url;
     private final LocalDateTime createdDate;
     private final LocalDateTime lastModifiedDate;
 
     @Builder
-    public RecruitmentResponseDto(Long id, String company, String logo, String title, int viewCount, String career, String education, String pay, String address, String category, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
+    public RecruitmentResponseDto(Long id, String company, String logo, String title, int viewCount, String career, String education, String pay, String address, String category, String url, LocalDateTime createdDate, LocalDateTime lastModifiedDate) {
         this.id = id;
         this.company = company;
         this.logo = logo;
@@ -33,6 +34,7 @@ public class RecruitmentResponseDto {
         this.pay = pay;
         this.address = address;
         this.category = category;
+        this.url = url;
         this.createdDate = createdDate;
         this.lastModifiedDate = lastModifiedDate;
     }

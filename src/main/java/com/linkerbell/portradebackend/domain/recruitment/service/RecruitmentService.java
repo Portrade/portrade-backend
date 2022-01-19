@@ -2,13 +2,12 @@ package com.linkerbell.portradebackend.domain.recruitment.service;
 
 import com.linkerbell.portradebackend.domain.company.domain.Company;
 import com.linkerbell.portradebackend.domain.company.dto.CompanyDetailResponseDto;
-import com.linkerbell.portradebackend.domain.company.dto.CompanyResponseDto;
 import com.linkerbell.portradebackend.domain.company.dto.RecruitmentsResponseDto;
 import com.linkerbell.portradebackend.domain.company.repository.CompanyRepository;
 import com.linkerbell.portradebackend.domain.recruitment.domain.Recruitment;
 import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentDetailResponseDto;
-import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentResponseDto;
 import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentRequestDto;
+import com.linkerbell.portradebackend.domain.recruitment.dto.RecruitmentResponseDto;
 import com.linkerbell.portradebackend.domain.recruitment.repository.RecruitmentRepository;
 import com.linkerbell.portradebackend.global.common.dto.IdResponseDto;
 import com.linkerbell.portradebackend.global.common.dto.PageResponseDto;

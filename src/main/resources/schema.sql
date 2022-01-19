@@ -140,6 +140,7 @@ create table recruitment
     view_count         integer,
     work_type          varchar(255),
     company_id         bigint,
+    url                varchar(255),
     created_date       timestamp,
     last_modified_date timestamp
 );

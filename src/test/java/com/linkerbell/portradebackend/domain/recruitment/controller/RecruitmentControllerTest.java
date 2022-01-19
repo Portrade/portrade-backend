@@ -108,11 +108,11 @@ class RecruitmentControllerTest {
 
         //then
         result.andExpect(status().isOk())
-                .andExpect(jsonPath("$.address").value("서울특별시 강남구 테헤란로11길"))
-                .andExpect(jsonPath("$.career").value("웹 프로그래머"))
-                .andExpect(jsonPath("$.category").value("programmer"))
-                .andExpect(jsonPath("$.education").value("신입/경력"))
-                .andExpect(jsonPath("$.viewCount").value("11"));
+                .andExpect(jsonPath("$.recruitment.address").value("서울특별시 강남구 테헤란로11길"))
+                .andExpect(jsonPath("$.recruitment.career").value("웹 프로그래머"))
+                .andExpect(jsonPath("$.recruitment.category").value("programmer"))
+                .andExpect(jsonPath("$.recruitment.education").value("신입/경력"))
+                .andExpect(jsonPath("$.recruitment.viewCount").value("11"));
     }
 
     @DisplayName("기업 공고 수정 API 실패 - 권한없는 사용자")
