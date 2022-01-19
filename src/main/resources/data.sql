@@ -147,21 +147,21 @@ VALUES (4, '2020-11-22T08:17:09.478881', '서울 강남구 테헤란로 142, 12�
 
 -- 기업 공고
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
-                        title, pay, view_count, work_type, company_id)
+                        title, pay, view_count, work_type, company_id, url)
 VALUES (1, '2020-12-07T08:17:09.478882', '서울특별시 강남구 테헤란로11길', 'UI/UX 디자이너', 'designer', '신입/경력', now(),
-        'http://www.aws1243.com', '29shop UI/UX 디자이너 채용', '회사내규에 따름', '1300', '정규직', 3);
+        'http://www.aws1243.com', '29shop UI/UX 디자이너 채용', '회사내규에 따름', '1300', '정규직', 3, 'recruitment.content.url');
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
-                        title, pay, view_count, work_type, company_id)
+                        title, pay, view_count, work_type, company_id, url)
 VALUES (2, '2020-12-08T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '웹 프로그래머', 'programmer', '신입/경력', now(),
-        'http://www.aws1243.com', '회사내규에 따름', '1000', 10, '정규직', 3);
+        'http://www.aws1243.com', '회사내규에 따름', '1000', 10, '정규직', 3, 'recruitment.content.url');
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
-                        title, pay, view_count, work_type, company_id)
+                        title, pay, view_count, work_type, company_id, url)
 VALUES (3, '2020-12-09T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '백엔드 프로그래머', 'programmer', '신입/경력', now(),
-        'http://www.aws1243.com', '29shop 백엔드 프로그래머 채용', '회사내규에 따름', '100', '정규직', 3);
+        'http://www.aws1243.com', '29shop 백엔드 프로그래머 채용', '회사내규에 따름', '100', '정규직', 3, 'recruitment.content.url');
 INSERT INTO recruitment(recruitment_id, created_date, address, career, category, education, last_modified_date, logo,
-                        title, pay, view_count, work_type, company_id)
+                        title, pay, view_count, work_type, company_id, url)
 VALUES (4, '2020-12-09T08:17:09.478882', '서울특별시 강남구 테헤란로11길', '백엔드 프로그래머', 'programmer', '신입/경력', now(),
-        'http://www.aws1243.com', '기업A 백엔드 프로그래머 채용', '회사내규에 따름', '100', '정규직', 4);
+        'http://www.aws1243.com', '기업A 백엔드 프로그래머 채용', '회사내규에 따름', '100', '정규직', 4, 'recruitment.content.url');
 
 -- 댓글
 INSERT INTO comment(comment_id, created_date, content, portfolio_id, user_id)

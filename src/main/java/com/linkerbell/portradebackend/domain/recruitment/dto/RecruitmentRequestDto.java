@@ -28,9 +28,10 @@ public class RecruitmentRequestDto {
     private String address;
     @NotNull(message = "NULL_RECRUITMENT_CATEGORY")
     private String category;
+    private String url;
 
     @Builder
-    public RecruitmentRequestDto(String logo, String title, String career, String education, String workType, String pay, String address, String category) {
+    public RecruitmentRequestDto(String logo, String title, String career, String education, String workType, String pay, String address, String category, String url) {
         this.logo = logo;
         this.title = title;
         this.career = career;
@@ -39,6 +40,7 @@ public class RecruitmentRequestDto {
         this.pay = pay;
         this.address = address;
         this.category = category;
+        this.url = url;
     }
 
     public Recruitment toEntity(Company company) {
@@ -52,6 +54,7 @@ public class RecruitmentRequestDto {
                 .address(address)
                 .category(category)
                 .company(company)
+                .url(url)
                 .build();
     }
 }

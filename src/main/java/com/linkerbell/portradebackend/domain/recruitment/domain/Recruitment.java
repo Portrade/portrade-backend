@@ -51,11 +51,14 @@ public class Recruitment extends BaseTimeEntity {
     @Column(nullable = false)
     private String category;
 
+    @Column
+    private String url;
+
     @Column(name = "last_modified_date")
     private LocalDateTime lastModifiedDate;
 
     @Builder
-    public Recruitment(Long id, Company company, String logo, String title, int viewCount, String career, String education, String workType, String pay, String address, String category) {
+    public Recruitment(Long id, Company company, String logo, String title, int viewCount, String career, String education, String workType, String pay, String address, String category, String url) {
         this.id = id;
         this.company = company;
         this.logo = logo;
@@ -67,6 +70,7 @@ public class Recruitment extends BaseTimeEntity {
         this.pay = pay;
         this.address = address;
         this.category = category;
+        this.url = url;
     }
 
     public void update(RecruitmentRequestDto recruitmentRequestDto) {
@@ -76,6 +80,7 @@ public class Recruitment extends BaseTimeEntity {
         education = recruitmentRequestDto.getEducation();
         address = recruitmentRequestDto.getAddress();
         category = recruitmentRequestDto.getCategory();
+        url = recruitmentRequestDto.getUrl();
 
         lastModifiedDate = LocalDateTime.now();
     }
