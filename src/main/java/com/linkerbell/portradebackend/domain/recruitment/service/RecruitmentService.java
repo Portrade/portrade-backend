@@ -83,6 +83,7 @@ public class RecruitmentService {
                 .career(recruitment.getCareer())
                 .education(recruitment.getEducation())
                 .pay(recruitment.getPay())
+                .url(recruitment.getUrl())
                 .address(recruitment.getAddress())
                 .category(recruitment.getCategory())
                 .createdDate(recruitment.getCreatedDate())
