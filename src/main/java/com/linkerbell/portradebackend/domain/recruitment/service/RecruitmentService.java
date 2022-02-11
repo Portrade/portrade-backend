@@ -47,7 +47,7 @@ public class RecruitmentService {
                 page - 1,
                 size,
                 Sort.by(Sort.Direction.DESC, "id"));
-        Page<Recruitment> recruitmentPage = recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCareerContaining(pageable, title, area, job);
+        Page<Recruitment> recruitmentPage = recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCategoryContaining(pageable, title, area, job);
 
         List<com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto> recruitmentResponseDtos = recruitmentPage.stream()
                 .map(com.linkerbell.portradebackend.domain.company.dto.RecruitmentResponseDto::of)
