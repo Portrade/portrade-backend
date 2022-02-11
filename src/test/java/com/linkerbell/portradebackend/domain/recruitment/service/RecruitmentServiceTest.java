@@ -83,7 +83,7 @@ class RecruitmentServiceTest {
         Page<Recruitment> recruitmentPage = new PageImpl<>(recruitments);
         Pageable pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.DESC, "id"));
 
-        given(recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCareerContaining(eq(pageable), anyString(), anyString(), anyString())).willReturn(recruitmentPage);
+        given(recruitmentRepository.findAllByTitleContainingAndAddressContainingAndCategoryContaining(eq(pageable), anyString(), anyString(), anyString())).willReturn(recruitmentPage);
 
         //when
         RecruitmentsResponseDto recruitmentsResponseDto = recruitmentService.getRecruitments(1, 10, "", "", "");

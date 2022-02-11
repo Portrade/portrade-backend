@@ -9,5 +9,5 @@ public interface RecruitmentRepository extends JpaRepository<Recruitment, Long> 
 
     Page<Recruitment> findAllByCompany_Id(Pageable pageable, Long companyId);
 
-    Page<Recruitment> findAllByTitleContainingAndAddressContainingAndCareerContaining(Pageable pageable, String area, String job, String title);
+    Page<Recruitment> findAllByTitleContainingAndAddressContainingAndCategoryContaining(Pageable pageable, String title, String area, String job);
 }
